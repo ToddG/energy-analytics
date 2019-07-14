@@ -1,4 +1,4 @@
-# energy
+# energy-analytics
 
 Application container for 'harbour'.
 
