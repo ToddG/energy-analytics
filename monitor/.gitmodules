@@ -1,0 +1,3 @@
+[submodule "storage/grafana/plugins/piechart-panel"]
+	path = storage/grafana/plugins/piechart-panel
+	url = https://github.com/grafana/piechart-panel.git

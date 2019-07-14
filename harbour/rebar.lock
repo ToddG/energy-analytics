@@ -1,0 +1,12 @@
+[{<<"elli">>,
+  {git,"git@github.com:elli-lib/elli.git",
+       {ref,"752e0f516d4be4be5f41810901362fbca77dde3c"}},
+  1},
+ {<<"mprom">>,
+  {git,"git://github.com/toddg/mprom.git",
+       {ref,"0bf25664456ca1bf531cf05d1db5cd4be0b1fee8"}},
+  0},
+ {<<"prometheus">>,
+  {git,"git://github.com/deadtrickster/prometheus.erl.git",
+       {ref,"4cae6df7d3d0f5feb5508ffc0ea4b2eedf5136fc"}},
+  1}].
