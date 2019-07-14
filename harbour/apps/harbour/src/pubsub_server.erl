@@ -6,14 +6,14 @@
 %%% @end
 %%% Created : 2019-07-14 02:08:43.831261
 %%%-------------------------------------------------------------------
--module(pubsub).
+-module(pubsub_server).
 
 -behaviour(gen_server).
 
 %% API
 -export([start_link/0]).
--export([publish/1,
-         subscribe/1]).
+-export([publish/2,
+         subscribe/2]).
 
 %% gen_server callbacks
 -export([init/1,
@@ -28,21 +28,24 @@
 -record(state, {topics = #{} :: map()}).
 -record(pub, {topic :: term() , message :: term()}).
 -record(sub, {topic, subscriber :: subscriber()}).
--type pub() :: #pub{}.
--type sub() :: #sub{}.
+%-type pub() :: #pub{}.
+%-type sub() :: #sub{}.
 -type subscriber() :: pid() | term().
 
 
 %%%===================================================================
 %%% API
 %%%===================================================================
--spec(publish(pub()) -> ok | {error, Reason :: term()}).
-publish(P) ->
-    gen_server:call(?MODULE, {publish, P}). 
+%%% TODO: remove subsribers if/when their process dies? Perhaps just 
+%%% TODO: do this for Pids and not for registered names...
+%%%
+-spec(publish(term(), term()) -> ok | {error, Reason :: term()}).
+publish(Topic, Message) ->
+    gen_server:call(?MODULE, {publish, #pub{topic=Topic, message=Message}}). 
 
--spec(subscribe(sub()) -> ok | {error, Reason :: term()}).
-subscribe(S) ->
-    gen_server:call(?MODULE, {subscribe, S}). 
+-spec(subscribe(term(), term()) -> ok | {error, Reason :: term()}).
+subscribe(Topic, Subscriber) ->
+    gen_server:call(?MODULE, {subscribe, #sub{topic=Topic, subscriber=Subscriber}}). 
 
 
 %%--------------------------------------------------------------------
@@ -104,10 +107,10 @@ handle_call({subscribe, #sub{topic=Topic, subscriber=Subscriber}}, _From, State)
                 State1 = State#state{topics=TM1},
                 {reply, ok, State1}
     end;
-handle_call({publish, #pub{topic=Topic}} = P, _From, State) ->
+handle_call({publish, #pub{topic=Topic, message=Message}}, _From, State) ->
     TM = State#state.topics,
     case maps:is_key(Topic, TM) of
-        true -> [Pid ! P || Pid <- maps:get(Topic, TM)],
+        true -> [Pid ! {Topic, Message} || Pid <- maps:get(Topic, TM)],
                 {reply, ok, State};
         _ ->    {reply, {error, topic_not_found}, State} 
     end;

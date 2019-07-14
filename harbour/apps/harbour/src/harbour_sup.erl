@@ -29,7 +29,22 @@ init([]) ->
     SupFlags = #{strategy => one_for_all,
                  intensity => 0,
                  period => 1},
-    ChildSpecs = [],
+    ChildSpecs = [
+                     {tag_pubsub,
+                        {pubsub_server, start_link, []},
+                        permanent,
+                        10000,
+                        worker,
+                        [pubsub_server]},
+                     {tag_config,
+                        {config_server, start_link, []},
+                        permanent,
+                        10000,
+                        worker,
+                        [config_server]}        
+                 ],
     {ok, {SupFlags, ChildSpecs}}.
 
 %% internal functions
+%%
+          
