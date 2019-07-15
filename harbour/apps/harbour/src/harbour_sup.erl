@@ -41,7 +41,13 @@ init([]) ->
                         permanent,
                         10000,
                         worker,
-                        [config_server]}        
+                        [config_server]},
+                     {tag_manifest,
+                        {manifest_server, start_link, []},
+                        permanent,
+                        10000,
+                        worker,
+                        [manifest_server]}        
                  ],
     {ok, {SupFlags, ChildSpecs}}.
 

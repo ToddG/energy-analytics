@@ -52,3 +52,8 @@ To tail the logs, do this:
 * http://zwrob.com/posts/monitoring-03/
 * http://zwrob.com/posts/monitoring-04/
 * http://zwrob.com/posts/erlang-01/
+
+## notes
+
+* https://stackoverflow.com/questions/17529623/erlang-location-of-hrl-files-in-multiple-applications#17533897
+

@@ -178,14 +178,25 @@ code_change(_OldVsn, State, _Extra) ->
 
 %% @end
 %%--------------------------------------------------------------------
-inotify_event(Arg, Ref, ?inotify_msg(Masks, Cookie, OptionalName)) ->
-    io:format("[INOTIFY] - ~p ~p - ~p ~p ~p~n", [Arg, Ref, Masks, Cookie, OptionalName]),
+inotify_event(_, Ref, ?inotify_msg(Masks, Cookie, OptionalName)) ->
+    %%io:format("[INOTIFY] - ~p ~p - ~p ~p ~p~n", [Arg, Ref, Masks, Cookie, OptionalName]),
     {ok, WatchDir} = application:get_env(harbour, watch_dir),
     ChangedFile = filename:join(WatchDir, OptionalName),
     broadcast_file_change(Masks, ChangedFile),
     ok.
 
 
+%%
+
+%%--------------------------------------------------------------------
+%% @doc
+%%
+%% This function responds to [close_write] events and publishes the 
+%% list of tuples as events on the pubsub eventbus.
+%%
+%% [INOTIFY] - dir_change #Ref<0.1930962159.569638913.226951> - [close_write] 0 "bar.config"
+%% @end
+%%--------------------------------------------------------------------
 broadcast_file_change(Masks, UpdatedConfigFile) when Masks == [?CLOSE_WRITE] ->
     case file:consult(UpdatedConfigFile) of 
         {ok, Terms} -> [broadcast_term(T) || T <- Terms];
