@@ -30,7 +30,7 @@ clean:
 
 .PHONY: build
 build:  
-	rebar3 do clean, compile, eunit
+	rebar3 do clean, compile, eunit, dialyzer
 
 .PHONY: release
 release:  
@@ -46,6 +46,16 @@ start: release
 stop: 
 	# dev release
 	./_build/default/rel/${APP}/bin/${APP} stop
+
+.PHONY: attach
+attach: 
+	# dev release
+	./_build/default/rel/${APP}/bin/${APP} attach
+
+.PHONY: console
+console: 
+	# dev release
+	./_build/default/rel/${APP}/bin/${APP} console
 
 .PHONY: package
 package: 

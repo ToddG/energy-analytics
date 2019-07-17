@@ -4,16 +4,17 @@
 %%% @doc
 %%%
 %%% @end
-%%% Created : 2019-07-14 02:08:43.831261
+%%% Created : 2019-07-15 08:06:09.865124
 %%%-------------------------------------------------------------------
--module(pubsub_server).
+-module(work_server).
 
 -behaviour(gen_server).
+-include("../../common/include/tables.hrl").
 
 %% API
--export([start_link/0]).
--export([publish/2,
-         subscribe/2]).
+-export([start_link/0
+         ,refresh/0
+        ]).
 
 %% gen_server callbacks
 -export([init/1,
@@ -25,28 +26,16 @@
 
 -define(SERVER, ?MODULE). 
 
--record(state, {topics = #{} :: map()}).
--record(pub, {topic :: term() , message :: term()}).
--record(sub, {topic, subscriber :: subscriber()}).
-%-type pub() :: #pub{}.
-%-type sub() :: #sub{}.
--type subscriber() :: pid() | term().
-
+-record(state, {config                  :: work_server_config()}).
+-record(work_server_config, {name       :: string(),
+                             path       :: string(),
+                             refresh    :: pos_integer()
+                            }).
+-type work_server_config()              :: #work_server_config{}.
 
 %%%===================================================================
 %%% API
 %%%===================================================================
-%%% TODO: remove subsribers if/when their process dies? Perhaps just 
-%%% TODO: do this for Pids and not for registered names...
-%%%
--spec(publish(term(), term()) -> ok | {error, Reason :: term()}).
-publish(Topic, Message) ->
-    gen_server:call(?MODULE, {publish, #pub{topic=Topic, message=Message}}). 
-
--spec(subscribe(term(), term()) -> ok | {error, Reason :: term()}).
-subscribe(Topic, Subscriber) ->
-    gen_server:call(?MODULE, {subscribe, #sub{topic=Topic, subscriber=Subscriber}}). 
-
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -58,6 +47,10 @@ subscribe(Topic, Subscriber) ->
     {ok, Pid :: pid()} | ignore | {error, Reason :: term()}).
 start_link() ->
     gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
+
+
+refresh() ->
+    gen_server:call(?MODULE, {refresh}).
 
 %%%===================================================================
 %%% gen_server callbacks
@@ -78,7 +71,12 @@ start_link() ->
     {ok, State :: #state{}} | {ok, State :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term()} | ignore).
 init([]) ->
-    {ok, #state{}}.
+    {ok, ConfigDir} = application:get_env(harbour, config_dir),
+    ConfigFile = filename:join(ConfigDir, "work.config"),
+    ConfigRecord = case file:consult(ConfigFile) of
+        {ok, Terms} -> parse_config(Terms)
+    end,
+    {ok, #state{config=ConfigRecord}}.
 
 %%--------------------------------------------------------------------
 %% @private
@@ -95,27 +93,13 @@ init([]) ->
     {noreply, NewState :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term(), Reply :: term(), NewState :: #state{}} |
     {stop, Reason :: term(), NewState :: #state{}}).
-handle_call({subscribe, #sub{topic=Topic, subscriber=Subscriber}}, _From, State) ->
-    TM = State#state.topics,
-    case maps:is_key(Topic, TM) of
-        true -> SubscriberList0 = maps:get(Topic, TM),
-                SubscriberList1 = [Subscriber | SubscriberList0],
-                TM1 = TM#{Topic := SubscriberList1},
-                State1 = State#state{topics=TM1},
-                {reply, ok, State1};
-        _ ->    TM1 = TM#{Topic => [Subscriber]},
-                State1 = State#state{topics=TM1},
-                {reply, ok, State1}
-    end;
-handle_call({publish, #pub{topic=Topic, message=Message}}, _From, State) ->
-    TM = State#state.topics,
-    case maps:is_key(Topic, TM) of
-        true -> [Pid ! {pubsub, {Topic, Message}} || Pid <- maps:get(Topic, TM)],
-                {reply, ok, State};
-        _ ->    {reply, {error, topic_not_found}, State} 
-    end;
+handle_call({refresh}, _From, State) ->
+    refresh_reports(),
+    {reply, ok, State};
 handle_call(_Request, _From, State) ->
     {reply, ok, State}.
+
+
 
 %%--------------------------------------------------------------------
 %% @private
@@ -145,6 +129,9 @@ handle_cast(_Request, State) ->
     {noreply, NewState :: #state{}} |
     {noreply, NewState :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term(), NewState :: #state{}}).
+handle_info({pubsub, {work_server_config, _} = C}, State) ->
+    ConfigRecord = parse_config([C]),
+    {noreply, State#state{config=ConfigRecord}};
 handle_info(_Info, State) ->
     {noreply, State}.
 
@@ -181,3 +168,43 @@ code_change(_OldVsn, State, _Extra) ->
 %%%===================================================================
 %%% Internal functions
 %%%===================================================================
+
+%%--------------------------------------------------------------------
+%% @private
+%% @doc
+%%
+%% Parse the list of terms, which could be anything, into a valid
+%% work server config record.
+%%
+%%
+%% Expected config from ./config/work.config. Could be delivered either
+%% by file:consult or by a message bus event from a file change 
+%% notification.
+%%
+%% {work_server_config, [
+%%%         {database_name, "work"},
+%%%         {database_path, "data"},
+%%%         {manifest_refresh_frequency_ms, 3600000},
+%%%     ]
+%%% }.
+%%%
+%% @end
+%%--------------------------------------------------------------------
+-spec(parse_config([term()]) -> #work_server_config{}).
+parse_config(ConfigList) ->
+    Config      = proplists:get_value(work_server_config, ConfigList),
+    DbName      = proplists:get_value(database_name, Config),
+    DbPath      = proplists:get_value(database_path, Config),
+    Refresh     = proplists:get_value(manifest_refresh_frequency_ms, Config),
+    #work_server_config{name=DbName, path=DbPath, refresh=Refresh}.    
+
+
+refresh_reports() ->
+    {ok, ReportUrls} = manifest_server:reports(),
+    {ok, Tasks} = db_server:read(task),
+    DownloadTasks = lists:filter(fun(X) -> X#task.type == download_url end, Tasks),
+    ExistingUrls = [X#task.data || X <- DownloadTasks],
+    NewUrls = lists:subtract(ReportUrls, ExistingUrls),
+    NewDownloadTasks = [#task{id=make_ref(), type=download_url, data=X} || X <- NewUrls],
+    ok = db_server:create(NewDownloadTasks),
+    ok.

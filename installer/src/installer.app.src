@@ -1,15 +1,11 @@
-{application, harbour,
- [{description, "An OTP application"},
+{application, installer,
+ [{description, "An escript"},
   {vsn, "0.1.0"},
   {registered, []},
-  {mod, { harbour_app, []}},
   {applications,
    [kernel
     ,stdlib
-    ,common
-    ,inotify
     ,mnesia
-    ,mprom
    ]},
   {env,[]},
   {modules, []},

@@ -87,14 +87,14 @@ reports(StartDate, EndDate) ->
     {stop, Reason :: term()} | ignore).
 init([]) ->
     ok = pubsub_server:subscribe(manifest_server_oasis_reports, manifest_server),
-    {ok, WatchDir} = application:get_env(harbour, watch_dir),
-    ConfigFile = filename:join(WatchDir, "manifest.config"),
-    {Reports} = case file:consult(ConfigFile) of
+    {ok, ConfigDir} = application:get_env(harbour, config_dir),
+    ConfigFile = filename:join(ConfigDir, "manifest.config"),
+    {Config} = case file:consult(ConfigFile) of
         {ok, Terms} -> 
             MSOR = lists:last(lists:filter(fun({K,_}) -> K == manifest_server_oasis_reports end, Terms)),
             {MSOR}
     end,
-    {ok, #state{reports = parse_reports(Reports)}}.
+    {ok, #state{reports = parse_config(Config)}}.
 
 
 %%--------------------------------------------------------------------
@@ -119,7 +119,8 @@ handle_call({reports}, _From, State) ->
     {reply, common_reports(P, StartDate, EndDate), State};
 handle_call({reports_start_end, StartDate, EndDate}, _From, State) ->
     {manifest_server_oasis_reports, P} = State#state.reports,
-    {reply, common_reports(P, StartDate, EndDate), State};
+    {ok, Reports} =  common_reports(P, StartDate, EndDate),
+    {reply, {ok, Reports}, State};
 handle_call(_Request, _From, State) ->
     {reply, ok, State}.
 
@@ -162,8 +163,8 @@ handle_cast(_Request, State) ->
     {noreply, NewState :: #state{}} |
     {noreply, NewState :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term(), NewState :: #state{}}).
-handle_info({manifest_server_oasis_reports, Reports}, State) ->
-    {noreply, State#state{reports = parse_reports(Reports)}};
+handle_info({pubsub, {manifest_server_oasis_reports, Reports}}, State) ->
+    {noreply, State#state{reports = parse_config(Reports)}};
 handle_info(_Info, State) ->
     {noreply, State}.
 
@@ -201,8 +202,8 @@ code_change(_OldVsn, State, _Extra) ->
 %%% Internal functions
 %%%===================================================================
 
-parse_reports(R) ->
-    %% TODO: parse the reports to guarantee they are correct
+parse_config(R) ->
+    %% TODO: parse the config to guarantee they are correct
     R.
 
 
@@ -258,15 +259,15 @@ single_zip_url(OASISReport, StartDateTime, EndDateTime, MarketRunID, Version, Pa
 %%% 	version = API version (1 for the GMT 2013 release)
 %%% @end
 %%%-------------------------------------------------------------------
-group_zip_url(OASISReport, StartDateTime, EndDateTime, Version) -> 
-    	WEBSite = "oasis.caiso.com",
-	Context = "oasisapi",
-	ReportType = "GroupZip",
-	io_lib:format("http://~s/~s/~s?groupid=~s&startdatetime=~p&enddatetime=~p&Version=~p", 
-		      [WEBSite, Context, ReportType, OASISReport, StartDateTime, EndDateTime, Version]).
-
-file(Path, OASISReport, StartDateTime, EndDateTime, Version) -> 
-	io_lib:format("~s/~s_~s_~s_~p.zip", [Path, OASISReport, StartDateTime, EndDateTime, Version]).
-
-file(Path, OASISReport, StartDateTime, EndDateTime, MarketRunId, Version) -> 
-	io_lib:format("~s/~s_~s_~s_~s_~p.zip", [Path, OASISReport, StartDateTime, EndDateTime, MarketRunId, Version]).
+%%% group_zip_url(OASISReport, StartDateTime, EndDateTime, Version) -> 
+%%%     	WEBSite = "oasis.caiso.com",
+%%% 	Context = "oasisapi",
+%%% 	ReportType = "GroupZip",
+%%% 	io_lib:format("http://~s/~s/~s?groupid=~s&startdatetime=~p&enddatetime=~p&Version=~p", 
+%%% 		      [WEBSite, Context, ReportType, OASISReport, StartDateTime, EndDateTime, Version]).
+%%% 
+%%% file(Path, OASISReport, StartDateTime, EndDateTime, Version) -> 
+%%% 	io_lib:format("~s/~s_~s_~s_~p.zip", [Path, OASISReport, StartDateTime, EndDateTime, Version]).
+%%% 
+%%% file(Path, OASISReport, StartDateTime, EndDateTime, MarketRunId, Version) -> 
+%%% 	io_lib:format("~s/~s_~s_~s_~s_~p.zip", [Path, OASISReport, StartDateTime, EndDateTime, MarketRunId, Version]).

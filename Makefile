@@ -30,11 +30,12 @@ help:
 # -----------------------------------------------------------------------------
 .PHONY: shell
 shell:  
-	cd ${APP} && $(MAKE) shell ${ARGS}
+	cd ${APP} && $(MAKE) shell ARGS=${ARGS}
 
 .PHONY: build
 build:  
 	cd ${APP} && $(MAKE) build
+	cd installer && $(MAKE) build
 
 .PHONY: release
 release:  
@@ -48,9 +49,21 @@ start:
 stop: 
 	cd ${APP} && $(MAKE) stop
 
+.PHONY: attach
+attach: 
+	cd ${APP} && $(MAKE) attach
+
 .PHONY: package
 package: 
 	cd ${APP} && $(MAKE) package
+
+.PHONY: clean
+clean: 
+	rm -rf ${APP}/_build
+
+.PHONY: install
+install: 
+	cd installer && $(MAKE) run
 
 # -----------------------------------------------------------------------------
 #  CONTAINER COMMANDS

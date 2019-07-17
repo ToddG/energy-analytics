@@ -64,8 +64,8 @@ start_link() ->
     {ok, State :: #state{}} | {ok, State :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term()} | ignore).
 init([]) ->
-    {ok, WatchDir} = application:get_env(harbour, watch_dir),
-    Ref = inotify:watch(WatchDir),
+    {ok, ConfigDir} = application:get_env(harbour, config_dir),
+    Ref = inotify:watch(ConfigDir),
     inotify:add_handler(Ref, ?MODULE, dir_change),
     {ok, #state{}}.
 
@@ -178,15 +178,12 @@ code_change(_OldVsn, State, _Extra) ->
 
 %% @end
 %%--------------------------------------------------------------------
-inotify_event(_, Ref, ?inotify_msg(Masks, Cookie, OptionalName)) ->
+inotify_event(_, _, ?inotify_msg(Masks, _, OptionalName)) ->
     %%io:format("[INOTIFY] - ~p ~p - ~p ~p ~p~n", [Arg, Ref, Masks, Cookie, OptionalName]),
-    {ok, WatchDir} = application:get_env(harbour, watch_dir),
-    ChangedFile = filename:join(WatchDir, OptionalName),
+    {ok, ConfigDir} = application:get_env(harbour, config_dir),
+    ChangedFile = filename:join(ConfigDir, OptionalName),
     broadcast_file_change(Masks, ChangedFile),
     ok.
-
-
-%%
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -202,8 +199,9 @@ broadcast_file_change(Masks, UpdatedConfigFile) when Masks == [?CLOSE_WRITE] ->
         {ok, Terms} -> [broadcast_term(T) || T <- Terms];
         {error, Reason} -> io:format("Error: ~p~n", [Reason])
     end;
-broadcast_file_change(Masks, UpdatedConfigFile) ->
-    io:format("ChangeIgnored: ~p ~p~n", [Masks, UpdatedConfigFile]).
+broadcast_file_change(_, _) ->
+    %%io:format("ChangeIgnored: ~p ~p~n", [Masks, UpdatedConfigFile]).
+    ok.
 
 broadcast_term({Topic, Message}) ->
     pubsub_server:publish(Topic, Message).

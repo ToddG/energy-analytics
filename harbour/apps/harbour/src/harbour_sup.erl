@@ -47,7 +47,19 @@ init([]) ->
                         permanent,
                         10000,
                         worker,
-                        [manifest_server]}        
+                        [manifest_server]},
+                     {tag_work,
+                        {work_server, start_link, []},
+                        permanent,
+                        10000,
+                        worker,
+                        [work_server]},
+                     {tag_db,
+                        {db_server, start_link, []},
+                        permanent,
+                        10000,
+                        worker,
+                        [db_server]}        
                  ],
     {ok, {SupFlags, ChildSpecs}}.
 

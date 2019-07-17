@@ -1,0 +1,7 @@
+{application, common,
+ [{description, "common headers for harbour app"},
+  {vsn, "0.1.0"},
+  {registered, []},
+  {applications, [kernel, stdlib ]},
+  {env,[]},
+  {modules, []}]}.
