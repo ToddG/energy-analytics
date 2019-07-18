@@ -4,16 +4,15 @@
 %%% @doc
 %%%
 %%% @end
-%%% Created : 2019-07-15 08:06:09.865124
+%%% Created : 2019-07-17 07:54:43.797975
 %%%-------------------------------------------------------------------
--module(work_server).
+-module(download_server).
 
 -behaviour(gen_server).
--include("../../common/include/tables.hrl").
 
 %% API
--export([start_link/0
-         ,refresh/0
+-export([start_link/0,
+         download/2
         ]).
 
 %% gen_server callbacks
@@ -26,12 +25,7 @@
 
 -define(SERVER, ?MODULE). 
 
--record(state, {config                  :: work_server_config()}).
--record(work_server_config, {name       :: string(),
-                             path       :: string(),
-                             refresh    :: pos_integer()
-                            }).
--type work_server_config()              :: #work_server_config{}.
+-record(state, {rate_limit = 500 :: pos_integer()}).
 
 %%%===================================================================
 %%% API
@@ -49,8 +43,14 @@ start_link() ->
     gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
 
 
-refresh() ->
-    gen_server:call(?MODULE, {refresh}).
+%%--------------------------------------------------------------------
+%% @doc
+%% Download url to file.
+%% @end
+%%--------------------------------------------------------------------
+download(Url, File) ->
+    gen_server:call(?MODULE, {download, Url, File}). 
+
 
 %%%===================================================================
 %%% gen_server callbacks
@@ -72,11 +72,11 @@ refresh() ->
     {stop, Reason :: term()} | ignore).
 init([]) ->
     {ok, ConfigDir} = application:get_env(harbour, config_dir),
-    ConfigFile = filename:join(ConfigDir, "work.config"),
-    ConfigRecord = case file:consult(ConfigFile) of
-        {ok, Terms} -> parse_config(Terms)
+    ConfigFile = filename:join(ConfigDir, "download.config"),
+    {rate_limit, RateLimit} = case file:consult(ConfigFile) of
+        {ok, [H|_]} -> parse_config(H)
     end,
-    {ok, #state{config=ConfigRecord}}.
+    {ok, #state{rate_limit=RateLimit}}.
 
 %%--------------------------------------------------------------------
 %% @private
@@ -93,13 +93,11 @@ init([]) ->
     {noreply, NewState :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term(), Reply :: term(), NewState :: #state{}} |
     {stop, Reason :: term(), NewState :: #state{}}).
-handle_call({refresh}, _From, State) ->
-    refresh_reports(),
+handle_call({download, Url, File}, _From, State) ->
+    ok = curl(Url, File, State#state.rate_limit),
     {reply, ok, State};
 handle_call(_Request, _From, State) ->
     {reply, ok, State}.
-
-
 
 %%--------------------------------------------------------------------
 %% @private
@@ -129,9 +127,9 @@ handle_cast(_Request, State) ->
     {noreply, NewState :: #state{}} |
     {noreply, NewState :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term(), NewState :: #state{}}).
-handle_info({pubsub, {work_server_config, _} = C}, State) ->
-    ConfigRecord = parse_config([C]),
-    {noreply, State#state{config=ConfigRecord}};
+handle_info({pubsub, {download_server_config, _} = C}, State) ->
+    {rate_limit, RateLimit} = parse_config(C),
+    {noreply, State#state{rate_limit=RateLimit}};
 handle_info(_Info, State) ->
     {noreply, State}.
 
@@ -168,42 +166,15 @@ code_change(_OldVsn, State, _Extra) ->
 %%%===================================================================
 %%% Internal functions
 %%%===================================================================
+parse_config(C)->
+    {download_server_config, P} = C,
+    RateLimit = proplists:get_value(rate_limit, P),
+    {rate_limit, RateLimit}.
 
-%%--------------------------------------------------------------------
-%% @private
-%% @doc
-%%
-%% Parse the list of terms, which could be anything, into a valid
-%% work server config record.
-%%
-%%
-%% Expected config from ./config/work.config. Could be delivered either
-%% by file:consult or by a message bus event from a file change 
-%% notification.
-%%
-%% {work_server_config, [
-%%%         {database_name, "work"},
-%%%         {database_path, "data"},
-%%%         {manifest_refresh_frequency_ms, 3600000},
-%%%     ]
-%%% }.
-%%%
-%% @end
-%%--------------------------------------------------------------------
--spec(parse_config([term()]) -> #work_server_config{}).
-parse_config(ConfigList) ->
-    Config      = proplists:get_value(work_server_config, ConfigList),
-    DbName      = proplists:get_value(database_name, Config),
-    DbPath      = proplists:get_value(database_path, Config),
-    Refresh     = proplists:get_value(manifest_refresh_frequency_ms, Config),
-    #work_server_config{name=DbName, path=DbPath, refresh=Refresh}.    
+curl(Link, OutputFile, RateLimit)->
+    io:format("downloading url:~s to file:~s, rate limit: ~p~n", [Link, OutputFile, RateLimit]), 
+    Cmd = io_lib:format("curl --limit-rate ~pK -X GET -o ~s \"~s\"", [RateLimit, OutputFile, Link]), 
+    io:format("command:~s~n", [Cmd]), 
+    Out = os:cmd(Cmd),
+    io:format("out: ~p~n", [Out]).
 
-
-refresh_reports() ->
-    {ok, Manifests} = manifest_server:manifests(),
-    {ok, Tasks} = db_server:read(?TABLE_HARBOUR_REPORT_TASK),
-    Existing = [{X#?TABLE_HARBOUR_REPORT_TASK.url, X#?TABLE_HARBOUR_REPORT_TASK.filename} || X <- Tasks],
-    New = lists:subtract(Manifests, Existing),
-    NewTasks = [#?TABLE_HARBOUR_REPORT_TASK{id=make_ref(), url=Url, filename=File} || {Url, File} <- New],
-    ok = db_server:create(NewTasks),
-    ok.

@@ -59,6 +59,10 @@ create(Items) ->
 %%--------------------------------------------------------------------
 %% @doc
 %% Return all 'enabled' records. 'R' of CRUD.
+%%
+%% Query can be either the table name or any arbitrary erlang term.
+%%
+%% See page 335 of Programming Erlang Second edition.
 %% @end
 %%--------------------------------------------------------------------
 read(Table) ->
@@ -207,7 +211,7 @@ p_create(Items) ->
                 mnesia:abort(uncreatable_items);
             true -> 
                 Shazzam = erlang:system_time(second),
-                RecordStates = [#rstate{fkid=id(X), date_created=Shazzam, date_modified=Shazzam} || X <- CreatableItems],
+                RecordStates = [#?TABLE_HARBOUR_RECORD_STATE{fkid=id(X), date_created=Shazzam, date_modified=Shazzam} || X <- CreatableItems],
                 lists:foreach(fun mnesia:write/1, CreatableItems),
                 lists:foreach(fun mnesia:write/1, RecordStates)
             end
@@ -217,18 +221,18 @@ p_create(Items) ->
 
 p_read(Table) ->
     {ok, do(qlc:q([X || X <- mnesia:table(Table),
-                   Y <- mnesia:table(rstate),
+                   Y <- mnesia:table(?TABLE_HARBOUR_RECORD_STATE),
                    id(X) =:= id(Y),
-                   Y#rstate.enabled =:= true]))}.
+                   Y#?TABLE_HARBOUR_RECORD_STATE.enabled =:= true]))}.
 
 p_update(Items) ->
     F = fun() ->
         ok = consistency_check(Items),
         Table = table(lists:nth(1, Items)),
         EnabledIdList = qlc:e(qlc:q([id(X) ||   X <- mnesia:table(Table),
-                                                Y <- mnesia:table(rstate),
+                                                Y <- mnesia:table(?TABLE_HARBOUR_RECORD_STATE),
                                                 id(X) =:= id(Y),
-                                                Y#rstate.enabled =:= true])),
+                                                Y#?TABLE_HARBOUR_RECORD_STATE.enabled =:= true])),
         EnabledIdSet = sets:from_list(EnabledIdList),
         UpdatableItems = lists:filter(fun (X) -> sets:is_element(id(X), EnabledIdSet) end, Items),
         if 
@@ -238,9 +242,9 @@ p_update(Items) ->
                 Shazzam = erlang:system_time(second),
                 UpdatableItemIdList = [id(X) || X <- UpdatableItems],
                 UpdatableItemIdSet = sets:from_list(UpdatableItemIdList),
-                RecordStates = qlc:e(qlc:q([X ||    X <- mnesia:table(rstate),
+                RecordStates = qlc:e(qlc:q([X ||    X <- mnesia:table(?TABLE_HARBOUR_RECORD_STATE),
                                                     sets:is_element(id(X), UpdatableItemIdSet)])),
-                UpdatedRecordStates = [X#rstate{date_modified=Shazzam} || X <- RecordStates],
+                UpdatedRecordStates = [X#?TABLE_HARBOUR_RECORD_STATE{date_modified=Shazzam} || X <- RecordStates],
                 lists:foreach(fun mnesia:write/1, UpdatableItems),
                 lists:foreach(fun mnesia:write/1, UpdatedRecordStates)
             end
@@ -254,11 +258,11 @@ p_delete(Items) ->
         Shazzam = erlang:system_time(second),
         ItemsIdList = [id(X) || X <- Items],
         ItemsIdSet = sets:from_list(ItemsIdList),
-        ItemsRStates = qlc:e(qlc:q([X || X <-   mnesia:table(rstate),
-                                                sets:is_element(X#rstate.fkid, ItemsIdSet),
-                                                X#rstate.enabled =:= true
+        ItemsRStates = qlc:e(qlc:q([X || X <-   mnesia:table(?TABLE_HARBOUR_RECORD_STATE),
+                                                sets:is_element(X#?TABLE_HARBOUR_RECORD_STATE.fkid, ItemsIdSet),
+                                                X#?TABLE_HARBOUR_RECORD_STATE.enabled =:= true
                                    ])),
-        UpdatedRecordStates = [R#rstate{enabled=false, date_modified=Shazzam} || R <- ItemsRStates],
+        UpdatedRecordStates = [R#?TABLE_HARBOUR_RECORD_STATE{enabled=false, date_modified=Shazzam} || R <- ItemsRStates],
         lists:foreach(fun mnesia:write/1, UpdatedRecordStates)
     end,
     {atomic, ok} = mnesia:transaction(F),
@@ -272,7 +276,7 @@ do(Q) ->
 consistency_check(Items) ->
     Tables = sets:to_list(sets:from_list([table(X) || X <- Items])),
     case Tables of
-        [rstate] ->
+        [?TABLE_HARBOUR_RECORD_STATE] ->
             mnesia:abort(invalid_table);
         [_,_] ->
             mnesia:abort(too_many_tables);

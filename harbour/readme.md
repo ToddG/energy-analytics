@@ -51,3 +51,7 @@ Changes to this file will be published on the event bus as:
 The consumer of this event will filter by `pubsub` and then by the message topic which, in this case, is `work_server_config`.
 
 See any of the server implementations for details.
+
+## Questions
+
+* how do we perform a db migration/upgrade/schema change w/ mnesia?

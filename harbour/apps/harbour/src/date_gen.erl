@@ -7,16 +7,13 @@
 %%% Created : 2019-07-04 18:48:29.855489
 %%%-------------------------------------------------------------------
 -module(date_gen).
+-include("../../common/include/dates.hrl").
 
 -export([dates/2,
 	 format/1,
          day_ranges/1
 	]).
 
--type month()   :: 1..12.
--type day()     :: 1..31.
--type year()    :: 1..10000.
--type tdate()    :: {year(), month(), day()}.
 
 %%%===================================================================
 %%% Exported functions 

@@ -30,27 +30,27 @@ main(Args) ->
     Tables = mnesia:system_info(tables),
     io:format("existing tables: ~p~n", [Tables]),
     TableSet = sets:from_list(Tables),
-    case sets:is_element(task, TableSet) of
+    case sets:is_element(?TABLE_HARBOUR_REPORT_TASK, TableSet) of
         true -> 
-                io:format("table 'task' already exists: ~n", []);
+                io:format("table '~p' already exists: ~n", [?TABLE_HARBOUR_REPORT_TASK]);
         false ->
-                mnesia:create_table(task, [
+                mnesia:create_table(?TABLE_HARBOUR_REPORT_TASK, [
                                             {type, set},
-                                            {attributes, record_info(fields, task)},
+                                            {attributes, record_info(fields, ?TABLE_HARBOUR_REPORT_TASK)},
                                             {disc_copies, [node()]}
                                           ]),
-                io:format("created 'task' table: ~n", [])
+                io:format("created '~p' table: ~n", [?TABLE_HARBOUR_REPORT_TASK])
     end,
-    case sets:is_element(rstate, TableSet) of
+    case sets:is_element(?TABLE_HARBOUR_RECORD_STATE, TableSet) of
         true -> 
-                io:format("table 'rstate' already exists: ~n", []);
+                io:format("table '~p' already exists: ~n", [?TABLE_HARBOUR_RECORD_STATE]);
         false ->
-                mnesia:create_table(rstate, [
+                mnesia:create_table(?TABLE_HARBOUR_RECORD_STATE, [
                                             {type, set},
-                                            {attributes, record_info(fields, rstate)},
+                                            {attributes, record_info(fields, ?TABLE_HARBOUR_RECORD_STATE)},
                                             {disc_copies, [node()]}
                                           ]),
-                io:format("created 'rstate' table: ~n", [])
+                io:format("created '~p' table: ~n", [?TABLE_HARBOUR_RECORD_STATE])
     end,
     
     %% done
