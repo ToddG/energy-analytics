@@ -31,7 +31,7 @@
                                     filename                    :: string(),
                                     file_path   = undefined     :: undefined | string(),
                                     s3_url      = undefined     :: undefined | string(),
-                                    state       = undefined     :: undefined | download_started | download_completed | stored_in_db | stored_in_s3
+                                    state       = undefined     :: harbour_report_task_state()
                       }).
 
 
@@ -42,4 +42,12 @@
 		}).
 
 -type harbour_report_task()                                     :: #harbour_report_task{}.
+-type harbour_report_task_state()                               :: undefined | download_started | download_completed | parse_started| parse_completed | archive_started | archive_completed.
 
+%-type undefined()                                               :: undefined. 
+%-type download_started()                                        :: download_started. 
+%-type download_completed()                                      :: download_completed. 
+%-type parse_started()                                           :: parse_started. 
+%-type parse_completed()                                         :: parse_completed. 
+%-type archive_started()                                         :: archive_started. 
+%-type archive_completed()                                       :: archive_completed. 

@@ -137,15 +137,6 @@ handle_call({manifests_start_end, StartDate, EndDate}, _From, State) ->
 handle_call(_Request, _From, State) ->
     {reply, ok, State}.
 
-oasis_reports(C, R, StartDate, EndDate) ->
-    Website     = C#oasis_config.website,
-    Context     = C#oasis_config.context,
-    Reports     = R#oasis_reports.reports,
-    Dates       = date_gen:dates(StartDate, EndDate),
-    Ranges      = date_gen:day_ranges(Dates),
-    ListSZ = [single_zip(X, date_gen:format(Start), date_gen:format(End), Website, Context) || #{type := single_zip} = X <- Reports, {Start, End} <- Ranges],
-    {ok, ListSZ}.
-
 
 %%--------------------------------------------------------------------
 %% @private
@@ -301,3 +292,25 @@ single_zip_filename(OASISReport, StartDateTime, EndDateTime, MarketRunID, Versio
 %%% 
 %%% file(Path, OASISReport, StartDateTime, EndDateTime, MarketRunId, Version) -> 
 %%% 	io_lib:format("~s/~s_~s_~s_~s_~p.zip", [Path, OASISReport, StartDateTime, EndDateTime, MarketRunId, Version]).
+%%%
+%%%
+
+%%--------------------------------------------------------------------
+%% @private
+%% @doc
+%% @end
+%%--------------------------------------------------------------------
+-spec(oasis_reports(C::oasis_config(), 
+                    R::oasis_reports(), 
+                    StartDate :: tdate(), 
+                    EndDate :: tdate()) -> {ok, [{string(), string()}]}).
+oasis_reports(C, R, StartDate, EndDate) ->
+    Website     = C#oasis_config.website,
+    Context     = C#oasis_config.context,
+    Reports     = R#oasis_reports.reports,
+    Dates       = date_gen:dates(StartDate, EndDate),
+    Ranges      = date_gen:day_ranges(Dates),
+    SingleZipsList = [single_zip(X, date_gen:format(Start), date_gen:format(End), Website, Context) || 
+              #{type := single_zip} = X <- Reports, {Start, End} <- Ranges],
+    {ok, SingleZipsList}.
+

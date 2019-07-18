@@ -11,11 +11,12 @@
 -behaviour(gen_server).
 -include_lib("stdlib/include/qlc.hrl").
 -include("../../common/include/tables.hrl").
-
+-compile(export_all).
 %% API
 -export([start_link/0
         ,create/1
         ,read/1
+        ,read/2
         ,update/1
         ,delete/1
         ]).
@@ -53,25 +54,35 @@ start_link() ->
 %% yet exist.
 %% @end
 %%--------------------------------------------------------------------
+-spec(create(Items :: [tuple()]) ->
+    ok | ignore | {error, Reason :: term()}).
 create(Items) ->
     gen_server:call(?MODULE, {create, Items}). 
 
 %%--------------------------------------------------------------------
 %% @doc
 %% Return all 'enabled' records. 'R' of CRUD.
-%%
-%% Query can be either the table name or any arbitrary erlang term.
-%%
-%% See page 335 of Programming Erlang Second edition.
 %% @end
 %%--------------------------------------------------------------------
+-spec(read(Table :: atom()) ->
+    {ok, [tuple()]} | {error, Reason :: term()}).
 read(Table) ->
     gen_server:call(?MODULE, {read, Table}). 
 
 %%--------------------------------------------------------------------
 %% @doc
-%% Update all 'enabled' records. 'U' of CRUD. If 'disabled' records
-%% are included they are filtered out.
+%% Return all 'enabled' records where FilterFun(X) =:= true. 'R' of CRUD.
+%% @end
+%%--------------------------------------------------------------------
+-spec(read(Table :: atom(), FilterFun :: fun((tuple()) -> boolean()))
+      -> {ok, [tuple()]} | {error, Reason :: term()}).
+read(Table, FilterFun) ->
+    gen_server:call(?MODULE, {read, Table, FilterFun}). 
+
+%%--------------------------------------------------------------------
+%% @doc
+%% Update all 'enabled' records. 'U' of CRUD. Attempts to update
+%% 'disabled' records will raise an error.
 %% @end
 %%--------------------------------------------------------------------
 update(Items) ->
@@ -81,8 +92,10 @@ update(Items) ->
 %% @doc
 %% Delete an item. The 'D' of CRUD. When an item is deleted, it is not
 %% really deleted. No-one does that. Instead, the record is marked
-%% as enabled=false, meaning that it is to be treated as if it has
-%% been delteted.
+%% as 'disabled', meaning that it is to be treated as if it has
+%% been deleted. 
+%%
+%% * 'disabled' items are returned in read operations
 %% @end
 %%--------------------------------------------------------------------
 delete(Items) ->
@@ -126,8 +139,10 @@ init([]) ->
     {stop, Reason :: term(), NewState :: #state{}}).
 handle_call({create, Items}, _From, State) ->
     {reply, p_create(Items), State};
+handle_call({read, Table, FilterFun}, _From, State) ->
+    {reply, p_read(Table, FilterFun), State};
 handle_call({read, Table}, _From, State) ->
-    {reply, p_read(Table), State};
+    {reply, p_read(Table, fun (_) -> true end), State};
 handle_call({update, Items}, _From, State) ->
     {reply, p_update(Items), State};
 handle_call({delete, Items}, _From, State) ->
@@ -219,11 +234,12 @@ p_create(Items) ->
     {atomic, ok} = mnesia:transaction(F),
     ok.
 
-p_read(Table) ->
+p_read(Table, F) ->
     {ok, do(qlc:q([X || X <- mnesia:table(Table),
-                   Y <- mnesia:table(?TABLE_HARBOUR_RECORD_STATE),
-                   id(X) =:= id(Y),
-                   Y#?TABLE_HARBOUR_RECORD_STATE.enabled =:= true]))}.
+                        Y <- mnesia:table(?TABLE_HARBOUR_RECORD_STATE),
+                        id(X) =:= id(Y),
+                        F(X) =:= true,
+                        Y#?TABLE_HARBOUR_RECORD_STATE.enabled =:= true]))}.
 
 p_update(Items) ->
     F = fun() ->
