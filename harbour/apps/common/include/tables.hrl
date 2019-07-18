@@ -41,3 +41,5 @@
                                 date_modified                   :: pos_integer()
 		}).
 
+-type harbour_report_task()                                     :: #harbour_report_task{}.
+

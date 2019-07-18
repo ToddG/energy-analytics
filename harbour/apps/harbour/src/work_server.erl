@@ -14,6 +14,10 @@
 %% API
 -export([start_link/0
          ,refresh/0
+         ,next_downloadable_item/0
+         ,item_download_complete/1
+         ,next_parsable_item/0
+         ,item_parse_complete/1
         ]).
 
 %% gen_server callbacks
@@ -40,7 +44,6 @@
 %%--------------------------------------------------------------------
 %% @doc
 %% Starts the server
-%%
 %% @end
 %%--------------------------------------------------------------------
 -spec(start_link() ->
@@ -49,8 +52,64 @@ start_link() ->
     gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
 
 
+%%--------------------------------------------------------------------
+%% @doc
+%% Calls -> manifest_server:manifests() to get the full set of current
+%% manifests. After retrieving, adds the new items to the db table
+%% `harbour_report_task`.
+%% @end
+%%--------------------------------------------------------------------
+-spec(refresh() -> 
+    ok | {error, Reason :: term()}).
 refresh() ->
     gen_server:call(?MODULE, {refresh}).
+
+
+%%--------------------------------------------------------------------
+%% @doc
+%% Returns the next item that hasn't been previously downloaded. 
+%% Returns items sorted with current items first based on the report
+%% timestamp.
+%% @end
+%%--------------------------------------------------------------------
+-spec(next_downloadable_item() -> 
+    {ok, Task :: harbour_report_task()} | {error, Reason :: term()}).
+next_downloadable_item() ->
+    gen_server:call(?MODULE, {next_downloadable_item}).
+
+
+%%--------------------------------------------------------------------
+%% @doc
+%% Register an item as having completed the download process.
+%% @end
+%%--------------------------------------------------------------------
+-spec(item_download_complete(Id :: reference()) -> 
+    ok | {error, Reason :: term()}).
+item_download_complete(Id) ->
+    gen_server:call(?MODULE, {item_download_complete, Id}).
+
+%%--------------------------------------------------------------------
+%% @doc
+%% Returns the next item that has been downloaded but not yet parsed. 
+%% Returns items sorted with current items first based on the report
+%% timestamp.
+%% @end
+%%--------------------------------------------------------------------
+-spec(next_parsable_item() -> 
+    {ok, Task :: harbour_report_task()} | {error, Reason :: term()}).
+next_parsable_item() ->
+    gen_server:call(?MODULE, {next_parsable_item}).
+
+
+%%--------------------------------------------------------------------
+%% @doc
+%% Register an item as having completed the parse process.
+%% @end
+%%--------------------------------------------------------------------
+-spec(item_parse_complete(Id :: reference()) ->
+    ok | {error, Reason :: term()}).
+item_parse_complete(Id) ->
+    gen_server:call(?MODULE, {item_parse_complete, Id}).
 
 %%%===================================================================
 %%% gen_server callbacks
