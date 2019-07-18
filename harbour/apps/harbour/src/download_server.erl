@@ -4,20 +4,19 @@
 %%% @doc
 %%%
 %%% @end
-%%% Created : 2019-07-15 17:09:21.780311
+%%% Created : 2019-07-17 07:54:43.797975
 %%%-------------------------------------------------------------------
--module(db_server).
+-module(download_server).
 
 -behaviour(gen_server).
--include_lib("stdlib/include/qlc.hrl").
+-include_lib("kernel/include/logger.hrl").
 -include("../../common/include/tables.hrl").
 
 %% API
 -export([start_link/0
-        ,create/1
-        ,read/1
-        ,update/1
-        ,delete/1
+         ,download/0
+         %,download/1 %% use a regex match
+         ,download/2
         ]).
 
 %% gen_server callbacks
@@ -30,7 +29,11 @@
 
 -define(SERVER, ?MODULE). 
 
--record(state, {}).
+-record(state, {
+                    rate_limit      = 500                   :: pos_integer(),
+                    download_path   = "/appdata/zip/"       :: string(),
+                    refresh         = 3600000
+         }).
 
 %%%===================================================================
 %%% API
@@ -47,42 +50,27 @@
 start_link() ->
     gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
 
-%%--------------------------------------------------------------------
-%% @doc
-%% Create and store items. 'C' of CRUD. Only store items that do not
-%% yet exist.
-%% @end
-%%--------------------------------------------------------------------
-create(Items) ->
-    gen_server:call(?MODULE, {create, Items}). 
 
 %%--------------------------------------------------------------------
 %% @doc
-%% Return all 'enabled' records. 'R' of CRUD.
+%% Download all new files. Query the work_server for all remaining
+%% stuff to download. This starts a sequential download that continues
+%% for as long as there are items to download.
 %% @end
 %%--------------------------------------------------------------------
-read(Table) ->
-    gen_server:call(?MODULE, {read, Table}). 
+download() ->
+    ?LOG_INFO(#{server=>download, what=>download}),
+    gen_server:cast(?MODULE, {download}). 
 
 %%--------------------------------------------------------------------
 %% @doc
-%% Update all 'enabled' records. 'U' of CRUD. If 'disabled' records
-%% are included they are filtered out.
+%% Download url to file.
 %% @end
 %%--------------------------------------------------------------------
-update(Items) ->
-    gen_server:call(?MODULE, {update, Items}). 
+download(Url, File) ->
+    ?LOG_INFO(#{server=>download, what=>download, url=>Url, file=>File}),
+    gen_server:cast(?MODULE, {download, Url, File}). 
 
-%%--------------------------------------------------------------------
-%% @doc
-%% Delete an item. The 'D' of CRUD. When an item is deleted, it is not
-%% really deleted. No-one does that. Instead, the record is marked
-%% as enabled=false, meaning that it is to be treated as if it has
-%% been delteted.
-%% @end
-%%--------------------------------------------------------------------
-delete(Items) ->
-    gen_server:call(?MODULE, {delete, Items}). 
 
 %%%===================================================================
 %%% gen_server callbacks
@@ -103,7 +91,15 @@ delete(Items) ->
     {ok, State :: #state{}} | {ok, State :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term()} | ignore).
 init([]) ->
-    {ok, #state{}}.
+    ok = pubsub_server:subscribe(download_server_config, ?MODULE),
+    {ok, ConfigDir} = application:get_env(harbour, config_dir),
+    ConfigFile = filename:join(ConfigDir, "download.config"),
+    {ok, RateLimit, DownloadPath, Refresh} = case file:consult(ConfigFile) of
+        {ok, C} -> parse_config(C)
+    end,
+    State = #state{rate_limit=RateLimit, download_path=DownloadPath, refresh=Refresh},
+    %%spawn(fun() -> timer(State) end),
+    {ok, State}.
 
 %%--------------------------------------------------------------------
 %% @private
@@ -120,14 +116,6 @@ init([]) ->
     {noreply, NewState :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term(), Reply :: term(), NewState :: #state{}} |
     {stop, Reason :: term(), NewState :: #state{}}).
-handle_call({create, Items}, _From, State) ->
-    {reply, p_create(Items), State};
-handle_call({read, Table}, _From, State) ->
-    {reply, p_read(Table), State};
-handle_call({update, Items}, _From, State) ->
-    {reply, p_update(Items), State};
-handle_call({delete, Items}, _From, State) ->
-    {reply, p_delete(Items), State};
 handle_call(_Request, _From, State) ->
     {reply, ok, State}.
 
@@ -142,8 +130,15 @@ handle_call(_Request, _From, State) ->
     {noreply, NewState :: #state{}} |
     {noreply, NewState :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term(), NewState :: #state{}}).
+handle_cast({download}, State) ->
+    spawn(fun() -> sequential_download(State) end),
+    {noreply, State};
+handle_cast({download, Url, File}, State) ->
+    ok = curl(Url, File, State#state.rate_limit),
+    {noreply, State};
 handle_cast(_Request, State) ->
     {noreply, State}.
+
 
 %%--------------------------------------------------------------------
 %% @private
@@ -159,7 +154,13 @@ handle_cast(_Request, State) ->
     {noreply, NewState :: #state{}} |
     {noreply, NewState :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term(), NewState :: #state{}}).
-handle_info(_Info, State) ->
+handle_info({pubsub, {download_server_config, _} = Config} = Info, State) ->
+    {ok, RateLimit, DownloadPath, Refresh} = parse_config([Config]),
+    State1 = State#state{rate_limit=RateLimit, download_path=DownloadPath, refresh=Refresh},
+    ?LOG_INFO(#{server=>download, what=>handle_info, info=>Info, state0=>State, state1=>State1}),
+    {noreply, State1};
+handle_info(Info, State) ->
+    ?LOG_INFO(#{service => download, what => handle_info, info=> Info, state0 => State}), 
     {noreply, State}.
 
 %%--------------------------------------------------------------------
@@ -195,93 +196,48 @@ code_change(_OldVsn, State, _Extra) ->
 %%%===================================================================
 %%% Internal functions
 %%%===================================================================
-p_create(Items) ->
-    F = fun() ->
-        ok = consistency_check(Items),
-        Table = table(lists:nth(1, Items)),
-        ExistingIdList = qlc:e(qlc:q([id(X) ||  X <- mnesia:table(Table)])),
-        ExistingIdSet = sets:from_list(ExistingIdList),
-        CreatableItems = lists:filter( fun (X) -> not sets:is_element(id(X), ExistingIdSet) end, Items),
-        if 
-            CreatableItems =/= Items -> 
-                mnesia:abort(uncreatable_items);
-            true -> 
-                Shazzam = erlang:system_time(second),
-                RecordStates = [#rstate{fkid=id(X), date_created=Shazzam, date_modified=Shazzam} || X <- CreatableItems],
-                lists:foreach(fun mnesia:write/1, CreatableItems),
-                lists:foreach(fun mnesia:write/1, RecordStates)
-            end
-        end,
-    {atomic, ok} = mnesia:transaction(F),
-    ok.
+parse_config(C)->
+    P               = proplists:get_value(download_server_config, C),
+    RateLimit       = proplists:get_value(rate_limit, P),
+    DownloadPath    = proplists:get_value(download_path, P),
+    RefreshRate     = proplists:get_value(refresh, P),
+    {ok, RateLimit, DownloadPath, RefreshRate}.
 
-p_read(Table) ->
-    {ok, do(qlc:q([X || X <- mnesia:table(Table),
-                   Y <- mnesia:table(rstate),
-                   id(X) =:= id(Y),
-                   Y#rstate.enabled =:= true]))}.
 
-p_update(Items) ->
-    F = fun() ->
-        ok = consistency_check(Items),
-        Table = table(lists:nth(1, Items)),
-        EnabledIdList = qlc:e(qlc:q([id(X) ||   X <- mnesia:table(Table),
-                                                Y <- mnesia:table(rstate),
-                                                id(X) =:= id(Y),
-                                                Y#rstate.enabled =:= true])),
-        EnabledIdSet = sets:from_list(EnabledIdList),
-        UpdatableItems = lists:filter(fun (X) -> sets:is_element(id(X), EnabledIdSet) end, Items),
-        if 
-            UpdatableItems =/= Items -> 
-                mnesia:abort(unupdatable_items);
-            true -> 
-                Shazzam = erlang:system_time(second),
-                UpdatableItemIdList = [id(X) || X <- UpdatableItems],
-                UpdatableItemIdSet = sets:from_list(UpdatableItemIdList),
-                RecordStates = qlc:e(qlc:q([X ||    X <- mnesia:table(rstate),
-                                                    sets:is_element(id(X), UpdatableItemIdSet)])),
-                UpdatedRecordStates = [X#rstate{date_modified=Shazzam} || X <- RecordStates],
-                lists:foreach(fun mnesia:write/1, UpdatableItems),
-                lists:foreach(fun mnesia:write/1, UpdatedRecordStates)
-            end
-        end,
-    {atomic, ok} = mnesia:transaction(F),
-    ok.
-
-p_delete(Items) ->
-    F = fun() ->
-        ok = consistency_check(Items),
-        Shazzam = erlang:system_time(second),
-        ItemsIdList = [id(X) || X <- Items],
-        ItemsIdSet = sets:from_list(ItemsIdList),
-        ItemsRStates = qlc:e(qlc:q([X || X <-   mnesia:table(rstate),
-                                                sets:is_element(X#rstate.fkid, ItemsIdSet),
-                                                X#rstate.enabled =:= true
-                                   ])),
-        UpdatedRecordStates = [R#rstate{enabled=false, date_modified=Shazzam} || R <- ItemsRStates],
-        lists:foreach(fun mnesia:write/1, UpdatedRecordStates)
-    end,
-    {atomic, ok} = mnesia:transaction(F),
-    ok.
-
-do(Q) ->
-    F = fun() -> qlc:e(Q) end,
-    {atomic, Val} = mnesia:transaction(F),
-    Val.
-
-consistency_check(Items) ->
-    Tables = sets:to_list(sets:from_list([table(X) || X <- Items])),
-    case Tables of
-        [rstate] ->
-            mnesia:abort(invalid_table);
-        [_,_] ->
-            mnesia:abort(too_many_tables);
-        [_] -> 
+-spec(curl(Link :: string(), 
+           OutputFile :: string(), 
+           RateLimit :: pos_integer()) -> ok | {error, Reason :: term()}).
+curl(Link, OutputFile, RateLimit)->
+    ?LOG_INFO(#{server=>download, what=>curl, link=>Link, file=>OutputFile, rate=>RateLimit}),
+    case filelib:is_regular(OutputFile) of
+        true -> 
+            ?LOG_WARNING(#{server=>download, what=>curl, link=>Link, file=>OutputFile, rate=>RateLimit, text=>"output file exists, skipping download"}),
+            ok;
+        _ ->
+            Cmd = io_lib:format("curl --limit-rate ~pK -X GET -o ~s \"~s\"", [RateLimit, OutputFile, Link]), 
+            Out = os:cmd(Cmd),
+            ?LOG_INFO(#{server=>download, what=>curl, link=>Link, file=>OutputFile, output=>Out, cmd=>Cmd}),
             ok
     end.
 
-table(R) ->
-    element(1, R).
+-spec(sequential_download(State :: #state{}) -> ok | {error, Reason :: term()}).
+sequential_download(State) ->
+    case work_server:next_downloadable_item() of 
+        {ok, T} -> 
+            Url         = T#?TABLE_HARBOUR_REPORT_TASK.url,
+            FileName    = T#?TABLE_HARBOUR_REPORT_TASK.filename,
+            File        = filename:join(State#state.download_path, FileName),
+            ok = curl(Url, File, State#state.rate_limit),
+            work_server:item_download_complete(Url),
+            download_server:download(),
+            ok;
+        _ -> ok
+    end.
 
-id(R) ->
-    element(2, R).
+
+%timer(State) ->
+%    receive cancel -> ok
+%    after 2000 ->
+%            ?LOG_INFO(#{server=>download, what=>timer, state=>State}),
+%            download_server:download()
+%    end.

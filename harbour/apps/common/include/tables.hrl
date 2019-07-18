@@ -1,32 +1,24 @@
 %%%===================================================================
-%%% In order for the CRUD semantics to work properly, namely the
-%%% 'delete' method, we need to have the following structure fo
-%%% each record (which defines a table in the db):
+%%% Expose the tables as macros so that if we ever have to do an
+%%% inplace upgrade or some other migration, we don't have to hunt
+%%% for all the usages. We can do tha A/B switch here.
+%%%===================================================================
+-define(TABLE_HARBOUR_REPORT_TASK,             harbour_report_task).
+
+%%%===================================================================
+%%% Tables
 %%%
-%%% The field is always 'id':
-%%%
-%%% 	{id, foo, bar, baz, ...}
-%%%
-%%% 'rstate' is an internal table that tracks the record state. The
-%%% foreign key id, 'fkid', equals any table's 'id' like this:
-%%%
-%%% 	rstat.fkid =:= {anytable}.id
-%%%
-%%% element(1, Task) =:= task
-%%% element(2, Task) =:= reference()
-%%% element(1, Rstate) =:= rstate
-%%% element(2, Rstate) =:= reference()
+%%% url works as the key as it is unique
 %%%===================================================================
 
--record(task,	{	id                      :: reference(),
-                        type                    :: undefined | download_url,
-                        data                    :: string(),
-                        state = undefined       :: undefined | download_started | download_completed | stored_in_db
-                      }).
-
-
--record(rstate,	{	fkid			:: reference(),
-                        enabled = true          :: boolean(),
-                        date_created            :: pos_integer(),
-                        date_modified           :: pos_integer()
+-record(harbour_report_task,	{   url                             :: string(),
+                                    filename                        :: string(),
+                                    file_path       = undefined     :: undefined | string(),
+                                    s3_url          = undefined     :: undefined | string(),
+                                    state           = undefined     :: harbour_report_task_state(),
+                                    date_created    = undefined     :: undefined | pos_integer(),
+                                    date_modified   = undefined     :: undefined | pos_integer()
 		}).
+
+-type harbour_report_task()                                     :: #harbour_report_task{}.
+-type harbour_report_task_state()                               :: undefined | download_started | download_completed | parse_started| parse_completed | archive_started | archive_completed.

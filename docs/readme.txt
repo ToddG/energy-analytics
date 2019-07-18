@@ -1,0 +1,2 @@
+https://caiso.com/Documents/OASIS-InterfaceSpecification_v5_1_8Redline_Independent2019Release.pdf
+

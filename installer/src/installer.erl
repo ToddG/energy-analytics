@@ -9,20 +9,31 @@
 %%====================================================================
 
 %% escript Entry point
-main(Args) ->
-    Path = "/appdata/db/mnesia",
-    io:format("Installer is configuring target system... ~p~n", [Args]),
+main([Path|_]) ->
+    MnesiaPath  = filename:join([Path, "db", "mnesia"]),
+    ZipPath     = filename:join([Path, "zip"]),
+    XmlPath     = filename:join([Path, "xml"]),
+    LogPath     = filename:join([Path, "log"]),
+    ok = filelib:ensure_dir(io_lib:format("~s/", [MnesiaPath])),
+    ok = filelib:ensure_dir(io_lib:format("~s/", [ZipPath])),
+    ok = filelib:ensure_dir(io_lib:format("~s/", [XmlPath])),
+    ok = filelib:ensure_dir(io_lib:format("~s/", [LogPath])),
+    io:format("Installing system to... ~p~n", [Path]),
+    io:format(" > db dir    : ~p~n", [MnesiaPath]),
+    io:format(" > zip dir   : ~p~n", [ZipPath]),
+    io:format(" > xml dir   : ~p~n", [XmlPath]),
+    io:format(" > log dir   : ~p~n", [LogPath]),
     %% directory
-    application:set_env([{mnesia, [{dir, Path}]}]),
+    application:set_env([{mnesia, [{dir, MnesiaPath}]}]),
     E = application:get_all_env(mnesia),
     io:format("installer: ~p~n", [E]),
     %% schema
     DbNodes = [node()],
     case mnesia:create_schema(DbNodes) of
         ok -> 
-            io:format("created db schema at: ~s~n", [Path]);
+            io:format("created db schema at: ~s~n", [MnesiaPath]);
         {error,{Node,{already_exists, Node}}} ->
-            io:format("db schema already exists at: ~s for node: ~s~n", [Path, Node])
+            io:format("db schema already exists at: ~s for node: ~s~n", [MnesiaPath, Node])
     end,
     io:format("created schema on: ~p~n", [DbNodes]),
     %% tables
@@ -30,29 +41,17 @@ main(Args) ->
     Tables = mnesia:system_info(tables),
     io:format("existing tables: ~p~n", [Tables]),
     TableSet = sets:from_list(Tables),
-    case sets:is_element(task, TableSet) of
+    case sets:is_element(?TABLE_HARBOUR_REPORT_TASK, TableSet) of
         true -> 
-                io:format("table 'task' already exists: ~n", []);
+                io:format("table '~p' already exists: ~n", [?TABLE_HARBOUR_REPORT_TASK]);
         false ->
-                mnesia:create_table(task, [
+                mnesia:create_table(?TABLE_HARBOUR_REPORT_TASK, [
                                             {type, set},
-                                            {attributes, record_info(fields, task)},
+                                            {attributes, record_info(fields, ?TABLE_HARBOUR_REPORT_TASK)},
                                             {disc_copies, [node()]}
                                           ]),
-                io:format("created 'task' table: ~n", [])
+                io:format("created '~p' table: ~n", [?TABLE_HARBOUR_REPORT_TASK])
     end,
-    case sets:is_element(rstate, TableSet) of
-        true -> 
-                io:format("table 'rstate' already exists: ~n", []);
-        false ->
-                mnesia:create_table(rstate, [
-                                            {type, set},
-                                            {attributes, record_info(fields, rstate)},
-                                            {disc_copies, [node()]}
-                                          ]),
-                io:format("created 'rstate' table: ~n", [])
-    end,
-    
     %% done
     mnesia:stop(),
     erlang:halt(0).

@@ -35,31 +35,31 @@ init([]) ->
                         permanent,
                         10000,
                         worker,
-                        [pubsub_server]},
-                     {tag_config,
+                        [pubsub_server]}
+                     ,{tag_config,
                         {config_server, start_link, []},
                         permanent,
                         10000,
                         worker,
-                        [config_server]},
-                     {tag_manifest,
+                        [config_server]}
+                     ,{tag_manifest,
                         {manifest_server, start_link, []},
                         permanent,
                         10000,
                         worker,
-                        [manifest_server]},
-                     {tag_work,
+                        [manifest_server]}
+                     ,{tag_work,
                         {work_server, start_link, []},
                         permanent,
                         10000,
                         worker,
-                        [work_server]},
-                     {tag_db,
-                        {db_server, start_link, []},
+                        [work_server]}
+                     ,{tag_download,
+                        {download_server, start_link, []},
                         permanent,
                         10000,
                         worker,
-                        [db_server]}        
+                        [download_server]}        
                  ],
     {ok, {SupFlags, ChildSpecs}}.
 

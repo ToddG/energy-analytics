@@ -9,11 +9,13 @@
 -module(manifest_server).
 
 -behaviour(gen_server).
+-include("../../common/include/dates.hrl").
+-include_lib("kernel/include/logger.hrl").
 
 %% API
--export([start_link/0,
-         reports/0,
-         reports/2
+-export([start_link/0
+         ,manifests/0
+         ,manifests/2
         ]).
 
 %% gen_server callbacks
@@ -26,12 +28,19 @@
 
 -define(SERVER, ?MODULE). 
 
--record(state, {reports}).
+-record(state,              {oasis_config   :: oasis_config(),
+                             oasis_reports  :: oasis_reports() 
+                            }).
 
--type month()   :: 1..12.
--type day()     :: 1..31.
--type year()    :: 1..10000.
--type tdate()    :: {year(), month(), day()}.
+-record(oasis_config,       {website        :: string(),
+                             context        :: string(),
+                             start_date     :: tdate()
+                            }).
+
+-record(oasis_reports,      {reports        :: [map()]}).
+
+-type oasis_config()                        :: #oasis_config{}.
+-type oasis_reports()                       :: #oasis_reports{}.
 
 %%%===================================================================
 %%% API
@@ -53,18 +62,20 @@ start_link() ->
 %% Generate list of report urls.
 %% @end
 %%--------------------------------------------------------------------
--spec(reports() -> {ok, [term()]} | {error, Reason :: term()}).
-reports() -> 
-    gen_server:call(?MODULE, {reports}). 
+-spec(manifests() -> {ok, [term()]} | {error, Reason :: term()}).
+manifests() -> 
+    ?LOG_INFO(#{service => manifest, what => manifests}), 
+    gen_server:call(?MODULE, {manifests}). 
 
 %%--------------------------------------------------------------------
 %% @doc
 %% Generate list of report urls, between start and end dates (close close).
 %% @end
 %%--------------------------------------------------------------------
--spec(reports(tdate(), tdate()) -> {ok, [term()]} | {error, Reason :: term()}).
-reports(StartDate, EndDate) -> 
-    gen_server:call(?MODULE, {reports_start_end, StartDate, EndDate}). 
+-spec(manifests(tdate(), tdate()) -> {ok, [term()]} | {error, Reason :: term()}).
+manifests(StartDate, EndDate) -> 
+    ?LOG_INFO(#{service => manifest, what => manifests, startdate => StartDate, enddate => EndDate}), 
+    gen_server:call(?MODULE, {manifests_start_end, StartDate, EndDate}). 
 
 
 %%%===================================================================
@@ -86,16 +97,18 @@ reports(StartDate, EndDate) ->
     {ok, State :: #state{}} | {ok, State :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term()} | ignore).
 init([]) ->
-    ok = pubsub_server:subscribe(manifest_server_oasis_reports, manifest_server),
+    ok = pubsub_server:subscribe(manifest_server_config, ?MODULE),
+    ok = pubsub_server:subscribe(oasis_reports_config, ?MODULE),
     {ok, ConfigDir} = application:get_env(harbour, config_dir),
-    ConfigFile = filename:join(ConfigDir, "manifest.config"),
-    {Config} = case file:consult(ConfigFile) of
-        {ok, Terms} -> 
-            MSOR = lists:last(lists:filter(fun({K,_}) -> K == manifest_server_oasis_reports end, Terms)),
-            {MSOR}
+    ManifestConfigFile = filename:join(ConfigDir, "manifest.config"),
+    {ok, OasisServerConfig} = case file:consult(ManifestConfigFile) of
+        {ok, C1} -> parse_oasis_server_config(C1)
     end,
-    {ok, #state{reports = parse_config(Config)}}.
-
+    OasisReportConfigFile = filename:join(ConfigDir, "oasis_reports.config"),
+    {ok, OasisReportsConfig} = case file:consult(OasisReportConfigFile) of
+        {ok, C2} -> parse_oasis_report_config(C2)
+    end,
+    {ok, #state{oasis_config = OasisServerConfig, oasis_reports = OasisReportsConfig}}.
 
 %%--------------------------------------------------------------------
 %% @private
@@ -112,27 +125,20 @@ init([]) ->
     {noreply, NewState :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term(), Reply :: term(), NewState :: #state{}} |
     {stop, Reason :: term(), NewState :: #state{}}).
-handle_call({reports}, _From, State) ->
-    {manifest_server_oasis_reports, P} = State#state.reports,
-    StartDate   = proplists:get_value(start_date, P),
+handle_call({manifests}, _From, State) ->
+    C = State#state.oasis_config,
+    R = State#state.oasis_reports,
+    StartDate = C#oasis_config.start_date,
     {EndDate, _} = calendar:local_time(),
-    {reply, common_reports(P, StartDate, EndDate), State};
-handle_call({reports_start_end, StartDate, EndDate}, _From, State) ->
-    {manifest_server_oasis_reports, P} = State#state.reports,
-    {ok, Reports} =  common_reports(P, StartDate, EndDate),
+    {ok, Reports} = oasis_reports(C, R, StartDate, EndDate),
+    {reply, {ok, Reports}, State};
+handle_call({manifests_start_end, StartDate, EndDate}, _From, State) ->
+    C = State#state.oasis_config,
+    R = State#state.oasis_reports,
+    {ok, Reports} =  oasis_reports(C, R, StartDate, EndDate),
     {reply, {ok, Reports}, State};
 handle_call(_Request, _From, State) ->
     {reply, ok, State}.
-
-common_reports(P, StartDate, EndDate) ->
-    Website     = proplists:get_value(website, P),
-    Context     = proplists:get_value(context, P),
-    Reports     = proplists:get_value(reports, P),
-    Dates       = date_gen:dates(StartDate, EndDate),
-    Ranges      = date_gen:day_ranges(Dates),
-    Reports     = proplists:get_value(reports, P),
-    ListSZ = [single_zip_url(R, date_gen:format(Start), date_gen:format(End), Website, Context) || #{type := single_zip} = R <- Reports, {Start, End} <- Ranges],
-    {ok, ListSZ}.
 
 
 %%--------------------------------------------------------------------
@@ -163,9 +169,18 @@ handle_cast(_Request, State) ->
     {noreply, NewState :: #state{}} |
     {noreply, NewState :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term(), NewState :: #state{}}).
-handle_info({pubsub, {manifest_server_oasis_reports, Reports}}, State) ->
-    {noreply, State#state{reports = parse_config(Reports)}};
-handle_info(_Info, State) ->
+handle_info({pubsub, {oasis_reports_config, _} = Config} = Info, State) ->
+    {ok, ReportsConfig} = parse_oasis_report_config([Config]),
+    State1 = State#state{oasis_reports = ReportsConfig},
+    ?LOG_INFO(#{service => manifest, what => handle_info, info=> Info, state0=> State, state1 => State1}), 
+    {noreply, State1};
+handle_info({pubsub, {manifest_server_config, _} = Config} = Info, State) ->
+    {ok, OasisConfig} = parse_oasis_server_config([Config]),
+    State1 = State#state{oasis_config = OasisConfig},
+    ?LOG_INFO(#{service => manifest, what => handle_info, info=> Info, state0=> State, state1 => State1}), 
+    {noreply, State1};
+handle_info(Info, State) ->
+    ?LOG_INFO(#{service => manifest, what => handle_info, info=> Info, state0 => State, state1 => State}), 
     {noreply, State}.
 
 %%--------------------------------------------------------------------
@@ -201,11 +216,18 @@ code_change(_OldVsn, State, _Extra) ->
 %%%===================================================================
 %%% Internal functions
 %%%===================================================================
+parse_oasis_server_config(P0) ->
+    P1          = proplists:get_value(manifest_server_config, P0),
+    P2          = proplists:get_value(oasis,        P1),
+    Website     = proplists:get_value(website,      P2),
+    Context     = proplists:get_value(context,      P2),
+    StartDate   = proplists:get_value(start_date,   P2),
+    {ok, #oasis_config{website=Website, context=Context, start_date=StartDate}}.
 
-parse_config(R) ->
-    %% TODO: parse the config to guarantee they are correct
-    R.
-
+parse_oasis_report_config(P0) ->
+    P1          = proplists:get_value(oasis_reports_config, P0),
+    Reports     = proplists:get_value(reports, P1),
+    {ok, #oasis_reports{reports=Reports}}.
 
 %%%-------------------------------------------------------------------
 %%% @doc
@@ -233,13 +255,20 @@ parse_config(R) ->
 %%%	variable Parameters are defined for each Report and its specific Filter options
 %%% @end
 %%%-------------------------------------------------------------------
-single_zip_url(#{type := single_zip, name := Name, mri := MRI, version := Version, params := Params}, Start, End, Website, Context) ->
-    single_zip_url(Name, Start, End, MRI, Version, Params, Website, Context).
+single_zip(#{type := single_zip, name := Name, mri := MRI, version := Version, params := Params}, Start, End, Website, Context) ->
+    {single_zip_url(Name, Start, End, MRI, Version, Params, Website, Context), single_zip_filename(Name, Start, End, MRI, Version, Params, Website, Context)}.
 
 single_zip_url(OASISReport, StartDateTime, EndDateTime, MarketRunID, Version, Params, Website, Context) -> 
 	ReportType = "SingleZip",
 	io_lib:format("http://~s/~s/~s?queryname=~s&startdatetime=~sT07:00-0000&enddatetime=~sT07:00-0000&market_run_id=~s&version=~p&~s", 
 		      [Website, Context, ReportType, OASISReport, StartDateTime, EndDateTime, MarketRunID, Version, Params]).
+
+
+single_zip_filename(OASISReport, StartDateTime, EndDateTime, MarketRunID, Version, Params, Website, Context) -> 
+	io_lib:format("~s:sz:~s:~s:~s:~s:~s:~p:~s.zip", 
+		      [OASISReport, Website, Context, StartDateTime, EndDateTime, MarketRunID, Version, Params]).
+    
+    
 
 %%%-------------------------------------------------------------------
 %%% @doc
@@ -271,3 +300,26 @@ single_zip_url(OASISReport, StartDateTime, EndDateTime, MarketRunID, Version, Pa
 %%% 
 %%% file(Path, OASISReport, StartDateTime, EndDateTime, MarketRunId, Version) -> 
 %%% 	io_lib:format("~s/~s_~s_~s_~s_~p.zip", [Path, OASISReport, StartDateTime, EndDateTime, MarketRunId, Version]).
+%%%
+%%%
+
+%%--------------------------------------------------------------------
+%% @private
+%% @doc
+%% @end
+%%--------------------------------------------------------------------
+-spec(oasis_reports(C::oasis_config(), 
+                    R::oasis_reports(), 
+                    StartDate :: tdate(), 
+                    EndDate :: tdate()) -> {ok, [{string(), string()}]}).
+oasis_reports(C, R, StartDate, EndDate) ->
+    Website     = C#oasis_config.website,
+    Context     = C#oasis_config.context,
+    Reports     = R#oasis_reports.reports,
+    Dates       = date_gen:dates(StartDate, EndDate),
+    Ranges      = date_gen:day_ranges(Dates),
+    SingleZipsList = [single_zip(X, date_gen:format(Start), date_gen:format(End), Website, Context) || 
+              #{type := single_zip} = X <- Reports, {Start, End} <- Ranges],
+    ?LOG_INFO(#{service => manifest, what => oasis_reports, type => sz, count => length(SingleZipsList)}), 
+    {ok, SingleZipsList}.
+

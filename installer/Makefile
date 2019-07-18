@@ -34,4 +34,4 @@ shell:
 
 .PHONY: run
 run: build 
-	_build/default/bin/${APP}
+	_build/default/bin/${APP} /appdata

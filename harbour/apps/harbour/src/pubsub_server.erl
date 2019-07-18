@@ -9,6 +9,7 @@
 -module(pubsub_server).
 
 -behaviour(gen_server).
+-include_lib("kernel/include/logger.hrl").
 
 %% API
 -export([start_link/0]).
@@ -41,10 +42,12 @@
 %%%
 -spec(publish(term(), term()) -> ok | {error, Reason :: term()}).
 publish(Topic, Message) ->
+    ?LOG_INFO(#{service => pubsub, what => publish, topic => Topic, message => Message}), 
     gen_server:call(?MODULE, {publish, #pub{topic=Topic, message=Message}}). 
 
 -spec(subscribe(term(), term()) -> ok | {error, Reason :: term()}).
 subscribe(Topic, Subscriber) ->
+    ?LOG_INFO(#{service => pubsub, what => subscribe, topic => Topic, subscriber => Subscriber}), 
     gen_server:call(?MODULE, {subscribe, #sub{topic=Topic, subscriber=Subscriber}}). 
 
 
@@ -95,27 +98,44 @@ init([]) ->
     {noreply, NewState :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term(), Reply :: term(), NewState :: #state{}} |
     {stop, Reason :: term(), NewState :: #state{}}).
-handle_call({subscribe, #sub{topic=Topic, subscriber=Subscriber}}, _From, State) ->
+handle_call({subscribe, #sub{topic=Topic, subscriber=Subscriber}} = R, _From, State) ->
+    {ok, State1} = p_subscribe(State, Topic, Subscriber),
+    ?LOG_INFO(#{service => pubsub, what => handle_call, request=>R, state0 => State, state1 => State1}), 
+    {reply, ok, State1};
+handle_call({publish, #pub{topic=Topic, message=Message}} = R, _From, State) ->
+    p_publish(State, Topic, Message),
+    ?LOG_INFO(#{service => pubsub, what => handle_call, request=>R, state0 => State}), 
+    {reply, ok, State};
+handle_call(_Request, _From, State) ->
+    {reply, ok, State}.
+
+
+p_subscribe(State, Topic, Subscriber) ->
     TM = State#state.topics,
     case maps:is_key(Topic, TM) of
         true -> SubscriberList0 = maps:get(Topic, TM),
                 SubscriberList1 = [Subscriber | SubscriberList0],
                 TM1 = TM#{Topic := SubscriberList1},
                 State1 = State#state{topics=TM1},
-                {reply, ok, State1};
+                {ok, State1};
         _ ->    TM1 = TM#{Topic => [Subscriber]},
                 State1 = State#state{topics=TM1},
-                {reply, ok, State1}
-    end;
-handle_call({publish, #pub{topic=Topic, message=Message}}, _From, State) ->
+                {ok, State1}
+    end.
+
+p_publish(State, Topic, Message) ->
     TM = State#state.topics,
     case maps:is_key(Topic, TM) of
-        true -> [Pid ! {pubsub, {Topic, Message}} || Pid <- maps:get(Topic, TM)],
-                {reply, ok, State};
-        _ ->    {reply, {error, topic_not_found}, State} 
-    end;
-handle_call(_Request, _From, State) ->
-    {reply, ok, State}.
+        true -> 
+            [send(Pid, Topic, Message) || Pid <- maps:get(Topic, TM)];
+        _ ->    
+            ?LOG_WARNING(#{service => pubsub, what => send, topic=>Topic, message=>Message, text=>"topic not found"})
+    end.
+
+send(Pid, Topic, Message) ->
+    ?LOG_INFO(#{service => pubsub, what => send, pid=>Pid, topic=>Topic, message=>Message}), 
+    Pid ! {pubsub, {Topic, Message}}.
+
 
 %%--------------------------------------------------------------------
 %% @private
@@ -145,7 +165,8 @@ handle_cast(_Request, State) ->
     {noreply, NewState :: #state{}} |
     {noreply, NewState :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term(), NewState :: #state{}}).
-handle_info(_Info, State) ->
+handle_info(Info, State) ->
+    ?LOG_INFO(#{service => pubsub, what => handle_info, info=> Info, state0 => State}), 
     {noreply, State}.
 
 %%--------------------------------------------------------------------
