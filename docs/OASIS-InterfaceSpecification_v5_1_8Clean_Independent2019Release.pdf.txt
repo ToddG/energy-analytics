@@ -1,0 +1,12514 @@
+ 
+
+ 
+
+   
+ 
+
+Interface Specification for OASIS 
+
+2019 Independent Release 
+
+     
+
+ Version:  5.1.8 
+
+    2/15/2019  
+
+ 
+
+ 
+
+ 
+
+1 
+ 
+ 
+ 
+
+ 
+
+ 
+
+ 
+ 
+ 
+
+Revision History 
+
+Interface Specification for OASIS 
+ 
+
+Date 
+
+Sep 23, 2013 
+
+Versi
+on 
+
+4.0.0 
+
+Description 
+
+Initial release of GMT 2013 services to Market Participants. Pre-GMT 
+tech specs and it’s version history is at 
+http://www.caiso.com/Documents/InterfaceSpecifications-
+OASISv3_12_0.pdf 
+
+Oct 24, 2013 
+
+4.0.1  Minor corrections and updates 
+
+ 
+
+Nov 26, 2013 
+
+4.0.2 
+
+Removed deprecated group CRR1_GRP and corrected report names 
+available under RTM1_GRP and HASP1_GRP 
+
+Removed alternate URL for CURR_LMP_GRP. StartDateTime and 
+version parameters are now mandatory for all reports. 
+
+Dec 15, 2013 
+
+4.0.3 
+
+PRC_LMP URL typo correction.  
+
+Update for PRC_FLEX_RAMP and PRC_FLEX_RAMP_CURR. 
+
+Updated files in groups HASP_MPM_SD_PRC_GRP, 
+RTPD_MPM_SD_PRC_GRP, DAM_MPM_LMP_GRP 
+
+Jan 22, 2014 
+
+4.1.1  Merge FERC764 tech spec changes on top of latest GMT release tech 
+
+spec 
+
+Updated current Transmission usage, Demand forecast, Renewable 
+forecast sections for 15-min interval data. 
+
+Mar 4th, 2014 
+
+4.1.2 
+
+Renamed query parameter for SLD_FCST to be execution_type instead 
+of exec_type for RTM market_run_id 
+
+Mar 12, 2014 
+
+4.1.3 
+
+Added additional report query parameters for TRNS_USAGE and 
+TRNS_CURR_USAGE 
+
+Mar 18, 2014 
+
+4.2.0 
+
+Changes for Fall 2014/EIM release 
+
+Added new reports: 
+
+  PRC_EIM_GHG – EIM GHG shadow price  
+
+  ENE_EIM_TRANSFER_LIMITS – EIM Transfer limits 
+
+  ENE_EIM_TRANSFER –EIM Transfer 
+
+  ENE_EIM_DYN_NSI – EIM BAA Dynamic NSI 
+
+  ENE_BASE_NSI – BAA Base NSI 
+
+ 
+
+Updated reports: 
+
+  PRC_FLEX_RAMP_CURR and PRC_FLEX_RAMP for new 
+
+baa_grp_id attribute 
+
+  PRC_CNSTR, PRC_RTM_FLOWGATE, 
+
+PRC_CD_RTM_FLOWGATE, PRC_MPM_CNSTR, 
+PRC_MPM_CNSTR_CMP, PRC_MPM_RTM_FLOWGATE to 
+include new Constraint Type (Physical, Scheduling) 
+
+  PRC_INTVL_LMP,PRC_CURR_LMP,PRC_HASP_LMP, 
+
+PRC_RTPD_LMP, PRC_MPM_RTM_LMP to include GHG LMP 
+component in the output 
+
+Interface Specification for OASIS 
+
+ 
+
+Page i 
+
+ 
+
+ 
+ 
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+  ENE_EA updated for two new energy types for Base Schedule 
+
+and EIM manual dispatch.  
+
+  ENE_MPM for new baa_id attribute 
+
+ 
+
+OasisReport.xsd version will be moving from v1 to v2 for the 
+new/changed reports. 
+
+Jun 30, 2014 
+
+4.2.1 
+
+PRC_HASP_LMP correction to include GHG LMP component in the 
+output. 
+
+Aug 12,2014 
+
+4.2.2 
+
+  Removed newly added Constraint type element from the 
+
+following reports to roll back to previous version v1 
+PRC_CNSTR,PRC_RTM_FLOWGATE,       
+PRC_CD_RTM_FLOWGATE,  
+
+PRC_MPM_CNSTR, PRC_MPM_CNSTR_CMP,  
+PRC_MPM_RTM_FLOWGATE  
+
+  Updated the URLs to add enddatetime element to the following 
+
+reports 
+
+PRC_FLEX_RAMP 
+
+  
+
+  Added  sample URLs for market_run_id =ALL for the following 
+
+reports 
+
+ENE_EIM_TRANSFER_LIMITS 
+
+ENE_EIM_TRANSFER 
+
+ENE_EIM_DYN_NSI 
+
+  Removed non-existent report PRC_FLEX_RAMP_CURR from 
+
+the document. 
+
+ 
+
+ 
+
+Dec 04, 2014 
+
+4.2.3 
+
+Add new reports for the January 2015 release: 
+
+Major version=3; Minor version=20150101 
+
+  PRC_SPTIE_LMP - Scheduling Point Tie Combination Locational 
+
+Marginal Prices (LMP) 
+
+  PRC_CD_SPTIE_LMP - Contingency Dispatch Scheduling Point 
+
+Tie Combination Locational Marginal Prices (LMP) 
+
+ 
+
+Per Fall Release 2014 EIM, added version 2 sample URLs for the 
+following reports: PRC_INTVL_LMP, 
+PRC_CURR_LMP,PRC_HASP_LMP, PRC_RTPD_LMP, 
+PRC_MPM_RTM_LMP; where version=2 includes the GHG LMP 
+component in the output 
+
+Dec 19, 2014 
+
+4.2.4 
+
+  Removed the HASP market sample URLs for the new report 
+
+PRC_SPTIE_LMP 
+
+  Corrected the version # for the group report URLs: 
+
+DAM_SPTIE_LMP_GRP, RTPD_SPTIE_LMP_GRP, 
+RTD_SPTIE_LMP_GRP – should be version 3 
+
+Interface Specification for OASIS 
+
+ 
+
+Page ii 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Feb 18, 2015 
+
+4.2.5 
+
+  Updated CB Public Bids to add new Flowgate field (PUB_CB_BID) 
+
+  Update CB Reference Prices to add new TIE_NAME field 
+
+(PRC_DS_REF) 
+
+  Add new report ATL_CBNODE 
+
+Mar 12, 2015 
+
+4.2.6 
+
+  Updated occurrences of “Spring 2015” to “Independent 2015” release 
+
+in the document 
+
+Mar 30, 2015 
+
+4.2.7 
+
+  Corrected the PRC_DS_REF sample single zip URLs 
+
+  Updated Section 11 Long/Short Day section to add notes about HE25 
+
+and HE03 
+
+Apr 7,2016 
+
+4.3.0 
+
+Fall 2016 Release changes 
+
+ 
+
+New services  
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+service PRC_RTM_SCH_CNSTR (Scheduling Constraint 
+Shadow Prices) 
+
+service SLD_ADV_FCST (Advisory CAISO Demand Forecast) 
+
+service ENE_HRLY_BASE_NSI (EIM BAA Hourly Base NSI) 
+
+service ENE_UNCERTAINTY_MV (Uncertainty Movement by 
+Category) 
+
+service ENE_FLEX_RAMP_REQT (Flexible Ramp 
+Requirements) 
+
+service ENE_AGGR_FLEX_RAMP (Flex Ramp Aggr Awards) 
+
+service ENE_FLEX_RAMP_DC (Flex Ramp Surplus Demand 
+Curves) 
+
+Update to existing services  
+
+  Updated PRC_SPTIE_LMP service to include LMP_ENE_PRC, 
+
+LMP_LOSS_PRC AND LMP_GHG_PRC elements 
+
+  Updated PRC_CD_SPTIE_LMP service to include 
+
+LMP_ENE_PRC, LMP_LOSS_PRC AND LMP_GHG_PRC 
+elements 
+
+  Updated PRC_MPM_RTM_LMP service to extend the support for 
+
+RTD LMPM 
+
+  Updated PRC_MPM_ RTM_NOMOGRAM to extend the support 
+
+for RTD LMPM 
+
+  Updated PRC_MPM_RTM_NOMOGRAM_CMP to extend the 
+
+support for RTD LMPM 
+
+  Updated PRC_MPM_RTM_FLOWGATE to extend the support for 
+
+RTD LMPM 
+
+  Updated PRC_MPM_CNSTR_CMP to extend the support for 
+
+RTD LMPM 
+
+  Updated PRC_MPM_RTM_REF_BUS to extend the support for 
+
+RTD LMPM 
+
+  Updated PUB_BID to include GHG  market product 
+
+ 
+
+Other document corrections 
+
+Interface Specification for OASIS 
+
+ 
+
+Page iii 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+ 
+
+csv format to “6” under section 3.1.3 
+
+  Maximum download to only one hour for PRC_RTPD_LMP  
+
+June 2, 2016 
+
+4.3.1 
+
+Fall 2016 Release additional changes 
+
+ 
+
+  Added new SLD_SF_EVAL_DMD_FCST report under System 
+
+Demand section 
+
+  Added new ENE_EIM_TRANSFER_TIE report under Energy 
+
+section 
+
+  Added 'RAMP_TYPE' element for the ENE_AGGR_FLEX_RAMP 
+
+report 
+
+  Updated the SLD_ADV_FCST report description 
+
+Aug 19, 2016 
+
+4.3.2 
+
+Fall 2016 Release additional changes 
+
+  Added new ENE_HRLY_BASE_LOSS report under Energy 
+
+section 
+
+Dec 2, 2016 
+
+4.3.3 
+
+Independent 2016 release 
+
+ 
+
+Introduced API services for below reports:  
+
+  Price Correction Messages – ATL_PRC_CORR_MSG 
+
+  Scheduling Point Definition – ATL_SP 
+
+  BAA and Tie Definition – ATL_BAA_TIE 
+
+  Scheduling Point and Tie Definition – ATL_SP_TIE 
+
+ 
+
+ 
+
+Intertie Constraint and Scheduling Point Mapping – 
+ATL_ITC_SP 
+
+Intertie Scheduling Limit and Tie Mapping – 
+ATL_ISL_TIE 
+
+  Wind And Solar Summary – 
+
+ENE_WIND_SOLAR_SUMMARY 
+
+  EIM Transfer Limits By Tie – 
+
+ENE_EIM_TRANSFER_LIMITS_TIE 
+
+  MPM Default Competitive Path Assesment List – 
+
+PRC_MPM_DEFAULT_CMP 
+
+ 
+
+Updates to LMP Price API’s (split into individual price component files) 
+
+  PRC_INTVL_LMP 
+
+  PRC_RTPD_LMP 
+
+  PRC_HASP_LMP 
+
+  PRC_SPTIE_LMP (Group Names: 
+
+RTD_SPTIE_LMP_GRP,RTPD_SPTIE_LMP_GRP) 
+
+ 
+
+Updates to TRNS_CURR_USAGE API (limit to current and future trade 
+days only)  
+
+Jan 20,2016 
+
+4.3.4 
+
+Updated the following MPM Services ( Spring 2017) 
+
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page iv 
+
+ 
+
+ 
+ 
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+  Updated PRC_MPM_RTM_LMP service to remove the support 
+
+for RTD LMPM 
+
+  Updated PRC_MPM_ RTM_NOMOGRAM to remove the support 
+
+for RTD LMPM 
+
+  Updated PRC_MPM_RTM_NOMOGRAM_CMP to remove the 
+
+support for RTD LMPM 
+
+  Updated PRC_MPM_RTM_FLOWGATE to remove the support 
+
+for RTD LMPM 
+
+  Updated PRC_MPM_CNSTR_CMP to remove the support for 
+
+RTD LMPM 
+
+  Updated PRC_MPM_RTM_REF_BUS to remove the support for 
+
+RTD LMPM 
+
+  MPM Intertie Constraint Competitive Paths for RTD 
+
+Feb 10, 2017 
+
+4.3.5 
+
+Updated the following MPM Services ( Spring 2017) 
+
+ 
+
+ 
+
+  Updated PRC_MPM_RTM_REF_BUS to add support for RTD 
+
+LMPM. 
+
+  Updated PRC_MPM_RTM_NOMOGRAM_CMP to add support 
+
+for RTD LMPM. 
+
+  Updated PRC_MPM_CNSTR_CMP to add support for RTD 
+
+LMPM. 
+
+ 
+
+Added example API URLs for the following Services 
+
+ 
+
+ 
+
+  PRC_INTVL_LMP  for  version 3 
+
+  PRC_SPTIE_LMP for version 5 
+
+  PRC_HASP_LMP for version 3 
+
+  PRC_RTPD_LMP for version 3 
+
+  PRC_SPTIE_LMP for version 5 
+
+  DAM_SPTIE_LMP_GRP for version 5 
+
+Mar 31, 2017 
+
+5.0.0 
+
+Fall 2017 Release 
+
+ 
+
+ 
+
+  Added new service CSP_OFFER_SET for Competitive 
+
+Solicitation Process Offer Set. 
+
+  Added new service ENE_FLEX_RAMP_INPUT for Flexible Ramp 
+
+Requirements Input data. 
+
+  Added new service PRC_RTM_LAP for Hourly RTM LAP prices 
+
+Pre Fall - 2017 Release document clean up 
+
+ 
+
+  Corrected ENE_MPM API sample URL to fix the incorrect version 
+
+Interface Specification for OASIS 
+
+ 
+
+Page v 
+
+ 
+
+ 
+ 
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+  Corrected typo in PRC_MPM_DEFAULT_CMP service data 
+
+element COMPETITIVE_FLAG  
+
+ 
+
+ 
+
+Apr 28, 2017 
+
+5.1.0 
+
+Fall 2017 Release 
+
+ 
+
+ 
+
+  Added new service for Control Area Generating Capability List 
+
+ 
+
+Updated  CSP_OFFER_SET Service 
+
+  Service name changed from CSP_OFFER_SET to 
+
+PUB_CSP_OFFER_SET 
+
+  Removed SCHEDULINGCOORDINATOR  element 
+
+  Added notes to provide additional details 
+
+  CSP_OFFER_SET API sample URLs are updated. 
+
+   
+
+Updated  ENE_FLEX_RAMP_INPUT Service 
+
+  Service name changed from ENE_FLEX_RAMP_INPUT to 
+
+        ENE_EIM_FLEX_RAMP_INPUT 
+
+  ENE_FLEX_RAMP_INPUT API sample URLs are updated. 
+
+ 
+
+ 
+
+ 
+
+ 
+
+Jun 22, 2017 
+
+5.1.1 
+
+Fall 2017 Release 
+
+ 
+
+ 
+
+ 
+
+  Control Area Generating Capability List -Renamed element 
+
+GENERATING_UNIT_NAME to GEN_UNIT_NAME 
+
+ 
+
+Updated  ENE_FLEX_RAMP_INPUT Service 
+
+  Added TEST_INDICATOR element 
+
+  Added RAMP_TYPE element 
+
+  Added FLEX_RAMP_REQ_MW element 
+
+  Removed CHANGE_IN_LOAD_DEMAND element 
+
+  Removed UC_COMPONENT element 
+
+ 
+
+Oct 27, 2017 
+
+5.1.2 
+
+Updated  Hourly Real-Time LAP service  
+
+  Corrected group zip file name under Group Report Definitions 
+
+section. 
+
+  Corrected energy type code from SMEC to MCE 
+
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page vi 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+Updated Versioning and Namespace domain reference section 
+
+ 
+
+  Added  OASISMaster_v4.xsd 
+
+Jan 31, 2018 
+
+5.1.3 
+
+Updated ENE_FLEX_RAMP_INPUT Service 
+
+  Added DATA_ITEM element 
+
+  Removed MKT_TYPE element 
+
+ 
+
+June 25, 2018 
+
+5.1.4 
+
+Fall 2018 Release 
+
+  Updated CRR Public Bid service to add transaction type. 
+
+  Added new service for BAA Market Events  
+
+September  6, 2018  5.1.5 
+
+Fall 2018 Release – Revision 1 
+
+ 
+
+ 
+
+  Updated CRR Public Bid service to add Hedge_type 
+
+  Updated ENE_BAA_MKT_EVENTS  single report  sample url 
+
+string 
+
+  Added a new service for CRR Aggregated Revenue Adjustment 
+
+December 18, 2018  5.1.6 
+
+2019 Independent Release – FERC 844 
+
+ 
+
+  Added new service for Resource-Specific Uplift (ENE_RES_UPL) 
+
+  Added new service for Zonal Uplift (ENE_ZNL_UPL) 
+
+  Added new service for Operator-Initiated Commitment 
+
+(ENE_OIC) 
+
+  Added new service Day-Ahead Schedule Constraint Prices 
+
+(PRC_DAM_SCH_CNSTR) 
+
+  Added notes under Transmission section regarding Transmission 
+
+February 14, 2019 
+
+5.1.7 
+
+2019 Independent Release 
+
+Interface ID 
+
+ 
+
+  Added enddatetime to PRC_DAM_SCH_CNSTR 
+
+ 
+
+February 15, 2019 
+
+5.1.8 
+
+2019 Independent Release (target March 2019 / EIM Resource 
+Sufficiency Enhancements Project) 
+
+  Updated ENE_EIM_TRANSFER_LIMITS report description to 
+
+add limit type = IMPORT or EXPORT 
+
+Other 
+
+  Updated PRC_DAM_SCH_CNSTR & PRC_RTM_SCH_CNSTR 
+
+ 
+
+ 
+
+ 
+ 
+ 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page vii 
+
+ 
+
+ 
+ 
+ 
+
+ 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page viii 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+Table of Contents 
+
+ 
+ 
+ 
+
+ 
+
+1.  OVERVIEW ....................................................................................................................................................... 1 
+
+1.1  BACKGROUND – TIME HORIZONS..................................................................................................................... 1 
+TIME HORIZONS FOR CAISO PUBLIC DATA POSTINGS: ............................................................................................. 1 
+
+2.  DATA REQUEST TO API ................................................................................................................................ 2 
+
+2.1 
+
+2.2. 
+
+    API URL FOR SINGLE REPORTS ..................................................................................................................... 2 
+2.1.1.  Example URL for the ISO Market Simulation Environment .................................................................. 2 
+2.1.2.  Example URL for the ISO Market Production Environment ................................................................. 3 
+API URL FOR GROUP REPORTS .................................................................................................................. 3 
+Example URL ......................................................................................................................................... 3 
+
+2.2.1 
+
+3.  RETURNED XML FILE ................................................................................................................................... 4 
+
+3.1  FILE NAMES FOR SINGLE AND GROUP ............................................................................................................... 4 
+3.1.1 XML FORMAT .................................................................................................................................................. 5 
+XML Schemas ........................................................................................................................................ 5 
+ CSV FORMAT ............................................................................................................................................. 6 
+ERRORS ....................................................................................................................................................... 8 
+
+3.1.3 
+3.2  
+
+3.1.2 
+
+4.  RECOMMENDED USAGE .............................................................................................................................. 9 
+
+5.  REPORTS AND XML DATA ITEMS ............................................................................................................. 9 
+
+6. 
+
+SINGLE REPORT URL QUERY STRINGS ................................................................................................ 47 
+
+7.  GROUP REPORT DEFINITIONS ................................................................................................................ 67 
+
+8.  GROUP URL QUERY STRINGS .................................................................................................................. 72 
+
+9.  VERSIONING AND NAMESPACE DOMAIN REFERENCE ................................................................... 77 
+
+10.  SCHEMA FILES CHANGES ......................................................................................................................... 78 
+
+11.  LONG DAY AND SHORT DAY REQUEST EXAMPLES ......................................................................... 79 
+
+Interface Specification for OASIS 
+
+ 
+
+Page ix 
+
+ 
+
+ 
+
+ 
+ 
+ 
+
+1. 
+
+Overview 
+
+Interface Specification for OASIS 
+ 
+
+This document explains the functionality of the Open Access Same-Time Information System 
+(OASIS) API.  In this document the following are described: 
+
+  Background of OASIS. 
+  URL Parameter definitions for requesting OASIS data. 
+  Naming Convention for Returned OASIS files.  
+  Schema (XSD) for returned OASIS XML data. 
+
+1.1 Background – Time Horizons 
+
+The California Independent System Operator's (CAISO) Open Access Same-time information 
+System (OASIS) provides energy market and power grid information to the public and market 
+participants, through reports with real time updates. This information includes the following:  
+
+  System load requirements  
+  Market Price information  
+  Transmission availability  
+  System demand conditions  
+
+The data is categorized into three groups: 
+
+Category  
+OASIS Data  
+Public Bids 
+Atlas Data 
+
+Description 
+This is the CAISO operational and market data.   
+This is the Public Bid data published after 90 days. 
+This is the reference data supporting OASIS Data.   
+
+ 
+
+Its own XSD Schema, described in this document, supports each category.   
+
+To automate the download of the OASIS report data in XML, the information in this document 
+describes the OASIS XML format and the download procedures, including URL examples 
+associated with the XML data files. 
+
+ 
+
+Time Horizons for CAISO Public Data postings: 
+
+ 
+
+  GMT version services for ISO Market 
+
+The URL for the GMT version of the OASIS API web services is 
+http://oasis.caiso.com/oasisapi 
+
+This API document describes the functions for this version of OASIS.  
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 1 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+2. 
+
+Data Request to API 
+
+CAISO’s OASIS is redesigned to adapt to the changes in the markets and grid operations 
+initiated by the New ISO Market program.  However, the technology of the new OASIS for 
+downloading data is quite similar to the existing OASIS.  The process of obtaining data from 
+OASIS by automation using its API can be described as queries implemented through URL 
+Servlet requests. It can be defined as sending URL requests with parameters to the OASIS web 
+servers, from the Users web client.   
+
+2.1 
+
+    API URL for single reports 
+
+Single report request will be using the servlet called SingleZip. The return of XML in CIM 
+format will be based on XSDs specified above. The data content will be based on the type 
+parameters will be passed to the SingleZip request. To illustrate the URL and its parameters, we 
+show the pattern that would return an XML file based on the Schemas.   
+
+ 
+URL?queryname=<A>&startdatetime=<D>&enddatetime=<D>&market_run_id=<A>&version
+=<A>&varParameters 
+ 
+Where: 
+
+URL = http://oasiswebsite/context-path/SingleZip   
+ 
+For production : oasiswebsite = oasis.caiso.com 
+                 context-path = oasisapi 
+For mapstage   : oasiswebsite = oasis.caiso.com 
+                 context-path = oasisapi 
+
+ 
+Mandatory Parameters: 
+
+startdatetime = valid operating start datetime in GMT 
+
+(yyyymmddThh24:miZ) 
+
+enddatetime = valid operating end datetime in GMT (yyyymmddThh24:miZ)  
+
+which is equal or greater than <startdate> 
+
+queryname = valid reportname,  
+
+refer to the XML Query Name in the document 
+
+market_run_id =  valid market type 
+version =  API version (1 for the GMT 2013 release) 
+ 
+
+ 
+Variable Parameters: 
+
+varParameters 
+
+variable Parameters are defined for each Report  
+and its specific Filter options 
+
+ 
+
+2.1.1. 
+
+Example URL for the ISO Market Simulation Environment  
+
+To illustrate the use of the URL and its parameters, we show an example based on the pattern above: 
+This string indicates the proper path to query data that exists in our Market Simulation Environment.    
+
+ 
+http://oasismap.caiso.com/oasisapi/SingleZip?queryname=AS_REQ& 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 2 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-
+0000&market_run_id=DAM&version=1&as_type=ALL&as_region=ALL 
+ 
+ 
+
+2.1.2. 
+
+Example URL for the ISO Market Production Environment  
+
+To illustrate the use of the URL and its parameters, we show an example based on the pattern above. 
+This string indicates the proper path to query the data for Trading Days beginning with the deployment of 
+the New ISO Market:   
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=AS_REQ& 
+startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-
+0000&market_run_id=DAM& version=v1&as_type=ALL&version=1&as_region=ALL 
+ 
+ 
+
+  API URL for Group Reports 
+
+2.2. 
+The group reports depends on the servlet called GroupZip. The GroupZip is going to call a group of 
+singleZips. The XML’s embedded in the Zip file will be based on the group type. The data content will be 
+for entire day that the user is going to be requested at a given time you can only request for single day. 
+
+To illustrate the URL and its parameters, we show the pattern that would return an XML files 
+based on the Schemas.   
+
+ 
+URL?groupid=<A>&startdatetime=<D>&enddatetime=<D>&version=<A> 
+ 
+Where: 
+
+URL = http://<oasiswebsite>/oasisapi/GroupZip 
+ 
+For Production : <oasiswebsite> is oasis.caiso.com  
+For MAPStage   : <oasiswebsite> is oasismap.caiso.com 
+                  
+
+ 
+
+ 
+Mandatory Parameters: 
+ 
+
+Groupid   = valid groupid  
+startdatetime = valid operating start datetime with timezone 
+
+offset(yyyymmddThh24:miZ) 
+
+enddatetime = valid operating end datetime with timezone offset 
+
+(yyyymmddThh24:miZ) 
+
+            (Only applicable for HASP,RTM groups) 
+
+      version =  API version (1 for the GMT 2013 release) 
+
+2.2.1  Example URL 
+
+To illustrate the use of the URL and its parameters, we show an example based on the pattern 
+above:   
+
+ 
+Example 1: http://oasis.caiso.com/oasisapi/GroupZip?groupid=DAM_LMP_GRP& 
+startdatetime=20130919T07:00-0000&version=1 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 3 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+ 
+Example 2: http://oasis.caiso.com/oasisapi/GroupZip?groupid=HASP_LMP_GRP& 
+startdatetime=20130919T07:00-0000&enddatetime=20130919T08:00-0000&version=1 
+ 
+ 
+
+3. 
+
+Returned XML File 
+
+For every request sent to the OASIS web server, the web server will return a “zip” compressed 
+file. In case of single report or group zip functionality, the user then unzips the file to extract the 
+actual XML file/ files, for further processing by any business or report generation application.  
+
+ 
+
+3.1  File Names for single and group 
+
+The returned files will use the following naming convention for singlezip: 
+
+startdate_enddate_Report Name_MktRunID_Stamp#_Version.Zip 
+
+Within this zip file, the XML file will use the following naming convention: 
+
+ 
+startdate_enddate_Report Name_MktRunID_Stamp#_Version.XML 
+ 
+
+The returned files will use the following naming convention for groupzip: 
+
+startdate_startDate_GroupID_N_xml_Version.Zip 
+
+Within this zip file, the XML file will use the following naming convention: 
+
+20131115_20131115_ENE_CB_AWARDS_N_v1.xml 
+
+20131115_20131115_PRC_CURR_LMP_RTM_10_v1.xml 
+
+ 
+startdate_startdate_Report Name_MktRunID_Version.XML 
+XML Examples: 
+20131115_20131115_ENE_CB_AWARDS_GRP_N_N_v1_xml.zip 
+ 
+20131115_20131115_CURR_LMP_GRP_10_N_v1_xml.zip 
+ 
+20131104_20131105_AS_REQ_RTM_20131115_09_44_44_v1_xml.zip 
+ 
+ 
+CSV Examples: 
+20131115_20131115_CURR_LMP_GRP_10_N_v1_xml.zip 
+ 
+20131013_20131013_CB_NODAL_LMT_GRP_N_N_v1_csv.zip 
+ 
+20131104_20131105_AS_REQ_RTM_20131115_09_44_44_v1_csv.zip 
+ 
+
+20131104_20131105_AS_REQ_RTM_20131115_09_44_44_v1.xml 
+
+20131115_20131115_PRC_CURR_LMP_RTM_10_v1.xml 
+
+20131013_20131013_CB_NODAL_LIMITS_N_v1.csv 
+
+20131104_20131105_AS_REQ_RTM_20131115_09_44_44_v1.csv 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 4 
+
+ 
+
+ 
+ 
+ 
+3.1.1 XML Format 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+The structure of the XML (eXtensible Markup Language) format file is based on standard 
+CAISO CIM XML. It is generated by using Servlet call to the common reporting web services 
+framework and using XSLT the xml files will be translated to CIM XML based on xml schemas. 
+The CIM XML is zipped and sent to the requesting users as response, similar to the OASIS 
+operation today.  
+
+OASIS will continue to comply with FERC interface requirements and associated 
+implementation standards as it does today.  The CAISO believes the use of XML provides 
+information that is more valuable to the end user, and reduces overall development costs as 
+changes occur in the future.  
+
+To learn more about the reporting interface and download functionality, please browse through 
+our on-line OASIS HELP. Additional support can be obtained by contacting us through the 
+OASIS Support link. 
+
+3.1.2  XML Schemas 
+
+Three XML schemas are developed to conform to the CIM XML standard support data delivery 
+from the OASIS application. Each XML file, when downloaded, will point to the most current 
+version of the Schema. 
+
+With the GMT 2013 release, all services will start with V1 and future releases will support the 
+current and previous schemas. 
+
+For Fall 2018 release, OASISCRRPublicBid.xsd will be moving to version v2.  
+
+For CRR1B, OASISReport.xsd will be moving to version v7. 
+
+For 2019 Independent Release, OASISReport.xsd will be moving to version v8. 
+
+XSD 
+OASISReport_v8.xsd 
+ 
+ 
+OASISBid_v2.xsd 
+       
+
+Category  
+OASIS Data 
+
+Public Bids 
+
+Description 
+This is the primary schema by which OASIS returns 
+operational and market data.  
+
+OASIS returns Public Bid data by this schema. This 
+schema is a derivative of the bid schema used by 
+market participants to submit bids and schedules.   
+
+OASISCBBid_v2.xsd 
+       
+
+Public CB Bids  OASIS returns CB Public Bid data by this schema. This 
+schema is a derivative of the CB bid schema used by 
+market participants to submit CB bids.   
+
+OASISMaster_v4.xsd 
+ 
+OASISCRRPublicBid_v2.xsd  CRR Bid Data 
+
+Atlas Data 
+
+This schema is tailored to the Atlas / Reference data 
+portion of OASIS.  
+OASIS returns CRR Bid data by this schema. This 
+schema is a derivative of the CRR bid schema. 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 5 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+OASISCSPOfferSet_v1.xsd 
+
+CSP Offer Set   OASIS returns CSP offer Set data by this schema.  This 
+
+schema is derivatinve of the CSPOfferSet schema. 
+
+3.1.3  
+
+CSV Format 
+
+Please note that with the GMT 2013 release version, the CSV format will now return the data 
+elements in the top down format similar to XML in terms of overall layout. There will be the 
+header and the fields will be separated with a comma, but the pivot feature where the hours go 
+across like in the UI is now going away.  
+
+The element in the URL resultformat=6 will extract the data in CSV format. If resultformat= 
+element is not in the URL string, the default format will be XML. 
+
+The CSV format with the pivot hours across will continue to be supported in the pre-GMT 2013 
+OASIS web services. 
+
+For certain CSV reports that were pivoted across in pre-GMT services, an additional column 
+called “group” will be added as the last column in the GMT version of the CSV reports. Here is 
+the list of the impacted reports: 
+
+  AGGR_OUTAGE_SCH 
+
+  AS_MILEAGE_CALC 
+
+  AS_MILEAGE 
+
+  AS_REQ 
+
+  AS_RESULTS 
+
+  ATL_LDF 
+
+  ATL_PEAK_ON_OFF 
+
+  CB_NODAL_LIMITS 
+
+  CMMT_RA_MLC 
+
+  CMMT_RMR 
+
+  CRR_AGG_REV_ADJENE_CB_AWARDS 
+
+  ENE_CB_CLR_AWARDS 
+
+  ENE_CB_MKT_SUM 
+
+  ENE_DISP 
+
+  ENE_EA 
+
+  ENE_LOSS 
+
+  ENE_MPM 
+
+  ENE_SLRS 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 6 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+  ENE_OIC 
+
+  ENE_RES_UPL 
+
+  ENE_ZNL_UPL 
+
+  PRC_AS 
+
+  PRC_CD_INTVL_LMP 
+
+  PRC_CD_RTM_FLOWGATE 
+
+  PRC_CD_RTM_NOMOGRAM 
+
+  PRC_CNSTR 
+
+  PRC_CURR_HUB_LMP 
+
+  PRC_FLEX_RAMP 
+
+  PRC_FUEL 
+
+  PRC_GHG_ALLOWANCE 
+
+  PRC_HASP_LMP 
+
+  PRC_INTVL_AS 
+
+  PRC_INTVL_LMP 
+
+  PRC_LMP 
+
+  PRC_MPM_CNSTR_CMP 
+
+  PRC_MPM_CNSTR 
+
+  PRC_MPM_LMP 
+
+  PRC_MPM_NOMOGRAM_CMP 
+
+  PRC_MPM_NOMOGRAM 
+
+  PRC_MPM_REF_BUS 
+
+  PRC_MPM_RTM_FLOWGATE_CMP 
+
+  PRC_MPM_RTM_FLOWGATE 
+
+  PRC_MPM_RTM_LMP 
+
+  PRC_MPM_RTM_NOMOGRAM_CMP 
+
+  PRC_MPM_RTM_NOMOGRAM 
+
+  PRC_MPM_RTM_REF_BUS 
+
+  PRC_NOMOGRAM 
+
+  PRC_RTM_FLOWGATE 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 7 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+  PRC_RTM_NOMOGRAM 
+
+  PUB_CURR_LMP 
+
+  SLD_FCST 
+
+  SLD_REN_FCST 
+
+  TRNS_ATC 
+
+  TRNS_CURR_USAGE 
+
+  TRNS_USAGE 
+
+ 
+
+ 
+
+ 
+
+3.2   Errors 
+
+The XML API will throw errors based on the situation and those are described below. In 
+the XML file, if there is any error comes because of different reasons will be thrown with 
+both error code and error description. The Users will know the valid reason for failure. 
+The error codes and descriptions are described below. 
+
+Error Code   Error Description 
+
+1000     
+
+1001 
+
+ 
+
+1002     
+
+1003     
+
+1004     
+
+1005     
+
+1006     
+
+1007     
+
+1008     
+
+1009     
+
+No data returned for the specified selection.  
+
+Invalid Parameters of the given report name.  
+
+Invalid datetime format, please use valid datetime format. 
+
+Timed out waiting for query response.  
+
+Data can be requested for period of 31 days only.  
+
+Report name does not exist, please use valid report name.  
+
+Validation exception during transformation of XML.  
+
+Required file for does not exist.  
+
+Out of memory exception.  
+
+Exceptions in reading and writing of XML files. 
+
+1010 
+
+    
+
+System Error. 
+
+1011 
+
+1012 
+
+1013 
+
+ 
+
+ 
+
+Empty Query; Please Enter Report Name, Startdate, EndDate and Other 
+Parameters. 
+
+Connection refused. 
+
+ 
+
+Required Resources (xslt or xml or dir) Unavailable. 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 8 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+1014  
+
+1015 
+
+1016 
+
+1017 
+
+1018 
+
+1019 
+
+1020 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+Start Date is beyond the limit, Please Use valid Start Date that falls within the 
+prescribed limit. 
+
+GroupZip DownLoad is in Processing, Please Submit request after 
+Sometime 
+
+GROUPID Does Not Exist, Please Use Valid GROUPID Name 
+
+Please select a maximum of 10 nodes or use the ALL option 
+
+Invalid Selection, cannot select multiple hours for this query 
+
+market_term=ALL not supported for this query 
+
+Version parameter is missing or is invalid 
+
+4. 
+
+Recommended Usage 
+
+By observing the Publication and Revisions Log and Publication Schedule reports, users can 
+submit the requests more efficiently. We strongly recommend first to find out whether the data is 
+already published to the OASIS database. Once the required data is published then submit the 
+requests for the required reports. This way the user can eliminate unnecessary requests for the 
+required data.  
+
+5. 
+
+Reports and Xml Data Items 
+
+This section contains an overview listing of the individual types of result sets returned from 
+OASIS, corresponding to the online OASIS reports.   
+
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+PRICES 
+
+Locational Marginal Prices (LMP) 
+
+ 
+PRC_LMP 
+
+Hourly Locational Marginal Prices for all 
+PNodes and APNodes in $/MWh. For the DAM, 
+posts the LMP, plus the Congestion, Loss and 
+Energy Components that make up the LMP. 
+For the RUC, only the LMP will be posted. 
+
+LMP_CONG_PRC 
+LMP_ENE_PRC 
+LMP_LOSS_PRC 
+LMP_PRC 
+
+LMP - Congestion 
+Component;  
+LMP - Energy Component;  
+LMP - Losses Component; 
+LMP for each Pnode and 
+APnode; 
+
+Oasis will include separate XML file for each 
+price component within the same zip file. This 
+is existing functionality.   
+
+Scheduling Point Tie Combination Locational 
+Marginal Prices (LMP) 
+
+Scheduling Point Tie Combination Locational 
+Marginal Prices for market DAM, RTPD/FMM, 
+and RTD in $/MWh.  
+
+ 
+
+Oasis will include separate XML file for each 
+price component within the same zip file. This 
+is current behavior for DAM. This behavior will 
+be extended for other realtime markets in 
+version 5. 
+
+HASP Locational Marginal Prices (LMP) 
+
+PRC_HASP_LMP 
+
+PRC_SPTIE_LMP  LMP_CONG_PRC 
+
+ 
+LMP_PRC 
+ 
+ 
+ 
+LMP_ENE_PRC 
+ 
+LMP_LOSS_PRC 
+ 
+LMP_GHG_PRC 
+ 
+
+LMP_CONG_PRC 
+ 
+LMP_ENE_PRC 
+
+LMP - Congestion 
+Component;  
+LMP for each node tie 
+combination; 
+ 
+ 
+LMP - Energy Component;  
+ 
+LMP - Losses Component 
+ 
+LMP – GHG Component 
+ 
+
+LMP - Congestion 
+Component;  
+LMP - Energy Component;  
+
+Interface Specification for OASIS 
+
+ 
+
+Page 9 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+Posts hourly, the 4 15-minute Locational 
+Marginal Prices in $/MWh, for the HASP hour. 
+Posts the LMP, plus the Congestion, Loss and 
+Energy Components that make up the LMP. 
+Posts the HASP Binding LMP for PNodes and 
+APNodes relevant to Hourly Pre-Dispatched 
+Resources. Posts the HASP Advisory LMP for 
+PNodes and APnodes relevant to the Non-
+Hourly Pre-Dispatch Resources. 
+
+For HASP, SC's should always utilize the CMRI 
+posted price as the valid price for shadow-
+settlement purposes. 
+
+LMP_LOSS_PRC 
+LMP_PRC 
+ 
+LMP_GHG_PRC 
+ 
+ 
+
+LMP - Losses Component; 
+LMP for each Pnode and 
+APnode 
+GHG price for EIM pnode 
+and apnode 
+
+ 
+
+Oasis will include separate XML file for each 
+price component within the same zip file. This 
+is current behavior for DAM. This behavior will 
+be extended for other realtime markets in 
+version 3. 
+
+RTPD Locational Marginal Prices (LMP) 
+
+15-minute Locational Marginal Prices for all 
+PNodes and APNodes in $/MWh.  
+
+ 
+
+Oasis will include separate XML file for each 
+price component within the same zip file. This 
+is current behavior for DAM. This behavior will 
+be extended for other realtime markets in 
+version 3. 
+
+ 
+
+Interval Locational Marginal Prices (LMP) 
+
+Five-minute Locational Marginal Prices for all 
+PNodes and all APNodes in $/MWh, for each 
+five-minute interval RTM. Posts the LMP, plus 
+the Congestion, Loss and Energy Components 
+that makes up the LMP. 
+
+Node on the report will include Pnodes and 
+APnodes in ISO, EIM and non-EIM external 
+networks 
+
+ 
+
+Oasis will include separate XML file for each 
+price component within the same zip file. This 
+is current behavior for DAM. This behavior will 
+be extended for other realtime markets in 
+version 3. 
+
+PRC_RTPD_LMP 
+
+LMP_CONG_PRC 
+ 
+LMP_ENE_PRC 
+LMP_LOSS_PRC 
+LMP_PRC 
+ 
+LMP_GHG_PRC 
+
+PRC_INTVL_LMP  LMP_CONG_PRC 
+
+LMP_ENE_PRC 
+LMP_LOSS_PRC 
+LMP_PRC 
+ 
+ 
+LMP_GHG_PRC 
+
+LMP - Congestion 
+Component;  
+LMP - Energy Component;  
+LMP - Losses Component; 
+LMP for each Pnode and 
+APnode 
+GHG price for EIM pnode 
+and apnode 
+
+LMP - Congestion 
+Component;  
+LMP - Energy Component;  
+LMP - Losses Component; 
+LMP for each Pnode and 
+APnode; 
+GHG price for EIM pnode 
+and apnode 
+
+AS Clearing Prices  
+
+PRC_AS 
+
+Ancillary Services Regional Shadow Prices for 
+all Ancillary Service types at each AS Region 
+and Sub-Regional Partition. Posted hourly in 
+$/MW for the DAM and HASP. 
+
+The AS Clearing Prices Data is downloadable 
+to XML and CSV only for a single day at a time. 
+
+Interval AS Clearing Prices  
+
+PRC_INTVL_AS 
+
+NS_CLR_PRC 
+RD_CLR_PRC 
+ 
+RU_CLR_PRC 
+SP_CLR_PRC 
+ 
+ 
+RMD_CLR_PRC 
+ 
+ 
+RMU_CLR_PRC 
+ 
+ 
+NS_CLR_PRC 
+RD_CLR_PRC 
+ 
+RU_CLR_PRC 
+
+NonSpin Cleared Price; 
+Regulation Down Cleared 
+Price; 
+Regulation Up Cleared Price; 
+Spin Cleared Price; 
+ 
+Regulation Mileage Down 
+Cleared Price. 
+ 
+ 
+Regulation Mileage Up 
+Cleared Price 
+ 
+NonSpin Cleared Price; 
+RegulationDown Cleared 
+Price; 
+RegulationUp Cleared Price; 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 10 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+Ancillary Services Regional Shadow Prices for 
+all Ancillary Service types at each AS Region 
+and Sub-Regional Partition. Posts in $/MW. 
+Posts 15-Minute price relevant to the next 15 
+minute binding interval for RTM on a fifteen 
+minute basis.   
+
+Intertie Constraint Shadow Prices 
+
+Posts the hourly constraint pricing at 
+Transmission Interfaces and Intertie 
+Constraints, for each Market Process 
+(DAM,HASP) in $/MWh, and the 15-Minute 
+Shadow Price in $/MWh for the RTM. 
+
+PRC_CNSTR 
+
+Report will also include an indication of whether 
+the Constraints were binding because of the 
+base operating conditions or contingencies, 
+and if caused by a Contingency, the identity of 
+the specific Contingency. 
+
+  
+
+Transmission ID includes both ISO and EIM 
+ITC ID 
+
+SP_CLR_PRC 
+ 
+RMD_CLR_PRC 
+ 
+ 
+RMU_CLR_PRC 
+ 
+ 
+SHADOW_PRC 
+ 
+ 
+ 
+ 
+ 
+ 
+REASON 
+
+Spin Cleared Price; 
+ 
+Regulation Mileage Down 
+Cleared Price. 
+ 
+Regulation Mileage Up 
+Cleared Price. 
+ 
+Shadow price by 
+Transmission Interface and 
+Intertie Constraint 
+ 
+  
+ 
+Will indicate either “Base 
+Case” or specific 
+Contingency ID.  
+ 
+
+PRC_FUEL 
+
+FUEL_PRC 
+
+Daily Gas Price.  
+
+LMP - Congestion 
+Component;  
+LMP - Energy Component;  
+LMP - Losses Component; 
+LMP for each Pnode and 
+APnode; 
+GHG price for EIM pnode 
+and apnode 
+
+Shadow price by Nomogram 
+or Branch. 
+ 
+ 
+ 
+ 
+ 
+Will indicate either “Base 
+Case” or specific 
+Contingency ID.  
+ 
+
+Shadow price by Nomogram 
+or Branch. 
+ 
+ 
+ 
+Will indicate either “Base 
+Case” or specific 
+Contingency ID.  
+ 
+ 
+ 
+
+ 
+
+ 
+
+Fuel Prices 
+
+For each Gas Flow Day, lists the gas price in 
+$/mmBtu by fuel region.  
+
+Current Locational Marginal Price 
+
+This report is available for download only. Lists 
+Five min Locational Marginal Prices for all 
+Generator PNodes and all APNodes for the 
+current interval. (Returns the most recently 
+posted interval only)  Use SingleZip function if 
+specific nodes are required; use GroupZip for 
+downloading if all nodes are required.    
+
+Node on the report will include Pnodes and 
+APnodes in ISO, EIM and non-EIM external 
+networks 
+
+Nomogram/Branch Shadow Prices 
+
+Posts the hourly constraint pricing at each 
+Nomogram and Branch, for each Market 
+
+PRC_CURR_LMP  LMP_CONG_PRC 
+
+LMP_ENE_PRC 
+LMP_LOSS_PRC 
+LMP_PRC 
+ 
+ 
+LMP_GHG_PRC 
+ 
+
+PRC_NOMOGRAM  SHADOW_PRC 
+
+Process (DAM, HASP) in $/MWh, and the 15-
+Minute Shadow Price in $/MWh for the RTPD 
+in RTM. 
+
+Report will also include an indication of whether 
+the Constraints were binding because of the 
+base operating conditions or contingencies, 
+and if caused by a Contingency, the identity of 
+the specific Contingency. 
+
+Interval Nomogram/Branch Shadow Prices 
+
+Posts the 5 minute constraint pricing at each 
+Nomogram and Branch, for each Market 
+
+Process (RTM) in $/MWh. 
+
+PRC_RTM_NOMOG
+RAM 
+
+Report will also include an indication of whether 
+the Constraints were binding because of the 
+base operating conditions or contingencies, 
+and if caused by a Contingency, the identity of 
+the specific Contingency. 
+
+ 
+ 
+ 
+ 
+ 
+ 
+<m:REASON> 
+ 
+
+SHADOW_PRC 
+ 
+ 
+ 
+ 
+<m:REASON> 
+ 
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 11 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+XML Data Items 
+
+Description 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+Interval Intertie Constraint Shadow Prices 
+
+Posts the 5 minute constraint pricing at 
+Transmission Interfaces and Intertie 
+Constraints in $/MWh 
+
+XML Name 
+PRC_RTM_FLOWG
+ATE 
+
+Report will also include an indication of whether 
+the Constraints were binding because of the 
+base operating conditions or contingencies, 
+and if caused by a Contingency, the identity of 
+the specific Contingency. 
+
+Scheduling Constraint Shadow Prices 
+
+Posts Day-Ahead hourly scheduling constraint 
+shadow prices in $/MWh 
+
+PRC_DAM_SCH_C
+NSTR 
+ 
+
+ 
+
+ 
+
+SHADOW_PRC 
+ 
+ 
+ 
+ 
+ 
+ 
+REASON 
+ 
+
+SHADOW_PRC 
+ 
+ 
+ 
+ 
+CNSTR_TYPE 
+
+Shadow price by 
+Transmission Interface and 
+Intertie Constraint 
+ 
+ ) 
+ 
+Will indicate either “Base 
+Case” or specific 
+Contingency ID.  
+ 
+
+Shadow price by Scheduling 
+Constraint 
+ 
+  
+ 
+Some of the possible values 
+are  
+ 
+
+BAA TRANSFER UPPER 
+LIMIT 
+
+ 
+
+ETSR UPPER LIMIT 
+
+ 
+
+ETSR LOWER LIMIT 
+
+ 
+
+BAA TRANSFER LOWER 
+LIMIT 
+
+BAA TRANSFER UPPER 
+LIMIT 
+
+ 
+
+BAA TRANSFER 
+DISTRIBUTION 
+
+ 
+
+BAA POWER BALANCE 
+
+ 
+BAA TRANSFER LOWER 
+LIMIT 
+ 
+ETSR TRANSMISSION 
+COST 
+ 
+ 
+Shadow price by Scheduling 
+Constraint 
+ 
+  
+ 
+Some of the possible values 
+are  
+ 
+
+BAA TRANSFER UPPER 
+LIMIT 
+
+ 
+
+ETSR UPPER LIMIT 
+
+ 
+
+ETSR LOWER LIMIT 
+
+ 
+
+Scheduling Constraint Shadow Prices 
+
+Posts the 15 minute and 5 minute scheduling 
+constraint shadow prices in $/MWh 
+
+PRC_RTM_SCH_C
+NSTR 
+ 
+
+SHADOW_PRC 
+ 
+ 
+ 
+ 
+CNSTR_TYPE 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 12 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+Reference Prices  
+
+PRC_DS_REF 
+
+Quarterly Reference prices associated with 
+each node based on historical data, posted for 
+Convergence Bidding purposes.  
+
+ Nodal Group Constraints  
+
+This report displays the upper and lower MW 
+limits, cleared MW value and associated hourly 
+shadow prices for any binding Nodal Group 
+Constraint. Additionally, the list of 
+Eligible Pnodes included in the Nodal Group 
+Constraint is displayed. This report is triggered 
+with the publication of the Day-Ahead results.  
+
+System Ramping Nomogram Results 
+
+CB_NODAL_GRP_
+CNSTR_PRC 
+
+PRC_FLEX_RAMP 
+  
+
+BAA TRANSFER LOWER 
+LIMIT 
+
+BAA TRANSFER UPPER 
+LIMIT 
+
+ 
+
+BAA TRANSFER 
+DISTRIBUTION 
+
+ 
+
+BAA POWER BALANCE 
+
+ 
+BAA TRANSFER LOWER 
+LIMIT 
+ 
+ETSR TRANSMISSION 
+COST 
+ 
+ 
+Supply Component  
+    
+Demand Component 
+
+Shadow price by Nodal 
+Constraint Group    
+Cleared Price 
+Maximum Limit of the Price 
+Minimum Limit of the Price 
+
+SPLY_PRC 
+ 
+DMD_PRC 
+  
+  
+SHADOW_PRC 
+ 
+CLEARED_MW  
+MAXIMUM_LIMIT 
+MINIMUM_LIMIT 
+ 
+
+MKT_RUN_START_TIME 
+ 
+ 
+ 
+ 
+MKT_TYPE 
+ 
+ 
+ 
+RAMP_UP_CAP_REQ 
+ 
+ 
+ 
+RAMP_UP_SHADOW_PRC 
+ 
+ 
+ 
+RAMP_DOWN_CAP_REQ 
+ 
+ 
+ 
+RAMP_DOWN_SHADOW_P
+RC 
+ 
+ 
+BAA_GRP_ID 
+
+Indicates the start time of the 
+market run in pacific Time 
+format 
+
+ 
+
+An identifier which specifies 
+the market  run type 
+(DAM.RTPD& RTD) 
+
+ 
+
+Upward raming capacity 
+nomogram results 
+
+ 
+
+Shadow price of the upward 
+ramping  nomogram results 
+
+ 
+
+Downward ramping capacity 
+nomogram results. 
+
+ 
+
+Shadow price of the 
+downward nomogram 
+results. 
+ 
+EIM Area group ids (ISO, 
+PACE, PACW, ISO_PACW, 
+ISO_PACE, 
+PACE_PACW,ISO_PACW_
+PACE) 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 13 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+Contingency Dispatch Locational Marginal 
+Prices 
+
+ 
+
+XML Name 
+PRC_CD_INTVL_L
+MP 
+ 
+
+Similar to the Interval Locational Marginal 
+Prices (LMP) report, but for Real Time 
+Contingency Dispatch (RTCD) runs. Posts the 
+ten-minute Locational Marginal Prices for 
+PNodes and APNodes in $/MWh, for each ten-
+minute interval RTCD. 
+
+XML Data Items 
+
+Description 
+
+LMP_CONG_PRC 
+ 
+ 
+ 
+ 
+LMP_ENE_PRC 
+ 
+ 
+ 
+ 
+LMP_LOSS_PRC 
+ 
+ 
+ 
+
+LMP Marginal Cost of 
+Congestion for ten-minute 
+Contingency Dispatch. 
+
+ 
+
+LMP Marginal Cost of 
+Energy for ten-minute 
+Contingency Dispatch. 
+
+ 
+
+LMP Marginal Cost of 
+Losses for ten-minute 
+Contingency Dispatch. 
+
+ 
+
+ 
+
+Contingency Dispatch Scheduling Point Tie 
+Combination Locational Marginal Prices 
+
+ 
+
+This is for Real Time Contingency Dispatch 
+(RTCD) runs. Posts the ten-minute Locational 
+Marginal Prices for node tie in $/MWh, for each 
+ten-minute interval RTCD. 
+
+PRC_CD_SPTIE_L
+MP 
+ 
+
+Contingency Dispatch Intertie Constraint 
+Shadow Prices 
+
+PRC_CD_RTM_FL
+OWGATE 
+
+ 
+
+Similar to the Interval Intertie Constraint 
+Shadow Prices report, but for Real Time 
+Contingency Dispatch (RTCD) runs. Posts the 
+10-Minute constraint pricing at Transmission 
+Interfaces and Intertie Constraints in $/MWh, 
+for the RTCD run in the RTM. Report will also 
+include an indication of whether the Constraints 
+were binding because of the base operating 
+conditions or contingencies, and if caused by a 
+Contingency, the identity of the specific 
+Contingency. 
+
+  
+
+LMP_CONG_PRC 
+ 
+LMP_PRC 
+ 
+ 
+ 
+
+LMP_ENE_PRC 
+
+ 
+LMP_LOSS_PRC 
+ 
+LMP_GHG_PRIC 
+ 
+
+SHADOW_PRC 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+REASON 
+
+ 
+
+ 
+ 
+
+ 
+
+LMP - Congestion 
+Component;  
+
+LMP for each node tie 
+combination; 
+ 
+
+LMP - Energy Component;  
+
+ 
+
+LMP - Losses Component 
+
+ 
+LMP – GHG Component 
+
+ 
+
+Shadow price by 
+Transmission Interface and 
+Intertie Constraint for ten-
+minute Contingency 
+Dispatch. 
+
+ 
+  
+ 
+Will indicate either “Base 
+Case” or specific 
+Contingency ID.  
+
+ 
+
+ 
+
+Contingency Dispatch Nomogram/Branch 
+Shadow Prices 
+
+PRC_CD_RTM_NO
+MOGRAM 
+
+SHADOW_PRC 
+
+ 
+
+Shadow price by Nomogram 
+or Branch for ten-minute 
+Contingency Dispatch. 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 14 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+ 
+
+Similar to the Interval Nomogram/Branch 
+Shadow Prices report, but for Real Time 
+Contingency Dispatch (RTCD) runs. Posts the 
+10-Minute constraint pricing at each Nomogram 
+and Branch in $/MWh, for the RTCD run in the 
+RTM. Report will also include an indication of 
+whether the Constraints were binding because 
+of the base operating conditions or 
+contingencies, and if caused by a Contingency, 
+the identity of the specific Contingency. 
+
+ 
+
+REASON 
+
+ 
+
+ 
+ 
+ 
+
+MPM DA Locational Marginal Prices (LMP): 
+
+PRC_MPM_LMP 
+
+LMP_PRC 
+
+ 
+
+Hourly Locational Marginal Prices from the 
+Day-Ahead MPM run for all PNodes and 
+APNodes in $/MWh. Posts the LMP, plus the 
+Competitive Congestion, Non-Competitive 
+Congestion, Loss and Energy  
+
+Components that make up the LMP. 
+ 
+ 
+
+ 
+
+LMP_CONG_CC_PRC 
+
+ 
+
+LMP_CONG_NC_PRC 
+
+ 
+
+LMP_ENE_PRC 
+
+ 
+
+LMP_LOSS_PRC 
+
+ 
+
+ 
+
+MPM RT Locational Marginal Prices (LMP): 
+
+ 
+
+PRC_MPM_RTM_L
+MP 
+
+LMP_PRC 
+
+ 
+
+Posts hourly, the 4 15-minute Locational 
+Marginal Prices from the HASP  MPM run for 
+all PNodes and APNodes in $/MWh. 
+
+ OR 
+
+Posts every 15 minutes, the 15-minute 
+Locational Marginal Prices from the RTPD  
+MPM run for all PNodes and APNodes in 
+$/MWh. 
+
+ 
+
+ 
+
+LMP_CONG_CC_PRC 
+
+ 
+
+LMP_CONG_NC_PRC 
+
+ 
+
+LMP_ENE_PRC 
+
+ 
+
+LMP_LOSS_PRC 
+
+ 
+
+LMP_GHG_PRC 
+
+ Posts the LMP, plus the Competitive 
+Congestion, Non-Competitive Congestion,  
+
+Loss and Energy Components that make up 
+the LMP. 
+
+MPM Nomogram/Branch Shadow Prices 
+(DAM): 
+
+ 
+
+PRC_MPM_ 
+NOMOGRAM 
+
+Posts the hourly constraint pricing at each 
+binding Nomogram and Branch, for Day Ahead 
+MPM run in $/MWh.  Report will also include an 
+indication of whether the Constraints were 
+binding because of the base operating 
+conditions or contingencies, and if caused by a 
+Contingency, the identity of the specific 
+Contingency.   
+
+MPM Nomogram/Branch Shadow Prices 
+(RTM): 
+
+PRC_MPM_ 
+RTM_NOMOGRAM 
+
+ 
+
+Posts  hourly, 4 15-minute  interval constraint 
+pricing at each binding Nomogram and Branch, 
+for HASP MPM run in $/MWh 
+
+OR 
+
+SHADOW_PRC 
+ 
+ 
+ 
+ 
+ 
+ 
+<m:REASON> 
+
+ 
+
+SHADOW_PRC 
+ 
+ 
+ 
+ 
+ 
+ 
+<m:REASON> 
+
+ 
+Will indicate either “Base 
+Case” or specific 
+Contingency ID.  
+
+ 
+
+ 
+
+ 
+
+LMP for each  nodes 
+ 
+LMP - Competitive 
+Congestion Component 
+ 
+LMP-  Non-Competitive 
+Congestion Component 
+ 
+LMP - Energy Component 
+ 
+ 
+LMP - Losses Component 
+
+ 
+ 
+
+LMP for each  nodes 
+ 
+LMP - Competitive 
+Congestion Component 
+ 
+LMP-  Non-Competitive 
+Congestion Component 
+ 
+LMP - Energy Component 
+ 
+ 
+LMP - Losses Component 
+ 
+LMP - GHG Component 
+ 
+
+Shadow price by Nomogram 
+or Branch. 
+ 
+ 
+ 
+ 
+Will indicate either “Base 
+Case” or specific 
+Contingency ID.  
+ 
+
+Shadow price by Nomogram 
+or Branch. 
+ 
+ 
+ 
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 15 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+Posts every 15 minutes, 15-minute  interval 
+constraint pricing at each binding Nomogram 
+and Branch, for RTPD MPM run in $/MWh. 
+
+ 
+
+  
+
+ 
+
+Report will also include an indication of whether 
+the Constraints were binding because of the 
+base operating conditions or contingencies, 
+and if caused by a Contingency, the identity of 
+the specific Contingency. 
+
+Will indicate either “Base 
+Case” or specific 
+Contingency ID.  
+ 
+
+MPM Nomogram/Branch Competitive Paths 
+(DAM): 
+
+PRC_MPM_ 
+NOMOGRAM_CMP 
+
+MPM_CMP_STATUS_FLG  Competitive Path indicator 
+
+(Y/N) 
+
+ 
+
+Posts the hourly results of the dynamic 
+competitiveness constraint for the Day-Ahead 
+MPM run, for nomograms and flowgates.  
+Posts a flag indicating whether each binding 
+constraint was competitive or not  
+
+MPM Nomogram/Branch Competitive Paths 
+(RTM): 
+
+PRC_MPM_RTM_N
+OMOGRAM_CMP 
+
+MPM_CMP_STATUS_FLG  Competitive Path indicator 
+
+(Y/N) 
+
+ 
+
+Posts the hourly  4 15-minute  interval results 
+of the dynamic competitiveness constraint for 
+the  HASP MPM run for nomograms and 
+flowgates.  Posts a flag indicating whether each 
+binding constraint was competitive or not. 
+
+OR 
+
+Posts every 15 minutes, the 15-minute  interval 
+results of the dynamic competitiveness 
+constraint for the  RTPD MPM run for 
+nomograms and flowgates.  Posts a flag 
+indicating whether each binding constraint was 
+competitive or not. 
+
+ 
+
+OR 
+
+ 
+
+Posts every 5 minutes, the 5-minute  interval 
+results of the dynamic competitiveness 
+constraint for the  RTD MPM run for 
+nomograms and flowgates.  Posts a flag 
+indicating whether each binding constraint was 
+competitive or not. 
+
+ 
+
+MPM Intertie Constraint Shadow Prices (DAM): 
+
+ 
+
+Posts the hourly constraint pricing at 
+Transmission Interfaces and Intertie 
+Constraints, for  Day Ahead market MPM run in 
+$/MWh. Report will also include an indication of 
+whether the Constraints were binding because 
+of the base operating conditions or 
+contingencies, and if caused by a Contingency, 
+the identity of the specific Contingency. 
+
+MPM Intertie Constraint Shadow Prices (RTM): 
+
+ 
+
+PRC_MPM_RTM_F
+LOWGATE 
+
+PRC_MPM_CNSTR  SHADOW_PRC 
+
+ 
+ 
+ 
+I 
+ 
+ 
+REASON 
+ 
+
+SHADOW_PRC 
+ 
+ 
+ 
+ 
+
+Shadow price by 
+Transmission Interface and 
+Intertie Constraint 
+ 
+ 
+Will indicate either “Base 
+Case” or specific 
+Contingency ID.  
+ 
+
+Shadow price by 
+Transmission Interface and 
+Intertie Constraint 
+ 
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 16 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+ 
+ 
+REASON 
+ 
+
+Will indicate either “Base 
+Case” or specific 
+Contingency ID.  
+ 
+
+Posts the hourly,  the 4 15-minute interval 
+constraint pricing at Transmission Interfaces 
+and Intertie Constraints, for  HASP market  
+MPM run in $/MWh.  
+
+OR 
+
+Posts every 15 minutes,  the15-minute interval 
+constraint pricing at Transmission Interfaces 
+and Intertie Constraints, for  RTPD market  
+MPM run in $/MWh 
+
+  
+
+Report will also include an indication of whether 
+the Constraints were binding because of the 
+base operating conditions or contingencies, 
+and if caused by a Contingency, the identity of 
+the specific Contingency 
+
+PRC_MPM_CNSTR
+_CMP 
+ 
+
+MPM_CMP_STATUS_FLG 
+ 
+ 
+ 
+ 
+
+Competitive Path indicator 
+(Y/N) 
+ 
+ ) 
+ 
+
+PRC_MPM_ 
+REF_BUS 
+
+REFERENCE_BUS_ID 
+
+Reference Bus Name 
+
+PRC_MPM_RTM_R
+EF_BUS 
+
+REFERENCE_BUS_ID 
+
+Reference Bus Name 
+
+MPM Intertie Constraint Competitive Paths 
+(DAM): 
+
+OR 
+
+For HASP MPM run, posted hourly the 4 15 
+minute interval  results. 
+
+OR 
+
+For RTPD MPM run, posted  every 15 minutes, 
+the 15 minute interval  results     
+
+OR 
+
+ 
+
+For RTD MPM run, posted  every 5 minutes, 
+the 5 minute interval  results.     
+
+  
+
+ 
+
+Posts the results of the dynamic 
+competitiveness constraint for the market  
+MPM run, for interchanges, market scheduling 
+limits, and branch groups.  Posts a flag 
+indicating whether each binding constraint was 
+competitive or not.    
+
+MPM Reference Bus (DAM) : 
+
+ 
+
+Posts the reference bus used in the MPM run.  
+Posted hourly for the Day-Ahead   market.  
+
+ Note, the IFM, RUC, and regular HASP runs 
+use a distributed reference bus. 
+
+MPM Reference Bus (RTM) : 
+
+ 
+
+Posts the reference bus used in the MPM run.  
+Posted hourly, the 4 15-minute interval for the  
+HASP market.  
+
+OR 
+
+Posted every 15 minutes, the 15-minute 
+interval data for the RTPD market.  
+
+OR 
+
+ 
+
+Posted every 5 minutes, the 5-minute interval 
+data for the RTD market.  
+
+  
+
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 17 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+ 
+
+Note, the IFM, RUC, and regular HASP runs 
+use a distributed reference bus. 
+
+Greenhouse Gas Allowance Price 
+
+ 
+For each real-time trade date, posts the index 
+price for the California Carbon Allowance and 
+for  day-ahead bids, use the index price from 
+the previous day’s index  price 
+
+PRC_GHG_ALLOW
+ANCE 
+
+EIM GHG Shadow Prices 
+
+ 
+
+PRC_EIM_GHG 
+
+GHG shadow price of the net imbalance energy 
+export  
+
+MPM Default Competitive Path Assessment 
+List 
+
+PRC_MPM_DEFAU
+LT_CMP 
+
+PRC_RTM_LAP 
+
+ 
+
+TRNS_CURR_USA
+GE 
+
+ 
+
+Hourly RTM LAP prices 
+
+ 
+
+The Hourly Real-Time LAP Price for each 
+Custom and Default Load Aggregation Point 
+(DLAP).  
+
+ 
+
+The Hourly Real-Time LAP price data is 
+downloadable to XML and CSV only, for a 
+single day at a time.  
+
+Hourly Real-Time LAP price includes Total 
+(LMP), Energy (MCE), Congestion (MCC) and 
+Loss (MCL) price components. 
+
+ 
+
+Oasis will include separate XML file for each 
+price component within the same zip file. 
+
+   
+
+TRANSMISSION 
+
+Current Transmission Usage 
+
+Consolidated report for Current transmission 
+capacity and usage per Transmission Interface.  
+Starts with 7-days ahead and is updated 
+continuously as outages occur.  
+
+AS, Energy and ETC/TOR utilization values are 
+updated in conjunction with the publication of 
+the DAM and RTM market results. 
+
+ 
+
+Note: This API will updated to return only the 
+current trade date and/or future trade date. It 
+will return an error if used for historical trade 
+date. 
+
+ 
+
+OPR_DATE 
+ 
+ 
+  
+ 
+  
+ 
+GHG_ALLOWANCE_PRC 
+INTERVAL_START_GMT  
+INTERVAL_END_GMT 
+MKT_TYPE 
+PRC_SHADOW 
+
+DATA_ITEM 
+OPR_DATE 
+CONSTRAINT_GROUP_NAME 
+COMPETITIVE_FLAG 
+LMP_CONG_PRC 
+ 
+ 
+ 
+ 
+LMP_ENE_PRC 
+ 
+ 
+ 
+ 
+ 
+LMP_LOSS_PRC 
+ 
+ 
+ 
+
+LMP_PRC 
+ 
+ 
+ 
+LMP_GHG_PRC 
+
+ 
+ATC_MW  
+AS_IMPORT_MW 
+ 
+ 
+ENE_IMPORT_MW 
+ 
+ 
+ 
+CBM_MW 
+OTC_MW 
+ 
+ 
+ 
+TTC_MW 
+ 
+ 
+ 
+ 
+CONSTRAINT_MW 
+
+The operating date. 
+  
+ 
+ 
+ 
+ 
+Greenhouse gas allowance 
+price index value 
+Interval Start time (GMT) 
+Interval End time (GMT)  
+RTPD and RTD 
+EIM GHG Shadow price 
+
+PRC_MPM_DEFAULT_CMP 
+Opr Date 
+Constraint Group Name 
+Competitive Flag (Y or N) 
+
+Hourly Real Time Market 
+LAP Marginal Cost of 
+Congestion (MCC) for 
+Apnode 
+
+ . 
+
+Hourly Real Time Market 
+LAP System Marginal 
+Energy Cost (MCE) for 
+Apnode 
+
+ 
+
+Hourly Real Time Market 
+LAP Marginal Cost of Losses 
+(MCL) for Apnode 
+
+ 
+Hourly Real Time Market 
+LAP total (LMP) Price for 
+Apnode 
+ 
+Hourly Real Time Market 
+LAP LMP - GHG Component 
+ 
+
+  
+Current Hourly/15-min ATC; 
+Current Hourly/15-min 
+Tagged AS from Imports; 
+ 
+Current Hourly/15-min 
+Tagged Net Energy from 
+Imports / Exports; 
+ 
+Current Hourly/15-min CBM; 
+Current Hourly/15-min OTC; 
+This refers to the “Hourly 
+TTC” value 
+ 
+Current Hourly/15-min TTC; 
+This refers to the “Seasonal 
+TTC” value 
+ 
+ 
+Current Hourly Constraint; 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 18 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+USEAGE_MW 
+ 
+ 
+TRM_MW 
+ 
+TRM_UF_MW 
+ 
+TRM_FTO_MW 
+ 
+TRM_SPI_MW 
+ 
+ 
+MKT_XFER_CAP_MW 
+
+TRNS_ATC 
+
+ATC_MW 
+
+Current Hourly Unused TR 
+Capacity 
+ 
+Total TRM 
+ 
+Unscheduled  Flow 
+ 
+Forced Topology outages 
+ 
+Simultaneous Path 
+Interaction 
+ 
+Market Transfer Capability 
+ 
+DAM Hourly or HASP 15-
+minute or RTPD 15-minute 
+ATC  
+ 
+
+TRNS_OUTAGE 
+
+OUTAGE_LIMIT_MW 
+
+Curtailed Line Rating for 
+each Transmission Interface 
+MW. 
+
+Note: Report displays data at ITC/ISL level 
+(Transmission Interface ID). After new ETCC 
+activation date, data in the Transmission 
+Interface ID column will no longer display 
+historic mapping to Branch Groups. Data will 
+still display “/” character. Mapping of intertie 
+constraints and scheduling limits to ties and 
+scheduling points can be found in the Atlas 
+Reference reports: Scheduling Point and Tie 
+Definition, Intertie Constraint and Scheduling 
+Point Mapping, and Intertie Scheduling Limit 
+and Tie Mapping. 
+
+Market Available Transmission Capacity 
+
+Available Transmission Capacity per 
+Transmission Interface for DAM, HASP, RTPD. 
+
+ATC = OTC (TTC-CBM-Constraint)-AS From 
+Imports-Net Energy flow from Imports/Exports-
+Unscheduled Transmission Rights capacity.  
+
+ 
+
+Note: Report displays data at ITC/ISL level 
+(Transmission Interface ID). After new ETCC 
+activation date, data in the Transmission 
+Interface ID column will no longer display 
+historic mapping to Branch Groups. Data will 
+still display “/” character. Mapping of intertie 
+constraints and scheduling limits to ties and 
+scheduling points can be found in the Atlas 
+Reference reports: Scheduling Point and Tie 
+Definition, Intertie Constraint and Scheduling 
+Point Mapping, and Intertie Scheduling Limit 
+and Tie Mapping. 
+
+ 
+
+Transmission Outages 
+
+List planned and actual Transmission Outage 
+events per Transmission Interface and 
+direction.  Updated with every outage event. 
+
+ 
+
+Note: Report displays data at ITC/ISL level 
+(Transmission Interface ID). After new ETCC 
+activation date data in the Transmission 
+Interface ID column will no longer display 
+historic mapping to Branch Groups. Data will 
+still display “/” character. Mapping of intertie 
+constraints and scheduling limits to ties and 
+scheduling points can be found in the Atlas 
+Reference reports: Scheduling Point and Tie 
+Definition, Intertie Constraint and Scheduling 
+Point Mapping, and Intertie Scheduling Limit 
+and Tie Mapping. 
+
+ 
+
+Transmission Interface Usage 
+
+TRNS_USAGE 
+
+ 
+
+Consolidated report for transmission capacity, 
+usage, ETC/TOR utilization and schedules 
+resulting from CAISO market operations for 
+DAM,HASP or RTPD by Transmission 
+Interface.  
+
+ 
+
+ATC_MW  
+ 
+ 
+ 
+AS_IMPORT_MW 
+ 
+ 
+ 
+ 
+
+DAM Hourly or HASP 15-
+minute or RTPD 15-minute 
+ATC; 
+ 
+DAM Hourly or HASP 15-
+minute or RTPD 15-minute 
+DAM Hourly or HASP Hourly 
+or RTPD 15-minute Tagged 
+AS from Imports; 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 19 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+ 
+ENE_IMPORT_MW 
+ 
+ 
+ 
+ 
+CBM_MW 
+ 
+ 
+ 
+OTC_MW 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+TTC_MW 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+CONSTRAINT_MW 
+ 
+ 
+ 
+USEAGE_MW 
+ 
+ 
+ 
+ 
+ 
+ 
+TRM_MW 
+ 
+TRM_UF_MW 
+ 
+TRM_FTO_MW 
+ 
+TRM_SPI_MW 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+
+ 
+
+ 
+
+SLD_FCST_PEAK  SYS_PEAK_MW 
+
+ 
+DAM Hourly or HASP 15-
+minute or RTPD 15-minute 
+Tagged Net Energy from 
+Imports / Exports; 
+ 
+DAM Hourly or HASP 15-
+minute or RTPD 15-minute 
+CBM; 
+ 
+DAM Hourly or HASP 15-
+minute or RTPD 15-minute 
+OTC; 
+For Fall Release 2012, data 
+item name will not be 
+changed, yet going forward 
+will refer to the “Hourly TTC” 
+value 
+ 
+DAM Hourly or HASP Hourly 
+or RTPD 15-minute TTC; 
+For Fall Release 2012, data 
+item name will not be 
+changed, yet going forward 
+will refer to the “Seasonal 
+TTC” value 
+ 
+DAM Hourly or HASP 15-
+minute or RTPD 15-minute 
+Constraint; 
+ 
+DAM Hourly or HASP 15-
+minute or RTPD 15-minute 
+Unused TR Capacity 
+ 
+ 
+ 
+ 
+Total TRM 
+ 
+Unscheduled  Flow 
+ 
+Forced Topology outages 
+ 
+Simultaneous Path 
+Interaction 
+ 
+
+ 
+
+  
+The forecast peak demand in 
+MW for the Forecast Day. 
+
+Note: Report displays data at ITC/ISL level 
+(Transmission Interface ID). After new ETCC 
+activation date, data in the Transmission 
+Interface ID column will no longer display 
+historic mapping to Branch Groups. Data will 
+still display “/” character. Mapping of intertie 
+constraints and scheduling limits to ties and 
+scheduling points can be found in the Atlas 
+Reference reports: Scheduling Point and Tie 
+Definition, Intertie Constraint and Scheduling 
+Point Mapping, and Intertie Scheduling Limit 
+and Tie Mapping. 
+
+ 
+
+SYSTEM DEMAND 
+
+CAISO Peak Demand Forecast 
+
+Peak Demand Forecast per CAISO control 
+area total. Posting begins at 7 days before 
+Trading Day.  
+Also posts Peak Demand Forecast by TAC 
+Area. 
+
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 20 
+
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+CAISO Demand Forecast 
+
+Daily posting for the 2-DA,7-DA hourly forecast, 
+DAM hourly forecast by TAC area. 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+Hourly posting for the hourly Actual Demand by 
+TAC area. 
+
+ 
+
+15-minute posting for the RTPD markets by 
+TAC area. 
+ 
+ 
+RTM 5-Minute Load Forecast is posted every 
+five minutes, for the next 11 intervals. The 
+postings occur every 5-minutes for a rolling 11 
+interval period.  
+
+ 
+
+ 
+
+ 
+
+ 
+
+Advisory CAISO Demand Forecast 
+
+SLD_ADV_FCST 
+
+  
+
+RTPD 15-minute advisory Load Forecast is 
+posted every 15 minutes. 
+ 
+ 
+RTM 5-Minute advisory Load Forecast is 
+posted every five minutes. 
+
+ 
+
+ 
+
+ 
+
+Wind and Solar Forecast 
+
+ 
+
+Forecast and actual wind and solar generation 
+by hour. Aggregated by trading hub (NP15, 
+ZP26, and SP15).  Day-Ahead forecast is 
+posted daily in advance of the Day-Ahead 
+Market, Hour-Ahead forecast is posted in 
+advance of each HASP market. RTPD forecast 
+is posted in advance of each RTPD market run 
+by 15-minute intervals.  RTD forecast is posted 
+in advance of each RTD run by 5-minute 
+intervals. Actual production is posted the day 
+after the operating day. Note: to ensure a high 
+level of accuracy only Eligible Intermittent 
+Resources (EIR), including those that 
+participate in the Participating Intermittent 
+Resource program (PIRP) are included in the 
+report 
+
+SLD_REN_FCST  RENEW_FCST_DA_MW 
+
+RENEW_FCST_HASP_MW 
+RENEW_FCST_ACT_MW 
+RENEW_FCST_5MIN_MW 
+RENEW_FCST_15MIN_MW 
+ 
+ 
+ 
+ 
+TRADING_HUB 
+ 
+ 
+ 
+RENEWABLE_TYPE 
+ 
+ 
+ 
+ 
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+XML Name 
+ 
+SLD_FCST 
+
+XML Data Items 
+
+Description 
+
+ 
+SYS_FCST_DA_MW 
+ 
+ 
+ 
+ 
+ 
+SYS_FCST_2DA_MW 
+ 
+ 
+ 
+ 
+SYS_FCST_7DA_MW 
+ 
+ 
+ 
+SYS_FCST_ACT_MW 
+ 
+ 
+ 
+SYS_FCST_15MIN_MW 
+ 
+ 
+SYS_FCST_5MIN_MW 
+
+SYS_ADV_FCST_MW 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+  
+
+The forecast MW demand for 
+each hour of the Operating 
+Day, posted in the morning 
+the day before the Operating 
+Day, before the markets run; 
+ 
+The forecast MW demand for 
+each hour of the Operating 
+Day, posted two days before 
+the Operating day; 
+ 
+The forecast MW demand for 
+each hour of the Operating 
+Day, posted  seven  days 
+before the Operating day; 
+ 
+The actual demand 
+measurement by Hourly 
+basis 
+ 
+The forecast MW demand for 
+15 minute intervals 
+ 
+The VSTLF forecast MW 
+demand used for the 
+Operating Interval, for use in 
+RTID 
+
+The “first” advisory interval 
+forecast MW demand for 15 
+or 5  minute intervals 
+ 
+
+The forecast MW value for 
+each hour of the Operating 
+Day, posted in the morning 
+the day before the each 
+markets run 
+ 
+ 
+The trading hub name. Valid 
+values are  
+NP15,SP15,ZP26 and ALL 
+ 
+
+Renewable Type include one 
+of the following 
+
+- “Wind” (Include: Wind PIRP 
+& EIR resources). 
+- “Solar” (Include: Solar PIRP 
+& EIR resources). 
+ 
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 21 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+ 
+
+Sufficiency Evaluation Demand Forecast 
+
+ 
+
+Unbiased hourly and 15-minute load forecast. 
+
+Provides a 7-day publication period data 
+availability. 
+
+ 
+
+SLD_SF_EVAL_DM
+D_FCST 
+ 
+
+ENERGY 
+
+ 
+
+System Load and Resource Schedules 
+
+ENE_SLRS 
+
+ 
+
+Balanced System Load, Generation, Import 
+and Export per TAC Area, and for CAISO total. 
+Posts results for DAM, RUC Capacity, HASP 
+and 5-Minute RTM, as indicated below:  
+
+   
+DAM Load, Generation, Import and Export 
+Schedules per TAC Area and CAISO total for 
+each Operating Hour, in MW. 
+ 
+RUC Capacity from Generation and Imports for 
+each TAC Area and CAISO total for each 
+Operating Hour, in MW 
+ 
+Hour-Ahead Scheduling Process (HASP) 
+Import and Export per TAC Area and CAISO 
+total, in MW.   
+ 
+5 minute RTM Generation, Import and Export 
+per TAC Area and CAISO total, in MW.  
+
+ 
+
+Expected Energy 
+
+ 
+
+After-the-Fact Energy Accounting, per Energy 
+Type. Posted daily at T+1, in MWh for ISO 
+total.   
+
+ENE_EA 
+
+ 
+
+ 
+
+ 
+ 
+ 
+
+BAA_ID 
+
+ 
+
+ 
+
+GRANULARITY 
+
+ 
+
+ 
+
+ 
+
+FCST_PUBLICATION_GMT 
+
+ 
+
+ 
+
+ 
+
+INTERVAL_START_GMT 
+
+ 
+
+ 
+FCST_MW 
+
+ 
+
+ISO_TOT_GEN_MW 
+ 
+ 
+ 
+ISO_TOT_LOAD_MW 
+ 
+ 
+ 
+ISO_TOT_IMP_MW 
+ 
+ 
+ISO_TOT_EXP_MW 
+ 
+ 
+ 
+TOT_GEN_MW 
+ 
+ 
+ 
+TOT_LOAD_MW 
+ 
+ 
+ 
+TOT_IMP_MW 
+ 
+ 
+ 
+TOT_GEN_MW 
+ 
+
+DASE_MWH 
+DSSE_MWH 
+DABE_MWH 
+OE_MWH 
+HASE_MWH 
+ 
+SRE_MWH 
+RED_MWH 
+EDE_MWH 
+RMRE_MWH 
+
+Balancing Authority Area 
+Identifier 
+ 
+Corresponds to the HOURLY 
+or 15MIN level forecast 
+ 
+ 
+Timestamp on when the 
+forecast is published for the 
+upcoming horizon, GMT 
+ 
+Start time of the interval, 
+GMT  
+ 
+Forecast in MW unit 
+
+ 
+
+  
+ISO Total MW cleared as 
+Generation in DAM, RUC, 
+HASP, RTM.  
+ 
+ISO Total MW cleared as 
+Demand in DAM, HASP, 
+RTM.  
+ 
+ISO Total MW cleared as 
+imports in DAM, RUC, 
+HASP, RTM.  
+ 
+ISO Total MW cleared as 
+Exports in DAM, HASP, 
+RTM. 
+ 
+ 
+Total MW cleared as 
+Generation in DAM, RUC, 
+HASP, RTM, by TAC Area.  
+ 
+ISO Total MW cleared as 
+Demand in DAM, HASP, 
+RTM, by TAC Area.  
+ 
+ISO Total MW cleared as 
+imports in DAM, RUC, 
+HASP, RTM, by TAC Area.  
+ 
+ISO Total MW cleared as 
+Exports in DAM, HASP, 
+RTM, by TAC Area.  
+ 
+DA Scheduled Energy 
+DA Self-Scheduled Energy 
+DA Bid Award Energy 
+Optimal Energy 
+HourAhead Scheduled 
+Energy 
+Standard Ramping Energy 
+Ramping Energy Deviation 
+Exceptional Dispatch Energy 
+RMR Energy 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 22 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+Please refer to the table in the BPM for Market 
+Operations, Appendix C.4 for the complete list 
+of valid Expected Energy Types. 
+
+Market Power Mitigation Status  
+
+ENE_MPM 
+
+Mitigation Indicator showing whether any bids 
+were replaced by Reference Curves. Value will 
+be “Y” or “N”.  
+
+RMR 
+
+CMMT_RMR 
+
+Pre-Dispatched and MPM Determined RMR 
+capacity (MW) summed for all resources, for 
+the DAM and RTM market processes.  
+
+Exceptional Dispatch 
+
+ENE_DISP 
+
+Summary of Exceptional Dispatch Data. Posted 
+daily at T+1, in MWh by TAC area and 
+Instruction Type.   
+
+ 
+
+Please refer to the table in the BPM for Market 
+Operations, Appendix C.4 for the complete list 
+of valid Exceptional Dispatch Instruction Types. 
+
+MSSLFE_MWH 
+RE_MWH 
+MLE_MWH 
+SE_MWH 
+RTSSE_MWH 
+DMLE_MWH 
+PE_MWH 
+TEE_MWH 
+BASE_MWH 
+MDE_MWH 
+MPM_STATUS_FLG 
+ 
+ 
+ 
+BAA_ID 
+
+DISPATCH_MW 
+ 
+ 
+TOT_AVAIL_MW 
+ 
+DETER_MW 
+
+EXPT_DIS_PRC 
+EXPT_DIS_MWH 
+ 
+
+MSS Load Following Energy 
+Residual Energy 
+Minimum Load Energy 
+SLIC Energy 
+RT Self Scheduled Energy 
+DA Minimum Load Energy 
+Pumping Energy 
+Total Expected Energy 
+Base Schedule Energy 
+EIM Manual Dispatch Energy 
+Indicator whether mitigation 
+occurred in that Operating 
+Interval 
+ 
+One of more EIM BAA ID 
+ 
+The RMR capacity 
+dispatched ahead of the 
+Market. 
+ 
+Total RMR capacity available 
+to the market in that hour. 
+RMR capacity determined by 
+MPM before market run. 
+Exceptional Dispatch Price. 
+Exceptional Dispatch MW 
+ 
+
+ 
+
+Marginal Losses 
+
+CAISO Total Marginal Loss costs ($) and Total 
+System losses (MWh). Posted hourly for the 
+DAM and HASP. 
+
+ 
+
+ENE_LOSS 
+
+TOT_LOSS_PRC 
+ 
+TOT_LOSS_MW 
+
+Total costs incurred due to 
+Losses in this hour/interval. 
+Total MWh lost 
+
+Resource Adequacy and Minimum Load  
+
+CMMT_RA_MLC 
+
+Commitment data for each market. All data for 
+all markets posted daily at T+1. All commitment 
+data is related to ISO committed resources.  
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+RA_CAP_COMM_MW 
+ 
+MIN_LD_MW 
+ 
+RA_MLC_PRC 
+ 
+MIN_LD_MLC_PRC 
+ 
+TOT_STRT_CST_PRC 
+ 
+RA_STRT_PRC 
+ 
+RA_COMM_UNITS_CNT 
+ 
+ 
+TOT_COMM_UNITS_CNT 
+ 
+ 
+TOT_COMM_CAP_MW 
+
+Convergence Bidding Aggregate Awards 
+
+ENE_CB_AWARDS  ISO_TOT_SPLY_MW  
+
+  
+ISO_TOT_DMD_MW  
+
+RA Capacity Committed  
+ 
+Minimum Load  
+ 
+RA Minimum Load Cost 
+(MLC) 
+ 
+Minimum Load cost  
+ 
+Total Start Up Cost  
+ 
+RA Start-Up Cost 
+ 
+RA Number of Units 
+Committed 
+ 
+ 
+Total Number of Units 
+Committed 
+ 
+Total Capacity Committed 
+Supply Component 
+ 
+Demand Component 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 23 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+Posts Day Ahead CAISO aggregate Virtual 
+Bidding Awards for Energy for Supply & 
+Demand  Publishes with the Day Ahead Market 
+results   
+
+ 
+
+Net Cleared Convergence Bidding Awards 
+
+Posts Net Cleared MW for Virtual Bids for 
+every Virtual Bidding Node per Trade Hour 
+within a Trading Day including Trading Hubs 
+and default LAPs.  
+
+ 
+
+ENE_CB_CLR_AW
+ARDS 
+
+       ENE_CB_CLR_MW 
+  
+  
+ 
+
+Cleared MW 
+ 
+  
+
+This report will post after all Real Time markets 
+have closed for the associated Trading Day. 
+
+ 
+Posts  Convergence  Bidding  Supply  Awards, 
+
+Less Convergence Bidding Demand Awards per 
+
+node.  Under 
+
+this  convention,  positive  net 
+
+cleared virtual quantities will indicate net Virtual 
+
+Supply,  whereas  negative  net  cleared  virtual 
+
+quantities  will  indicate  net  Virtual Demand  at  a 
+
+given node. 
+
+A value of null Net Cleared Virtual quantities at 
+
+a  given  node  will  indicate  no  virtual  bids 
+
+submitted at that node while a value of zero will 
+
+indicate  virtual  supply  and  demand  Awards 
+
+netted to zero.   
+
+ 
+
+.  
+
+ 
+
+Day Ahead Market Summary 
+
+ENE_CB_MKT_SUM  DMD_SLF_ENE_SUB_MW 
+
+Summary of the Day Ahead market showing 
+physical and virtual breakdowns of energy 
+submitted, dollars submitted, energy cleared 
+and dollars cleared as well as the totals. 
+
+Posts after the completion of the DAM Market 
+publication.  
+
+ 
+
+ 
+
+ 
+
+ 
+
+DMD_SLF_ENE_CLR_MW 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+DMD_SLF_CLR_CST 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+DMD_ENE_SUB_MW 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ Sum of demand self 
+schedule energy bids 
+submitted for all internal 
+resources for a specific trade 
+date in the day ahead market  
+
+Sum of demand self 
+schedule energy bids 
+awarded (cleared) for all 
+internal resources for a 
+specific trade date in the day 
+ahead market  
+
+Sum of dollars associated 
+with demand self schedule 
+energy bids awarded 
+(cleared) for all internal 
+resources for a specific trade 
+date in the day ahead market  
+
+ 
+
+Sum of demand economic 
+energy bids submitted for all 
+internal resources for a 
+specific trade date in the day 
+ahead market. All the MW 
+values in each price curve 
+will be included in this 
+calculation  
+
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 24 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+ 
+
+ 
+
+DMD_ENE_SUB_CST 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+DMD_ENE_CLR_MW 
+
+ 
+
+ 
+
+ 
+
+DMD_ENE_CLR_CST 
+
+ 
+
+ 
+
+ 
+
+ 
+
+DMD_VIR_ENE_SUB_MW 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+DMD_VIR_SUB_CST 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+DMD_VIR_ENE_CLR_MW 
+
+ 
+
+ 
+
+ 
+
+ 
+
+DMD_VIR_CLR_CST 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+DMD_TOT_ENE_SUB_MW 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+Sum of dollars associated 
+with demand economic 
+energy submitted for all 
+internal resources for a 
+specific trade date in the day 
+ahead market. All the 
+MW/price pair values in each 
+price curve will be included 
+in this calculation  
+
+Sum of demand economic 
+energy bids awarded 
+(cleared) for all internal 
+resources for a specific trade 
+date in the day ahead market  
+
+Sum of dollars associated 
+with demand economic 
+energy bids awarded 
+(cleared) for all internal 
+resources for a specific trade 
+date in the day ahead market 
+
+Sum of demand 
+convergence bidding (virtual) 
+energy bids submitted for all 
+internal resources for a 
+specific trade date in the day 
+ahead market. All the MW 
+values in each price curve 
+will be included in this 
+calculation  
+
+Sum of dollars associated 
+with demand convergence 
+bidding (virtual) energy 
+submitted for all internal 
+resources for a specific trade 
+date in the day ahead 
+market. All the MW/price pair 
+values in each price curve 
+will be included in this 
+calculation  
+
+Sum of demand 
+convergence bidding (virtual) 
+energy bids awarded 
+(cleared) for all internal 
+resources for a specific trade 
+date in the day ahead market  
+
+Sum of dollars associated 
+with demand convergence 
+bidding (virtual) energy bids 
+awarded (cleared) for all 
+internal resources for a 
+specific trade date in the day 
+ahead market 
+
+Sum of demand self 
+schedule energy bids 
+submitted, demand 
+economic energy bids 
+submitted, demand virtual 
+bids submitted for all internal 
+resources (and nodes) for a 
+specific trade date in the day 
+ahead market 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 25 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+DMD_TOT_SUB_CST 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+DMD_TOT_ENE_CLR_MW 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+DMD_TOT_CLR_CST 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+SPLY_ENE_SUB_MW 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+SPLY_ENE_SUB_CST 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+Sum of dollars associated 
+with demand self schedule 
+energy bids submitted, 
+demand economic energy 
+bids submitted, demand 
+virtual bids submitted for all 
+internal resources (and 
+nodes) for a specific trade 
+date in the day ahead market 
+
+Sum of demand self 
+schedule energy bids 
+awarded (cleared) , demand 
+economic energy bids 
+awarded (cleared), demand 
+virtual bids awarded 
+(cleared)  for all internal 
+resources (and nodes) for a 
+specific trade date in the day 
+ahead market 
+
+Sum of dollars associated 
+with demand self schedule 
+energy bids awarded 
+(cleared) , demand economic 
+energy bids awarded 
+(cleared), demand virtual 
+bids awarded (cleared)  for 
+all internal resources (and 
+nodes) for a specific trade 
+date in the day ahead market 
+
+Sum of supply physical 
+energy bids submitted for all 
+internal resources for a 
+specific trade date in the day 
+ahead market. All the MW 
+values in each price curve 
+will be included in this 
+calculation. 
+
+Sum of dollars associated 
+with supply physical energy 
+submitted for all internal 
+resources for a specific trade 
+date in the day ahead 
+market. All the MW/price pair 
+values in each price curve 
+will be included in this 
+calculation. 
+
+SPLY_ENE_CLR_MW 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+SPLY_ENE_CLR_CST  
+
+ 
+
+ 
+
+ 
+
+ 
+
+Sum of supply physical 
+energy bids awarded 
+(cleared) for all internal 
+resources for a specific trade 
+date in the day ahead market 
+
+ 
+
+Sum of dollars associated 
+with supply physical energy 
+bids awarded (cleared) for all 
+internal resources for a 
+specific trade date in the day 
+ahead market 
+
+SPLY_SLF_ENE_SUB_MW 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 26 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+ 
+
+ 
+
+ 
+
+SPLY_SLF_ENE_CLR_MW 
+
+ 
+
+ 
+
+ 
+
+ 
+
+SPLY_SLF_CLR_CST 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+Sum of  supply self schedule 
+energy bids submitted for all 
+internal resources for a 
+specific trade date in the day 
+ahead market 
+
+ 
+
+Sum of  supply self schedule 
+energy bids awarded 
+(cleared) for all internal 
+resources for a specific trade 
+date in the day ahead market  
+
+ 
+
+Sum of dollars associated 
+with supply self schedule 
+energy bids awarded 
+(cleared) for all internal 
+resources for a specific trade 
+date in the day ahead market  
+
+SPLY_VIR_ENE_SUB_MW 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+SPLY_VIR_SUB_CST 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+SPLY_VIR_ENE_CLR_MW 
+
+ 
+
+ 
+
+ 
+
+ 
+
+SPLY_VIR_CLR_CST 
+
+ 
+
+ 
+
+ 
+
+ 
+
+SPLY_TOT_ENE_SUB_MW 
+
+ 
+
+ 
+
+ 
+
+ 
+
+SPLY_TOT_SUB_CST 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+Sum of supply convergence 
+bidding (virtual) energy bids 
+submitted for all internal 
+resources for a specific trade 
+date in the day ahead 
+market. All the MW values in 
+each price curve will be 
+included in this calculation. 
+
+ 
+
+Sum of dollars associated 
+with supply convergence 
+bidding (virtual) energy 
+submitted for all internal 
+resources for a specific trade 
+date in the day ahead 
+market. All the MW/price pair 
+values in each price curve 
+will be included in this 
+calculation. 
+
+Sum of supply convergence 
+bidding (virtual) energy bids 
+awarded (cleared) for all 
+internal resources for a 
+specific trade date in the day 
+ahead market 
+
+Sum of dollars associated 
+with supply convergence 
+bidding (virtual) energy bids 
+awarded (cleared) for all 
+internal resources for a 
+specific trade date in the day 
+ahead market 
+
+Sum of supply economic 
+energy bids submitted, 
+supply virtual bids submitted 
+for all internal resources (and 
+nodes) for a specific trade 
+date in the day ahead 
+market. 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 27 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+SPLY_TOT_ENE_CLR_MW 
+
+ 
+
+ 
+
+ 
+
+ 
+
+SPLY_TOT_CLR_CST 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+EXP_SLF_ENE_SUB_MW  
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+EXP_SLF_ENE_CLR_MW 
+
+ 
+
+ 
+
+ 
+
+EXP_SLF_CLR_CST 
+
+ 
+
+ 
+
+ 
+
+EXP_ENE_SUB_MW 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+EXP_ENE_SUB_CST 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+EXP_ENE_CLR_MW 
+
+ 
+
+ 
+
+EXP_ENE_CLR_CST 
+
+ 
+
+ 
+
+ 
+
+Sum of dollars associated 
+with supply economic energy 
+bids submitted, supply virtual 
+bids submitted for all internal 
+resources (and nodes) for a 
+specific trade date in the day 
+ahead market 
+
+Sum of supply economic 
+energy bids awarded 
+(cleared), supply virtual bids 
+awarded (cleared)  for all 
+internal resources (and 
+nodes) for a specific trade 
+date in the day ahead market 
+
+Sum of dollars associated 
+with supply economic energy 
+bids awarded (cleared), 
+supply virtual bids awarded 
+(cleared)  for all internal 
+resources (and nodes) for a 
+specific trade date in the day 
+ahead market 
+
+Sum of  Exports self 
+schedule energy bids 
+submitted  for a specific 
+trade date in the day ahead 
+market  
+
+N/A 
+
+ 
+
+Sum of  Exports self 
+schedule energy bids 
+awarded (cleared)  for a 
+specific trade date in the day 
+ahead market  
+
+Sum of dollars associated 
+with  Exports self schedule 
+energy bids awarded 
+(cleared)  for a specific trade 
+date in the day ahead market  
+
+Sum of Exports economic 
+energy bids submitted for a 
+specific trade date in the day 
+ahead market. All the MW 
+values in each price curve 
+will be included in this 
+calculation  
+
+Sum of dollars associated 
+with Exports economic 
+energy submitted for a 
+specific trade date in the day 
+ahead market. All the 
+MW/price pair values in each 
+price curve will be included 
+in this calculation  
+
+Sum of  Exports economic 
+energy bids awarded 
+(cleared)  for a specific trade 
+date in the day ahead market  
+
+Interface Specification for OASIS 
+
+ 
+
+Page 28 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+Sum of dollars associated 
+with  Exports economic 
+energy bids awarded 
+(cleared)  for a specific trade 
+date in the day ahead market 
+
+Sum of Exports convergence 
+bidding (virtual) energy bids 
+submitted for a specific trade 
+date in the day ahead 
+market. All the MW values in 
+each price curve will be 
+included in this calculation  
+
+Sum of dollars associated 
+with Exports convergence 
+bidding (virtual) energy 
+submitted for a specific trade 
+date in the day ahead 
+market. All the MW/price pair 
+values in each price curve 
+will be included in this 
+calculation  
+
+Sum of  Exports 
+convergence bidding (virtual) 
+energy bids awarded 
+(cleared)  for a specific trade 
+date in the day ahead market  
+
+Sum of dollars associated 
+with  Exports convergence 
+bidding (virtual) energy bids 
+awarded (cleared)  for a 
+specific trade date in the day 
+ahead market 
+
+Sum of  Exports self 
+schedule energy bids 
+submitted,  Exports 
+economic energy bids 
+submitted,  Exports virtual 
+bids submitted  (and nodes) 
+for a specific trade date in 
+the day ahead market 
+
+Sum of dollars associated 
+with  Exports self schedule 
+energy bids submitted,  
+Exports economic energy 
+bids submitted,  Exports 
+virtual bids submitted  (and 
+nodes) for a specific trade 
+date in the day ahead market 
+
+Sum of  Exports self 
+schedule energy bids 
+awarded (cleared) ,  Exports 
+economic energy bids 
+awarded (cleared),  Exports 
+virtual bids awarded 
+(cleared)   (and nodes) for a 
+specific trade date in the day 
+ahead market 
+
+EXP_VIR_ENE_SUB_MW 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+EXP_VIR_SUB_CST 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+EXP_VIR_ENE_CLR_MW 
+
+ 
+
+ 
+
+ 
+
+EXP_VIR_CLR_CST 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+EXP_TOT_ENE_SUB_MW 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+EXP_TOT_SUB_CST 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+EXP_TOT_ENE_CLR_MW 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+EXP_TOT_CLR_CST 
+
+ 
+
+ 
+
+ 
+
+ 
+
+IMP_SLF_ENE_SUB_MW 
+
+ 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 29 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+IMP_SLF_ENE_CLR_MW 
+
+ 
+
+ 
+
+ 
+
+IMP_SLF_CLR_CST 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+IMP_ENE_SUB_MW 
+
+ 
+
+ 
+
+ 
+
+ 
+
+IMP_ENE_SUB_CST 
+
+ 
+
+ 
+
+ 
+
+ 
+
+IMP_ENE_CLR_MW 
+
+ 
+
+ 
+
+ 
+
+IMP_ENE_CLR_CST 
+
+ 
+
+ 
+
+ 
+
+ 
+
+IMP_VIR_ENE_SUB_MW 
+
+ 
+
+ 
+
+ 
+
+ 
+
+IMP_VIR_SUB_CST 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+IMP_VIR_ENE_CLR_MW 
+
+ 
+
+ 
+
+ 
+
+IMP_VIR_CLR_CST 
+
+ 
+
+Sum of dollars associated 
+with  Exports self schedule 
+energy bids awarded 
+(cleared) ,  Exports 
+economic energy bids 
+awarded (cleared),  Exports 
+virtual bids awarded 
+(cleared)   (and nodes) for a 
+specific trade date in the day 
+ahead market 
+
+ 
+
+ 
+
+Sum of  Imports self 
+schedule energy bids 
+submitted  for a specific 
+trade date in the day ahead 
+market 
+
+ 
+
+Sum of  Imports self 
+schedule energy bids 
+awarded (cleared)  for a 
+specific trade date in the day 
+ahead market 
+
+Sum of dollars associated 
+Sum of  Imports self  
+schedule energy bids 
+submitted for a specific trade 
+date in the day ahead 
+market. All the MW values in 
+each price curve 
+
+ 
+
+ 
+
+ 
+
+Sum of Imports physical 
+energy bids submitted for a 
+specific trade date in the day 
+ahead market. All the MW 
+values in each price curve 
+will be included in this 
+calculation. 
+
+Sum of dollars associated 
+with Imports physical energy 
+submitted for a specific trade 
+date in the day ahead 
+market. All the MW/price pair 
+values in each price curve 
+will be included in this 
+calculation. 
+
+Sum of  Imports physical 
+energy bids awarded 
+(cleared)  for a specific trade 
+date in the day ahead market 
+
+Sum of dollars associated 
+with  Imports physical energy 
+bids awarded (cleared)  for a 
+specific trade date in the day 
+ahead market 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 30 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+ 
+
+ 
+
+ 
+
+IMP_TOT_ENE_SUB_MW 
+
+ 
+
+ 
+
+ 
+
+ 
+
+IMP_TOT_SUB_CST 
+
+ 
+
+ 
+
+ 
+
+ 
+
+IMP_TOT_ENE_CLR_MW 
+ 
+ 
+ 
+ 
+ 
+ 
+IMP_TOT_CLR_CST 
+ 
+
+Convergence Bidding Nodal MW Limits 
+
+CB_NODAL_LIMITS  CB_NODAL_LIMITS 
+
+ 
+ 
+PHYSICAL_TYPE 
+
+Sum of Imports convergence 
+bidding (virtual) energy bids 
+submitted for a specific trade 
+date in the day ahead 
+market. All the MW values in 
+each price curve will be 
+included in this calculation. 
+
+Sum of dollars associated 
+with Imports convergence 
+bidding (virtual) energy 
+submitted for a specific trade 
+date in the day ahead 
+market. All the MW/price pair 
+values in each price curve 
+will be included in this 
+calculation. 
+
+Sum of  Imports 
+convergence bidding (virtual) 
+energy bids awarded 
+(cleared)  for a specific trade 
+date in the day ahead market 
+
+Sum of dollars associated 
+with  Imports convergence 
+bidding (virtual) energy bids 
+awarded (cleared)  for a 
+specific trade date in the day 
+ahead market 
+
+Sum of  Imports economic 
+energy bids submitted,  
+Imports virtual bids 
+submitted  (and nodes) for a 
+specific trade date in the day 
+ahead market 
+
+Sum of dollars associated 
+with  Imports economic 
+energy bids submitted,  
+Imports virtual bids 
+submitted  (and nodes) for a 
+specific trade date in the day 
+ahead market 
+
+Sum of  Imports economic 
+energy bids awarded 
+(cleared),  Imports virtual 
+bids awarded (cleared)   
+(and nodes) for a specific 
+trade date in the day ahead 
+market 
+ 
+Sum of dollars associated 
+with   Imports economic 
+energy bids awarded 
+(cleared),  Imports virtual 
+bids awarded (cleared)   
+(and nodes) for a specific 
+trade date in the day ahead 
+market 
+
+Upper or lower limit (MW) 
+
+ 
+
+‘Supply’ or ‘Demand’ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 31 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+This report displays the MW limits used by the 
+ISO in formulating nodal MW constraints in 
+conjunction with convergence bidding. An 
+upper and lower limit is defined for each 
+Eligible Pnode other than an Eligible Pnode 
+established for an Intertie. This report is 
+triggered with the publication of the Day-Ahead 
+results. 
+
+Contingency Dispatch Resource Schedules 
+
+ENE_CD_SLRS 
+
+ 
+
+Similar to the System Load and Resource 
+Schedules report, but for Real Time 
+Contingency Dispatch (RTCD) runs.  RTM 
+Generation, Import and Export per TAC Area 
+and CAISO total, in MW for all 10-minute 
+RTCD runs. 
+
+ 
+
+ 
+
+AGGR_OUTAGE_S
+CH 
+
+Aggregated Generation Outages 
+
+ 
+
+Generator de-rates and outages which are 
+considered in the Day-Ahead Market. Report is 
+generated from the list of de-rates and outages 
+that are known at the time of publication, 
+typically 5:00 AM PPT the day prior to the 
+operating day. Aggregated into a total MW 
+capacity reduction amount by trading hub 
+(NP15, ZP26, and SP15) and resource type 
+(thermal, hydro, renewable). 
+
+ 
+
+EIM Transfer Limits 
+
+ 
+
+ENE_EIM_TRANSF
+ER_LIMITS 
+
+ISO_TOT_GEN_MW 
+ 
+ 
+ 
+ 
+ISO_TOT_IMP_MW 
+ 
+ 
+ 
+ISO_TOT_EXP_MW 
+ 
+ 
+ 
+ 
+TOT_GEN_MW 
+ 
+ 
+ 
+TOT_IMP_MW 
+ 
+ 
+ 
+ 
+ 
+TOT_EXP_MW 
+ 
+ 
+ 
+ 
+ 
+ 
+
+REPORT_DATE 
+ 
+ 
+OUTAGE_DATE 
+ 
+ 
+OUTAGE_HOUR 
+ 
+ 
+FUEL_CATEGORY 
+ 
+ 
+TRADING_HUB 
+ 
+ 
+ 
+OUTAGE_MW 
+ 
+ 
+MKT_TYPE 
+ 
+INTERVAL_START_GMT 
+ 
+INTERVAL_END_GMT 
+ 
+
+ISO Total MW cleared as 
+Generation for all 10-Minute 
+Contingency Dispatch run. 
+ 
+ 
+ISO Total MW cleared as 
+imports for all 10-Minute 
+Contingency Dispatch run. 
+ 
+ISO Total MW cleared  
+Exports for all 10-Minute 
+Contingency Dispatch run. 
+
+ 
+Total MW cleared as 
+Generation per TAC area for 
+all 10-Minute Contingency 
+Dispatch run. 
+  
+Total MW cleared as imports 
+per TAC area for all 10-
+Minute Contingency 
+Dispatch run. 
+
+ 
+Total MW cleared as Exports 
+per TAC area for all 10-
+Minute Contingency 
+Dispatch run. 
+
+ 
+
+ 
+
+ 
+The date when the data was 
+published 
+ 
+Outage date 
+ 
+ 
+Outage hour 
+ 
+ 
+Fuel Category 
+ 
+ 
+Trading Hub name 
+ 
+ 
+ 
+Outage MW 
+
+RTPD and RTD 
+ 
+Interval Start time (GMT) 
+ 
+Interval End time (GMT) 
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 32 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+After each RTPD and RTD market run is 
+completed, OASIS will post the NSI low/high 
+(before 2019) or import/export (2019 onwards) 
+limits per each EIM BAA group that are used in 
+the market 
+
+EIM Transfer 
+ 
+EIM BAA Net Imbalance energy export 
+(transfer) will be posted to OASIS for every 
+RTD and RTPD market 
+
+ENE_EIM_TRANSF
+ER 
+
+BAA_GRP_ID 
+ 
+LIMIT_TYPE 
+ 
+ 
+ 
+EIM_XFER_ MW 
+ 
+ 
+INTERVAL_START_GMT 
+INTERVAL_END_GMT 
+MKT_TYPE 
+BAA_GRP_ID 
+ 
+ 
+EIM_XFER_MW 
+ 
+
+ENE_EIM_DYN_NSI INTERVAL_START_GMT 
+
+EIM BAA Group ID 
+ 
+HIGH or LOW (before 2019) 
+IMPORT or EXPORT (2019 
+onwards) 
+ 
+EIM Transfer MW  
+ 
+
+Interval Start time (GMT) 
+Interval End time (GMT) 
+RTPD and RTD 
+EIM BAA Group (PACW, 
+PACE, ISO, PACW_PACE, 
+etc.) 
+EIM Transfer MW  
+ 
+ 
+ 
+Interval Start time (GMT) 
+Interval End time (GMT) 
+One of more EIM BAA ID 
+RTPD and RTD 
+EIM BAA Dynamic NSI MW 
+ 
+
+Interval Start time (GMT) 
+Interval End time (GMT) 
+Base schedule snapshot 
+indicator (T75MIN, T55MIN, 
+T40MIN, DA) 
+One of more EIM BAA ID 
+DAM and RTPD 
+EIM Base NSI MW  
+ 
+Interval Start time (GMT) 
+Interval End time (GMT) 
+Base schedule snapshot 
+indicator (T75MIN, T55MIN, 
+T40MIN, DA) 
+One of more EIM BAA ID 
+DAM and RTM 
+EIM Hourly Base NSI MW  
+ 
+Interval Start time (GMT) 
+Interval End time (GMT) 
+Base schedule snapshot 
+indicator (T75MIN, T55MIN, 
+T40MIN, DA) 
+One of more EIM BAA ID 
+DAM and RTM 
+EIM Hourly Base Loss MW  
+ 
+BAA Group ID 
+ 
+Market type.  Only applicable 
+for RTD market 
+ 
+Interval Start time (GMT) 
+ 
+Interval End time (GMT) 
+ 
+Supply or Intertie or Load 
+ 
+UM – Uncertainty Movement 
+
+EIM BAA Dynamic NSI 
+ 
+Dynamic Net Schedule Interchange for each 
+BAA will be posted to OASIS for every RTD 
+and RTPD market 
+
+EIM BAA Base NSI 
+ 
+DAM and RTM  base NSI for each EIM BAA. 
+All data shall be from the latest DAM and the 
+first RTPD 15-minute market within the hour. 
+ 
+
+ENE_BASE_NSI 
+
+EIM BAA Hourly Base NSI 
+ 
+DAM and RTM hourly base NSI for each EIM 
+BAA.  
+
+ENE_HRLY_BASE_
+NSI 
+
+EIM BAA Hourly Base Loss 
+ 
+DAM and RTM hourly base loss for each EIM 
+BAA.  
+
+ENE_HRLY_BASE_
+LOSS 
+
+Uncertainty Movement by Category 
+ 
+ 
+
+ENE_UNCERTAINT
+Y_MV 
+
+INTERVAL_END_GMT 
+BAA_ID 
+MKT_TYPE 
+EIM_DYN_NSI_MW 
+ 
+ 
+INTERVAL_START_GMT 
+INTERVAL_END_GMT 
+SNAPSHOT_INDICATOR 
+ 
+ 
+BAA_ID 
+MKT_TYPE 
+BASE_NSI_ MW 
+ 
+INTERVAL_START_GMT 
+INTERVAL_END_GMT 
+SNAPSHOT_INDICATOR 
+ 
+ 
+BAA_ID 
+MKT_TYPE 
+HRLY_BASE_NSI_MW 
+ 
+INTERVAL_START_GMT 
+INTERVAL_END_GMT 
+SNAPSHOT_INDICATOR 
+ 
+ 
+BAA_ID 
+MKT_TYPE 
+HRLY_BASE_LOSS_MW 
+ 
+BAA_GRP_ID 
+ 
+MKT_TYPE 
+ 
+ 
+INTERVAL_START_GMT 
+ 
+INTERVAL_END_GMT 
+ 
+CATEGORY 
+ 
+PRODUCT 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 33 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+Flexible Ramp Requirements 
+ 
+ 
+
+ENE_FLEX_RAMP_
+REQT 
+
+Flex Ramp Aggregated Awards 
+ 
+
+ENE_AGGR_FLEX_
+RAMP 
+ 
+
+Flex Ramp Surplus Demand Curves 
+ 
+ 
+ 
+
+ENE_FLEX_RAMP_
+DC 
+
+EIM Transfer By Tie 
+ 
+
+ENE_EIM_TRANSF
+ER_TIE 
+
+ 
+ 
+UNCERTAINTY_MV_MW 
+BAA_GRP_ID 
+ 
+MKT_TYPE 
+ 
+ 
+ 
+ 
+ 
+INTERVAL_START_GMT 
+ 
+INTERVAL_END_GMT 
+ 
+RAMP_TYPE 
+ 
+FLEX_RAMP_REQ_MW 
+ 
+NET_DEMAND_MW 
+ 
+UNCERTAINTY_MW 
+BAA_GRP_ID 
+ 
+MKT_TYPE 
+ 
+ 
+ 
+NTERVAL_START_GMT 
+ 
+INTERVAL_END_GMT 
+ 
+RAMP_TYPE 
+ 
+AGGR_FLEX_RAMP_MW 
+BAA_GRP_ID 
+ 
+RAMP_TYPE 
+ 
+NTERVAL_START_GMT 
+ 
+INTERVAL_END_GMT 
+ 
+ 
+SEGMENT_MW 
+ 
+ 
+SEGMENT_PRC 
+
+EIM_XFER_MW 
+
+ 
+
+ 
+
+ 
+
+BAA_GRP_ID 
+
+ 
+
+INTERVAL_START_GMT 
+
+ 
+
+INTERVAL_END_GMT 
+
+ 
+
+TIE_NAME 
+
+ 
+
+DIRECTION 
+
+ 
+ 
+ MW value 
+BAA ID 
+ 
+Market type.  Before Fall 
+2016 release, only RTPD 
+market applies. Beginning 
+Fall 2016 release market 
+type will be RTPD, RTD. 
+ 
+Interval Start time (GMT) 
+ 
+Interval End time (GMT) 
+ 
+Ramp Type  ( UP or DOWN) 
+ 
+ MW value 
+ 
+MW  value 
+ 
+MW value 
+BAA  Group ID 
+ 
+Market type.  Applicable for 
+both RTPD and RTD 
+markets. 
+ 
+Interval Start time (GMT) 
+ 
+Interval End time (GMT) 
+ 
+Ramp Type  ( UP or DOWN) 
+ 
+ MW value 
+BAA  Group ID 
+ 
+Ramp Type  ( UP or DOWN) 
+ 
+Interval Start time (GMT) 
+ 
+Interval End time (GMT) 
+ 
+  
+MW  value 
+ 
+ 
+Price 
+Energy Imbalance Market 
+(EIM) MW Transfer over the 
+tie from one EIM BAA entity 
+to the other EIM BAA entity.  
+ 
+Balancing Authority Area 
+Group Identifier 
+ 
+Interval Start time (GMT) 
+ 
+ 
+Interval End time (GMT) 
+ 
+Tie in which the transfer 
+occurs 
+ 
+Import or Export 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 34 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+EIM Transfer Limits By Tie 
+
+ENE_EIM_TRANSF
+ER_LIMITS_TIE 
+
+Wind And Solar Summary 
+
+ENE_WIND_SOLAR
+_SUMMARY 
+
+Flexible Ramp Requirements Input 
+
+ENE_EIM_FLEX_R
+AMP_INPUT 
+
+ 
+
+FROM_BAA  
+
+ 
+
+ 
+TO_BAA  
+
+DATA_ITEM 
+
+ 
+
+VALUE 
+
+ 
+
+ 
+
+ 
+
+ 
+
+OPR_DATE 
+
+INTERVAL_NUM 
+
+ 
+
+BAA_GRP_ID 
+
+ 
+
+INTERVAL_START_GMT 
+
+ 
+
+INTERVAL_END_GMT 
+
+ 
+
+TIE_NAME 
+
+ 
+
+DIRECTION 
+
+ 
+
+FROM_BAA  
+
+ 
+
+TO_BAA 
+
+OPR_DATE 
+
+DATA_ITEM 
+
+ 
+
+INTERVAL_START_GMT 
+
+INTERVAL_END_GMT 
+
+VALUE 
+
+INTERVAL_START_GMT 
+ 
+INTERVAL_END_GMT 
+ 
+SNAPSHOT_INDICATOR 
+ 
+ 
+ 
+BAA_ID 
+  
+
+DIVERSITY_BENEFIT_UC 
+
+ 
+
+ 
+
+NET_EXPORT_CAPABILITY 
+
+ 
+
+ 
+
+ 
+ 
+EIM Transfer from the 
+originating EIM BAA entity 
+ 
+EIM Transfer to the 
+destination EIM BAA entity 
+EIM_XFER_LIMITS_TI
+E_MW 
+ 
+Energy Imbalance Market 
+(EIM) MW Transfer Limit 
+over the tie from one EIM 
+BAA entity to the other EIM 
+BAA entity.  
+ 
+Opr Date 
+Interval Number 
+ 
+Balancing Authority Area 
+Group Identifier 
+ 
+Interval Start time (GMT) 
+ 
+ 
+Interval End time (GMT) 
+ 
+Tie in which the transfer 
+occurs 
+ 
+Import or Export 
+ 
+ 
+EIM Transfer from the 
+originating EIM BAA entity 
+ 
+EIM Transfer to the destination 
+EIM BAA entity 
+Opr Date 
+Summary Data Item( 
+(DAM_SCHEDULE,DAM_NET_VI
+RTUAL,DAM_FORECAST,RTM_S
+CHEDULE) 
+Interval Start Time in GMT 
+Interval End Time in GMT 
+MW Value 
+Interval Start time (GMT) 
+ 
+Interval End time (GMT) 
+ 
+Base schedule snapshot 
+indicator (T75MIN, T55MIN, 
+T40MIN) 
+ 
+One or more EIM BAA ID 
+  
+Diversity benefit scaled 
+uncertainty component. 
+ 
+ 
+Net Export Capability 
+ 
+ 
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 35 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+NET_IMPORT_CAPABILITY 
+
+ 
+
+CREDIT 
+
+ 
+
+TEST_INDICATOR 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+FLEX_RAMP_REQ_MW 
+
+ 
+
+RAMP_TYPE 
+
+ 
+
+DATA_ITEM 
+
+INTERVAL_START_GMT 
+ 
+INTERVAL_END_GMT 
+ 
+MKT_TYPE 
+ 
+ 
+BAA_ID 
+  
+
+MKT_EVENT_TYPE 
+
+RESOURCE_ID 
+ 
+RESOURCE_NAME 
+ 
+INTERVAL_START_GMT 
+ 
+ 
+INTERVAL_END_GMT 
+ 
+ 
+
+Net Import Capability 
+ 
+ 
+Credit 
+ 
+ 
+There will be four flexible 
+ramp capacity requirement 
+sufficiency tests:  
+1. ramp time duration is the 
+first 15-minute interval; 
+ 2. ramp time duration is 30-
+minutes spanning two 15-
+minute intervals;  
+3. ramp time duration is 45-
+minutes spanning three 15-
+minute intervals;  
+4. ramp time duration is 60 
+minutes spanning the four 
+15-minute intervals 
+ 
+ 
+Requirement  MW 
+ 
+ 
+Ramp Type  ( UP or DOWN) 
+ 
+ENE_EIM_FLEX_RAMP_IN
+TPUT 
+Interval Start time (GMT) 
+ 
+Interval End time (GMT) 
+ 
+Market type.  Applicable for   
+RTD market. 
+ 
+BAA ID 
+  
+Market Event Type 
+ 
+The valid values for 
+MKT_EVENT_TYPE 
+currently being planned are 
+as follows: 
+ 
+
+Contingency  
+
+ 
+
+Contingency-Corrected to 
+Yes   
+
+ 
+Contingency-Corrected to No 
+ 
+
+ 
+Resource ID 
+ 
+Resource Common Name 
+ 
+Interval Start Date Time  
+(GMT) 
+ 
+Interval End Date Time 
+(GMT) 
+ 
+
+BAA  Market Events 
+ 
+
+ENE_BAA_MKT_EV
+ENTS 
+
+Resource-Specific Uplift  
+
+ENE_RES_UPL 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 36 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Zonal Uplift  
+
+ENE_ZNL_UPL 
+
+Operator-Initiated Commitment  
+
+ENE_OIC 
+
+ANCILLARY 
+
+AS Requirements 
+
+ 
+
+AS_REQ 
+
+Ancillary Service Capacity Minimum and 
+Maximums per AS Region. Report will post for 
+the 2-Day-Ahead forecast, DAM , HASP and 
+RTM (RTPD)  
+
+ 
+
+Note:  
+
+UPLIFT_CATEGORY 
+
+ 
+
+UPLIFT_PAYMENT 
+
+INTERVAL_START_GMT 
+ 
+ 
+INTERVAL_END_GMT 
+ 
+ 
+TAC_AREA 
+ 
+
+UPLIFT_CATEGORY 
+
+ 
+UPLIFT_PAYMENT 
+
+RESOURCE_ID 
+ 
+TAC_AREA 
+ 
+INTERVAL_START_GMT 
+ 
+ 
+START_DATE_TIME_GMT  
+ 
+END_DATE_TIME_GMT  
+ 
+MKT_TYPE 
+ 
+ 
+EXECUTION_TYPE 
+ 
+ 
+COMMITMENT_MW 
+ 
+ 
+ 
+CONSTRAINT_TYPE 
+ 
+
+ 
+
+ 
+
+ 
+
+REASON 
+
+ 
+
+ 
+
+ 
+
+CLARIFIED_REASON 
+
+ 
+
+NS_REQ_MAX_MW 
+ 
+RD_REQ_MAX_MW 
+ 
+RU_REQ_MAX_MW 
+ 
+SP_REQ_MAX_MW 
+ 
+
+Description 
+Uplift Category (Charge 
+Code) 
+ 
+Uplift $ Payment 
+
+ 
+Interval Start Date Time  
+(GMT) 
+ 
+Interval End Date Time  
+(GMT) 
+ 
+TAC Area Name 
+ 
+Uplift Category (Charge 
+Code) 
+ 
+Uplift $ Payment 
+ 
+Masked Resource ID 
+ 
+TAC Area Name 
+ 
+Interval Start Date Time 
+(GMT) 
+ 
+Start Date Time (GMT) 
+ 
+End Date Time (GMT) 
+ 
+Market Type.  Applicable for   
+DAM and RTM 
+ 
+Execution Type. Applicable 
+for RUC, RTPD, and RTD 
+ 
+Commitment Size (MW) 
+  Dispatch MW for ED 
+  RUC Capacity for RUC  
+
+ 
+Constraint Type 
+  Minimum, Maximum, 
+Fixed for Exceptional 
+Dispatch 
+
+  Capacity for RUC.  
+
+ 
+
+ 
+
+  Reason Code for 
+
+Exceptional Dispatch 
+
+  “System Wide Capacity” 
+
+for RUC 
+
+  Other Reason for 
+
+Exceptional Dispatch  
+
+  “Optimization” for RUC 
+
+ 
+  
+
+Max capacity to be acquired 
+for NonSpin 
+Max capacity to be acquired 
+for RegulationDown 
+Max capacity to be acquired 
+for RegulationUp 
+Max capacity to be acquired 
+for Spin 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 37 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+When encountering a max A/S limit of zero, 
+please interpret this as “no limit”. 
+
+ 
+
+ 
+
+AS Results 
+
+ 
+
+AS_RESULTS 
+
+Ancillary Service Capacity procured and self-
+scheduled, by AS type, posted for each AS 
+Region.  Also posts the sum of the procured 
+and self-scheduled.  
+
+Posts Hourly for the Day-Ahead (DAM), HASP.  
+And in 15 Minute (RTPD) intervals, by AS type.  
+
+Also posts Total AS Cost for each AS Region, 
+by AS Type.   
+
+ 
+Results  will  only  post  for  AS  Regions  that  are 
+
+binding for that market run.  
+
+ 
+
+NS_REQ_MIN_MW 
+ 
+RD_REQ_MIN_MW 
+ 
+RU_REQ_MIN_MW 
+ 
+SP_REQ_MIN_MW 
+ 
+ 
+AS_REQ_MAX_MW 
+ 
+ 
+ 
+
+RMD_REQ_MAX_MW 
+
+ 
+
+RMD_REQ_MIN_MW 
+
+ 
+
+ 
+
+RMU_REQ_MAX_MW 
+
+ 
+ 
+RMU_REQ_MIN_MW 
+
+RU_TOT_CST_PRC 
+ 
+ 
+ 
+RD_TOT_CST_PRC 
+ 
+ 
+ 
+SP_TOT_CST_PRC 
+ 
+ 
+ 
+NS_TOT_CST_PRC 
+ 
+ 
+ 
+NS_PROC_MW 
+ 
+ 
+ 
+NS_SPROC_MW 
+ 
+ 
+NS_TOT_MW 
+ 
+ 
+SP_PROC_MW 
+ 
+ 
+SP_SPROC_MW 
+ 
+ 
+SP_TOT_MW 
+ 
+ 
+ 
+RU_PROC_MW 
+ 
+ 
+
+Min capacity to be acquired 
+for NonSpin 
+Min capacity to be acquired 
+for RegulationDown 
+Min capacity to be acquired 
+for RegulationUp 
+Min capacity to be acquired 
+for Spin 
+ 
+Max capacity UP to be 
+acquired for 
+RegulationUp,Spin,Non Spin  
+For 2DA Market. 
+Max capacity to be acquired 
+for Requlation Mileage Down 
+ 
+Min capacity to be acquired 
+for Requlation Mileage Down 
+ 
+Max capacity to be acquired 
+for Requlation Mileage Up 
+ 
+Min capacity to be acquired 
+for Requlation Mileage Down 
+ 
+ 
+The Total line cost across 
+AS Region for Regulation 
+Up. 
+ 
+The Total line cost across 
+AS Region for Regulation 
+Down. 
+ 
+The Total line cost across 
+AS Region for Spin. 
+ 
+The Total line cost across 
+AS Region for NonSpin. 
+ 
+The MW of capacity 
+procured from the AS market 
+bids for NonSpin.  
+The MW of capacity self-
+provided by market 
+participants. 
+Total MW of capacity 
+obtained.  
+ 
+The MW of capacity 
+procured from the AS market 
+bids for Spin.  
+The MW of capacity self-
+provided by market 
+participants 
+Total MW of capacity 
+obtained 
+ 
+ 
+The MW of capacity 
+procured from the AS market 
+bids for RegulationUp. 
+The MW of capacity self-
+provided by market 
+participants.  
+
+Interface Specification for OASIS 
+
+ 
+
+Page 38 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+ 
+RU_SPROC_MW 
+ 
+ 
+RU_TOT_MW 
+ 
+ 
+ 
+RD_PROC_MW 
+ 
+ 
+ 
+RD_SPROC_MW 
+ 
+ 
+RD_TOT_MW 
+ 
+
+RMD_PROC_MW 
+
+ 
+
+ 
+
+RMD_SPROC_MW 
+
+ 
+
+ 
+
+ 
+
+RMD_TOT_CST_PRC 
+
+ 
+
+ 
+
+ 
+RMD_TOT_MW 
+ 
+ 
+
+RMU_PROC_MW 
+
+ 
+
+ 
+
+RMU_SPROC_MW 
+
+ 
+
+ 
+
+ 
+
+RMU_TOT_CST_PRC 
+
+ 
+
+ 
+
+ 
+RMU_TOT_MW 
+ 
+ 
+
+Actual Operating Reserves 
+
+AS_OP_RSRV 
+
+OP_RSRV_ACT_PCT 
+
+Total Actual Load, AS, and Operating Reserves 
+maintained during delivery. 
+
+Mileage Calculation Components 
+
+ 
+
+AS_MILEAGE_CAL
+C 
+
+RMD_AVG_MIL 
+
+ 
+
+ 
+
+Total MW of capacity 
+obtained. 
+ 
+ 
+The MW of capacity 
+procured from the AS market 
+bids for RegulationDown. 
+The MW of capacity self-
+provided by market 
+participants. 
+Total MW of capacity 
+obtained 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+The MW of capacity 
+procured from the AS market 
+bids for Regulation Mileage 
+Down 
+ 
+The MW of capacity self-
+provided by market 
+participants for Regulation 
+Mileage Down 
+ 
+The Total line cost across 
+AS Region for Regulation 
+Mileage Down 
+ 
+ 
+Total MW of capacity 
+obtained for  Requlation 
+Mileage Up 
+ 
+The MW of capacity 
+procured from the AS market 
+bids for Regulation Mileage 
+Up 
+ 
+The MW of capacity self-
+provided by market 
+participants for Regulation 
+Mileage Up 
+ 
+The Total line cost across 
+AS Region for Regulation 
+Mileage Up 
+ 
+ 
+Total MW of capacity 
+obtained for  Requlation 
+Mileage Up 
+ 
+Total Actual Operating 
+Reserves maintained during 
+delivery.  
+
+Average Instructed Mileage 
+for regulation mileage down 
+ 
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 39 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+Lists system performance accuracy, average 
+Instructed Mileage (MW), and system Mileage 
+multiplier  
+
+data from the prior seven days for each hour of 
+a trading day.  
+
+ 
+
+RMD_SYS_MIL_MUL 
+
+ 
+
+ 
+RMD_SYS_PERF_ACC 
+ 
+ 
+ 
+
+RMU_AVG_MIL 
+
+ 
+
+ 
+
+RMU_SYS_MIL_MUL 
+
+ 
+
+ 
+RMU_SYS_PERF_ACC 
+
+CRR 
+
+CRR Clearing Prices 
+
+ 
+
+Congestion Revenue Rights Auction Clearing 
+Prices by Pnode for CRR segments. 
+
+ 
+
+ 
+
+CRR_CLEARING  ON_PRC 
+
+LT_OFF_PRC 
+ 
+Note : These the XML tags for 
+corresponding data items 
+ 
+CRR_MARKET_NAME 
+
+System Mileage Multiplier  
+for regulation mileage down 
+ 
+ 
+System Performance 
+Accuracy for  regulation 
+mileage up 
+ 
+Average Instructed Mileage 
+for regulation mileage up 
+ 
+ 
+System Mileage Multiplier  
+for regulation mileage up 
+ 
+ 
+System Performance 
+Accuracy for  regulation 
+mileage up. 
+ 
+  
+
+On-peak Price  
+Off-peak Price 
+
+ 
+
+ 
+
+ 
+CRR MARKET NAME  
+
+RESOURCE_NAME 
+
+APNODE ID 
+
+START_DATE_TIME  
+
+START DATE 
+
+END_DATE_TIME 
+
+End DATE 
+
+CRR Inventory 
+
+Congestion Revenue Rights Daily Inventory.  
+
+REASON  
+ 
+
+CRR_INVENTORY  ON_MW 
+
+MARKET TERM 
+
+On-peak capacity 
+Off-peak capacity 
+ 
+ 
+ 
+ 
+CRR MARKET NAME  
+Source APNODE 
+Sink APNODE 
+OWNER NAME 
+CRR OPTION 
+INVENTORY DATE 
+START DATE 
+END DATE 
+MARKET TERM 
+CRR Type 
+CRR CATEGORY 
+NSR INDEX 
+SEGMENT ID 
+Market interval start time 
+Market interval end time 
+ 
+Unique Identifier that 
+represents an event where a 
+transmission line has 
+restricted flow capacity for 
+the designated time period 
+ 
+ 
+
+OFF_MW 
+ 
+Note : These are the XML 
+tags for corresponding data 
+items 
+CRR_MARKET_NAME 
+SOURCE  
+SINK 
+RESOURCE_NAME  
+OPTION 
+INVENTORY_DATE_TIME  
+START_DATE_TIME  
+END_DATE_TIME    
+REASON 
+ 
+STATUS_TYPE  
+CRR_CATEGORY    
+CRR_NSR 
+CRR_SEGMENT 
+START_DATE_TIME  
+END_DATE_TIME 
+ 
+TRANS_CNSTR_ID 
+ 
+ 
+ 
+ 
+ 
+ 
+CNSTR_CASE 
+
+CRR  Aggregated Revenue Adjustment Data  CRR_AGG_REV_A
+
+DJ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 40 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+ 
+ 
+ 
+ 
+ 
+Note : The  below elements 
+are  modeled as  
+OASISDataitems 
+ 
+ 
+TOTAL_NOTIONAL_VALUE 
+ 
+ 
+TOTAL_OFFSET_VALUE 
+ 
+ 
+
+ 
+
+Note: Below structure is 
+common for –GENERATION, 
+LOAD, and INTERTIE. 
+ 
+STARTTIME 
+STOPTIME 
+ 
+REGISTEREDGENERATOR 
+ 
+ 
+SCHEDULINGCOORDINATO
+R  
+ 
+PRODUCTBID 
+     DESCRIPTION 
+     MRID 
+ 
+    MARKETPRODUCT 
+          DESCRIPTION 
+          
+MARKETPRODUCTTYPE 
+     
+    BIDSELFSCHED 
+         TIMEINTERVALSTART 
+         TIMEINTERVALEND 
+         SELFSCHEDMW 
+ 
+    BIDSCHEDULE 
+        TIMEINTERVALSTART 
+        TIMEINTERVALEND 
+        BIDPRICECURVE 
+              MRID 
+              
+CURVESCHEDDATA 
+                   XAXISDATA   
+                   Y1AXISDATA 
+                   Y2AXISDATA 
+ 
+STARTTIME 
+ 
+STOPTIME 
+ 
+ 
+
+Unique Identifier that 
+represents the basis for a 
+transmission line to have 
+restricted flow capacity for 
+the designated time period 
+ 
+ 
+ 
+ 
+ 
+ 
+The revenue amount 
+normally paid for a CRR 
+ 
+The revenue amount not 
+paid for a CRR due to 
+transmission constraints and 
+associated reduction in 
+congestion revenues 
+ 
+  
+
+ 
+ 
+ 
+ 
+Start time of bid 
+End time of bid 
+ 
+Pseudo ID of Resource 
+ 
+Pseudo ID of SC_ID 
+ 
+Description of product 
+ 
+ 
+ 
+All the possible types like 
+EN, LFD, LFU, NR, 
+RC,RD,RU,SR,RMD, RMU 
+and GHG  
+  
+Selfscheduled bid start and 
+end time with the MW. 
+ 
+ 
+Bid Schedule with  start and 
+end time   
+ 
+ 
+ 
+Curve details contains X and 
+Y1 & Y2 axis data. 
+ 
+ 
+Xaxis= optional element 
+Y1axis = optional element 
+Y2 axis = Opportunity Cost; 
+optional element 
+ 
+Start time of Virtual bid 
+End time of Virtual  
+bid 
+ 
+Pseudo ID of Apnode 
+
+ 
+
+PUB_BID 
+
+PUBLIC BIDS 
+
+Public Bids  
+
+ 
+
+Clean Bid payloads used as the input in the 
+markets, with certain fields replaced by pseudo 
+data as indicated. Posted for DAM and RTM. 
+Posted at T+90. The Public Bid Data is only 
+downloadable to XML and CSV, for a single 
+day at a time. 
+
+Data is available for downloading at midnight 
+on the 90th day after the trading day.  
+
+The Publications and Revisions log will not 
+create records for the Public Bid data when it is 
+becomes available for downloading on T+90.  
+
+ 
+
+ 
+
+ 
+
+CB Public Bids  
+
+ 
+
+PUB_CB_BID 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 41 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+Convergence Bidding Clean Bid payloads used 
+as the input in the markets, with certain fields 
+replaced by pseudo data as indicated. Posted 
+for DAM. Posted at T+90. The Public Bid Data 
+is only downloadable to XML and CSV, for a 
+single day at a time. 
+
+Data is available for downloading at midnight 
+on the 90th day after the trading day.  
+
+ 
+
+ 
+
+ 
+
+Congestion Revenue Rights (CRR) Public Bids 
+
+PUB_CRR_BID 
+
+ 
+
+Bids submitted and used in the CRR auction 
+markets, with certain fields replaced by pseudo 
+data as indicated. Posted for the monthly 
+auctions 90 days after the close of markets and 
+seasonal auctions after each relevant quarter 
+has passed. The Public Bid Data is only 
+downloadable to XML and CSV, for a single 
+market at a time. 
+
+ 
+
+AggregatedPnode 
+IndividualPnode 
+VirtualBidType 
+SCHEDULINGCOORDINATO
+R  
+ 
+ENERGYPRODUCTBID 
+       BIDSCHEDULE 
+        TIMEINTERVALSTART 
+        TIMEINTERVALEND 
+        BIDPRICECURVE 
+              
+CURVESCHEDDATA 
+                   XAXISDATA   
+                   Y1AXISDATA 
+STARTTIME 
+ 
+ 
+STOPTIME 
+ 
+ 
+ 
+MARKETTERM 
+ 
+ 
+ 
+MARKETNAME 
+ 
+ 
+SOURCEID 
+ 
+ 
+SINKID 
+ 
+TIMEOFUSE 
+ 
+ 
+MWQUANTITY 
+ 
+ 
+CRR_PRICE 
+ 
+ 
+CRRBID_ID 
+ 
+ 
+CRRBIDSEG_ID 
+ 
+ 
+AUCTIONCLOSEDATE 
+ 
+TRANSACTION_TYPE 
+ 
+ 
+ 
+ 
+HEDGE_TYPE 
+
+Competitive Solicitation Process Offer Set 
+
+  
+
+PUB_CSP_OFFER_
+SET 
+
+OFFERPERIODSTARTTIME 
+ 
+ 
+OFFERPERIODENDTIME 
+
+Pseudo ID of Pnode 
+Supply/Demand Bid 
+Pseudo ID of SC_ID 
+ 
+Bid Schedule with  start and 
+end time   
+ 
+Curve details contains X and 
+Y axis data. 
+ 
+ 
+
+Effective  Start  Date of the 
+CRR 
+ 
+Effective End Date of the 
+CRR 
+ 
+ 
+CRR auction type. Valid 
+values are Seasonal or 
+Monthly 
+ 
+CRR  auction  name 
+ 
+ 
+Source id 
+ 
+ 
+Sink id 
+ 
+Time of use of the CRR bid 
+ 
+ 
+The   MW Quantity of the bid  
+point 
+ 
+The Price of the  bid point 
+ 
+ 
+CRR Bid identifier 
+ 
+ 
+The point  number  in the 
+CRR Bid 
+ 
+CRR  auction Close date. 
+ 
+Transaction type will be used 
+to identify individual 
+transactions as BUY or SELL 
+ 
+ 
+Hedge type will be used to 
+indicate  CRR HedgeType ( 
+OBLIGATION or OPTION  
+ 
+ 
+Start time of the CSP offer 
+period (GMT). 
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 42 
+
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+Finalized offers into the competitive solicitation 
+process for Annual, monthly and intra-monthly 
+offer period. 
+
+This data will be posted on a rolling five-quarter 
+delay. 
+
+The Offer Data is only downloadable to XML 
+and CSV. 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+ 
+ 
+RESOURCEADEQUACYPER
+IODTYPE 
+ 
+ 
+ 
+ 
+ 
+ 
+STARTTIME 
+ 
+ 
+ 
+ENDTIME 
+ 
+ 
+ 
+ 
+SCHEDULETYPE 
+ 
+ 
+ 
+ 
+ 
+REGISTEREDRESOURCE 
+ 
+ 
+ 
+SCHEDULINGCOORDINATO
+R  
+ 
+GENERATIONTYPE 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FLEXIBLECATEGORY 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+AREA 
+ 
+ 
+BIDPRICECURVE 
+ 
+ 
+  
+XAXISDATA 
+ 
+Y1AXISDATA 
+
+End time of the CSP offer 
+period (GMT). 
+ 
+Resource Adequacy Period  
+type is one of the following  
+enumerated value 
+ 
+      ANNUAL 
+      MONTHLY 
+      INTRAMONTHLY 
+ 
+Start time of the CSP offer 
+(GMT). 
+ 
+ 
+End time of the CSP offer 
+(GMT). 
+ 
+ 
+ 
+Schedule type is one of the 
+following enumerated value 
+ 
+     FLEXIBLE 
+     GENERIC 
+ 
+Pseudo ID of  Resource  
+ 
+ 
+ 
+Pseudo ID of SC_ID 
+ 
+ 
+Generation Technology Type 
+is one of the following value 
+ 
+     WIND 
+     SOLAR 
+     HYDRO 
+     AGGR_OTHER 
+ 
+Flexible Category of the 
+resource. This can be 1, 2 or 
+3. This value will be 
+populated only for the 
+scheduletype ‘FLEXIBLE’ 
+ 
+1 - Base Ramping Flexibility  
+2 - Peak Ramping Flexibility  
+3- Super Ramping Flexibility  
+The required hours for the 
+Peak Ramping and Super-
+Peak Ramping categories 
+change on a seasonal basis.  
+ 
+ 
+TAC Area 
+ 
+ 
+BidPriceCurve data contains 
+contains X and Y axis data. 
+ 
+ 
+ The value on x-axis is MW 
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 43 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+ATLAS 
+
+Pnode Listing 
+
+ 
+
+ 
+
+ 
+
+ATL_PNODE 
+
+N/A 
+
+APNode Listing 
+
+ATL_APNODE 
+
+N/A 
+
+Load Distribution Factors (LDFs) 
+
+ATL_LDF 
+
+N/A 
+
+Load Aggregation Point Listing 
+
+Market Resource Listing 
+
+Trading Hub Listing 
+
+Trading Hub – Pnode Mapping 
+
+AS Region – Pnode Mapping 
+
+RUC Zone – Pnode Mapping 
+
+TAC Area – Pnode Mapping 
+
+Intertie Constraint Mapping 
+
+ 
+
+Note: Report will not display data after new 
+ETCC activation date. 
+ 
+
+Transmission Interface Listing 
+
+ 
+
+Note: Report will not display data after new 
+ETCC activation date. 
+ 
+
+Publications and Revisions 
+
+ATL_LAP 
+
+N/A 
+
+ATL_RESOURCE  N/A 
+
+ATL_HUB 
+
+N/A 
+
+ATL_PNODE_MAP  N/A 
+
+ATL_AS_REGION_
+MAP 
+ATL_RUC_ZONE_M
+AP 
+
+N/A 
+
+N/A 
+
+ATL_TAC_AREA 
+
+N/A 
+
+ATL_TIEPOINT 
+
+N/A 
+
+ATL_PUB 
+
+N/A 
+
+The value on y1-axis is price 
+($). 
+  
+ 
+All Pricing Node locations in 
+CAISO Markets. 
+For CB, Y/N flag will be 
+added. 
+For CB, Maximum CB MW 
+Limit, with effective start and 
+end dates will be added. 
+All Aggregated Pricing Node 
+locations used in CAISO 
+Markets.   
+For CB , Y/N flag will be 
+added. 
+For CB, Maximum CB MW 
+Limit, with effective start and 
+end dates will be added. 
+Typical Load Distribution 
+Factors that map Pnodes to 
+APNodes.  
+All Load Aggregation Points 
+in CAISO, by type. 
+List of CAISO Resources 
+and their associated 
+Pnode/APNode 
+All Trading Hub APNodes in 
+CAISO.  
+Map of all Pnodes to each 
+Trading Hub APNode.  
+Map of all Pnodes to each 
+Ancillary Services Region.   
+Map of all Pnodes to each 
+Reliability Unit Commitment 
+Zone.  
+Map of all Pnodes to each 
+Transmission Access 
+Charge Area.   
+Map of all Intertie 
+Constraints with respective 
+Transmission Interface and 
+TSIN. 
+
+List of all OASIS data 
+publication and revisions.  
+Users can track all data 
+additions and updates to 
+OASIS through these 
+entries.   
+Expected publication 
+schedule by which all OASIS 
+reports are published.  
+System Operating Messages 
+posted by Severity.  
+
+ATL_TI 
+
+N/A 
+
+All Transmission Interfaces 
+in CAISO.  
+
+OASIS Publication Schedule 
+
+ATL_PUB_SCHED  N/A 
+
+System Operating Messages 
+
+ATL_OSM 
+
+N/A 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 44 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+Peak-Off-Peak Definition 
+
+Convergence Bidding Node List 
+
+Price Correction Messages 
+
+Scheduling Point Definition 
+
+ATL_PEAK_ON_OF
+F 
+
+N/A 
+
+ATL_CBNODE 
+
+N/A 
+
+ATL_PRC_CORR_
+MSG 
+
+ATL_SP 
+
+Severity : Green = Normal, 
+Red = Emergency, Blue = 
+Urgent 
+Posts Hourly Peak/Off-Peak 
+indicator based on the 
+WECC definition.  
+List all the nodes and/or ties 
+for convergence bidding 
+Date And Time of the 
+Message 
+Actual Text of the correction 
+Balancing Area Authority Id 
+ 
+Schedule Point Name 
+ 
+Flag to denote if the Bid is 
+allowed 
+Bid Direction (Import, 
+export,Both) 
+Effective Start Date of the 
+Scheduling Point 
+ 
+Effective End Date of the 
+Scheduling Point 
+Name of the Tie 
+ 
+From BAA id 
+ 
+To Baa Id 
+ 
+Transfer Flag(Y or N) 
+ 
+Effective Start Date of the 
+Tie 
+Effective End Date of the Tie 
+Name of the Tie 
+ 
+Scheduling Point Name 
+ 
+Effective Start Date 
+Effective End Date 
+Name of the Constraint 
+Group 
+ 
+Name of the Schedule Point 
+ 
+Effective Start Date of the 
+Constraint and Schedule 
+Point Mapping 
+ 
+Effective End Date 
+Name of the Tie 
+Name of the Itie Schedule 
+Limit 
+ 
+Effective Start Date of the 
+Schedule Limit and Tie 
+Mapping 
+ 
+Effective End Date of the 
+Schedule Limit and Tie 
+Mapping 
+ID of the resource that is 
+certified in CAISO master file 
+system. 
+
+MSG_TIME 
+OASIS_MARKET_RUN_ID 
+MSG_TEXT 
+BAA_ID 
+ 
+SCHEDULING_POINT 
+ 
+ALLOW_BID 
+ 
+TI_DIRECTION 
+ 
+START_DATE 
+ 
+ 
+END_DATE 
+
+TIE_NAME 
+ 
+FROM_BAA 
+ 
+TO_BAA 
+ 
+EIM_TRANSFER_FLAG 
+ 
+START_DATE 
+ 
+END_DATE 
+TIE_NAME 
+ 
+SCHEDULING_POINT 
+ 
+START_DATE 
+END_DATE 
+TIEPOINT_NAME 
+ 
+SCHEDULING_POINT 
+ 
+START_DATE 
+ 
+ 
+ 
+ 
+END_DATE 
+TIE_NAME 
+ITIE_SCHEDULING_LIMIT 
+ 
+ 
+ 
+START_DATE 
+ 
+ 
+ 
+ 
+END_DATE 
+RESOURCE_ID 
+ 
+ 
+
+BAA And Tie Definition 
+
+ATL_BAA_TIE 
+
+Scheduling Point and Tie Definition 
+
+ATL_SP_TIE 
+
+Intertie Constraint and Scheduling Point 
+Mapping 
+
+ATL_ITC_SP 
+
+Intertie Scheduling Limit and Tie Mapping 
+
+ATL_ISL_TIE 
+
+Master Control Area Generating Capability List. 
+
+ 
+
+ATL_GEN_CAP_LS
+T 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 45 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Report/ResultSet 
+
+XML Name 
+
+XML Data Items 
+
+Description 
+
+ 
+
+This service can be used to get the CAISO 
+Control Area generating resource information. 
+
+ 
+
+This service will include only active generating 
+resource information. 
+
+ 
+GEN_UNIT_NAME 
+ 
+ 
+PARENT_RESOURCE_ID 
+ 
+ 
+BAA_ID 
+ 
+ 
+CLASSIFICATION  
+ 
+ 
+ 
+RESOURCE_AGG_TYPE 
+ 
+ 
+ 
+QF 
+ 
+ 
+ 
+ 
+ 
+NET_DEPENDABLE_CAPAC
+ITY 
+ 
+ 
+PTO_AREA 
+ 
+ 
+ 
+OWNER_OR_QF 
+ 
+ 
+ 
+UNIT_TYPE 
+ 
+ 
+ 
+ENERGY_SOURCE 
+ 
+ 
+ZONE 
+ 
+ 
+COD 
+ 
+ 
+UDC 
+ 
+ 
+RIVER_SYSTEM 
+ 
+ 
+NAMEPLATE_CAPACITY 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+RESOURCE_TYPE 
+
+ 
+ Name of the generating unit  
+ 
+ 
+Parent resource id of the 
+aggregated child resource 
+ 
+Balancing Area Authority ID 
+ 
+ 
+Unit classification. Valid 
+values are Participating or 
+Nonparticipating 
+ 
+Y/N Identifier if a resource is 
+Aggregate or Nonaggregate 
+resource 
+ 
+Y/N Identifier if a resource is 
+a qualifying cogeneration 
+facility or small qualifying 
+power production facility. 
+ 
+ 
+Net Dependable Capacity 
+(MW) 
+ 
+ 
+Name of the PTO Area 
+ 
+ 
+ 
+Owner or QF ID 
+ 
+ 
+ 
+Type of unit 
+ 
+ 
+ 
+Source of Energy 
+ 
+ 
+Zone Name  
+ 
+NP15, SP15 and ZP26 
+The date when the capacity 
+becomes commercial 
+ 
+Utility Distribution Company 
+ 
+ 
+River System 
+ 
+ 
+The actual nameplate 
+capacity rating on the 
+resource, (Gross output that 
+cannot exceed the 
+interconnection agreement) 
+Exact MW 
+ 
+ 
+ 
+Resource  Type 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 46 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+6. 
+
+Single Report URL Query Strings 
+
+This section contains examples of all single report URL Examples for XML downloads.   
+
+XML Name 
+
+Example URL for XML Download 
+
+PRICES 
+
+PRC_LMP 
+
+  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_LMP&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1&market_run_id=DAM&grp_type=ALL_APNODES  
+ 
+OR 
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_LMP&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1&market_run_id=DAM&node=LAPLMG1_7_B2  
+ 
+
+NOTE:  
+
+1. 
+
+ Recommend to use grp_type or node only. Grp_type will give all the APNODES or ALL NODES 
+groups and node can enable users to select individual APNODES or PNODES. 
+
+2.  The “enddatetime” is ignored if the query is to pull “ALL” or “ALL_APNODES” nodes; ie query will 
+
+return only 1-days’ worth of data for all nodes at a time based on the “startdatetime” supplied 
+
+3.  The “enddatetime” is referenced only when a node is supplied in the query 
+
+ 
+
+ 
+ 
+ 
+
+PRC_INTVL_LMP  http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_INTVL_LMP&startdatetime=20130919T07:00-
+0000&enddatetime=20130919T08:00-0000&version=1&market_run_id=RTM&grp_type=ALL_APNODES  
+ 
+OR 
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_INTVL_LMP&startdatetime=20130919T07:00-
+0000&enddatetime=20130919T08:00-0000&version=1&market_run_id=RTM&node=LAPLMG1_7_B2  
+  
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_INTVL_LMP&startdatetime=20130919T07:00-
+0000&enddatetime=20130919T08:00-0000&version=2&market_run_id=RTM&grp_type=ALL_APNODES  
+ 
+OR 
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_INTVL_LMP&startdatetime=20130919T07:00-
+0000&enddatetime=20130919T08:00-0000&version=2&market_run_id=RTM&node=LAPLMG1_7_B2  
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_INTVL_LMP&startdatetime=20130919T07:00-
+0000&enddatetime=20130919T08:00-0000&version=3&market_run_id=RTM&grp_type=ALL_APNODES  
+ 
+OR 
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_INTVL_LMP&startdatetime=20130919T07:00-
+0000&enddatetime=20130919T08:00-0000&version=3&market_run_id=RTM&node=LAPLMG1_7_B2  
+ 
+   
+
+NOTE:  
+
+ 
+
+1. 
+
+ Recommend to use grp_type or node only. Grp_type will give all the APNODES or ALL NODES 
+groups and node can enable users to select individual APNODES or PNODES. 
+
+2.  The “enddatetime” is ignored if the query is to pull “ALL” or “ALL_APNODES” nodes; ie query will 
+
+return only 1 hours’ worth of data for all nodes at a time based on the “startdatetime” supplied 
+
+3.  The “enddatetime” is referenced only when a node is supplied in the query 
+
+4.  Market_run_id ‘RTM’ will continue to provide 5-min RTD  interval LMP data 
+
+5.  Only  new  version (version=2) introduced as part of Fall 2014 release  will include new element  
+
+LMP_GHG_PRC. 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 47 
+
+ 
+
+ 
+ 
+ 
+
+ 
+
+PRC_HASP_LMP 
+
+Interface Specification for OASIS 
+ 
+
+ 
+
+ 
+
+ 
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_HASP_LMP&startdatetime=20130919T07:00-
+0000&enddatetime=20130919T08:00-0000&version=1&market_run_id=HASP&grp_type=ALL_APNODES  
+OR 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_HASP_LMP&startdatetime=20130919T07:00-
+0000&enddatetime=20130919T08:00-0000&version=1&market_run_id=HASP&node=LAPLMG1_7_B2   
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_HASP_LMP&startdatetime=20130919T07:00-
+0000&enddatetime=20130919T08:00-0000&version=2&market_run_id=HASP&grp_type=ALL_APNODES  
+OR 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_HASP_LMP&startdatetime=20130919T07:00-
+0000&enddatetime=20130919T08:00-0000&version=2&market_run_id=HASP&node=LAPLMG1_7_B2   
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_HASP_LMP&startdatetime=20130919T07:00-
+0000&enddatetime=20130919T08:00-0000&version=3&market_run_id=HASP&grp_type=ALL_APNODES 
+OR 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_HASP_LMP&startdatetime=20130919T07:00-
+0000&enddatetime=20130919T08:00-0000&version=3&market_run_id=HASP&node=LAPLMG1_7_B2   
+ 
+ 
+ 
+
+ NOTE:  
+
+ 
+
+1. 
+
+ Recommend to use grp_type or node only. Grp_type will give all the APNODES or ALL NODES 
+groups and node can enable users to select individual APNODES or PNODES. 
+
+2.  The “enddatetime” is ignored if the query is to pull “ALL” or “ALL_APNODES” nodes; ie query will 
+
+return only 1 hours’ worth of data for all nodes at a time based on the “startdatetime” supplied 
+
+3.  The “enddatetime” is referenced only when a node is supplied in the query 
+
+4.  Only  new  version (version=2) introduced as part of Fall 2014 release  will include new element  
+
+LMP_GHG_PRC. 
+
+  
+
+PRC_RTPD_LMP  http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_RTPD_LMP&startdatetime=20130919T07:00-
+0000&enddatetime=20130919T08:00-0000&version=1&market_run_id=RTPD&grp_type=ALL_APNODES  
+OR 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_RTPD_LMP&startdatetime=20130919T07:00-
+0000&enddatetime=20130919T08:00-0000&version=1&market_run_id=RTPD&node=LAPLMG1_7_B2   
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_RTPD_LMP&startdatetime=20130919T07:00-
+0000&enddatetime=20130919T08:00-0000&version=2&market_run_id=RTPD&grp_type=ALL_APNODES  
+OR 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_RTPD_LMP&startdatetime=20130919T07:00-
+0000&enddatetime=20130919T08:00-0000&version=2&market_run_id=RTPD&node=LAPLMG1_7_B2   
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_RTPD_LMP&startdatetime=20130919T07:00-
+0000&enddatetime=20130919T08:00-0000&version=3&market_run_id=RTPD&grp_type=ALL_APNODES  
+OR 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_RTPD_LMP&startdatetime=20130919T07:00-
+0000&enddatetime=20130919T08:00-0000&version=3&market_run_id=RTPD&node=LAPLMG1_7_B2   
+ 
+ 
+
+ NOTE:  
+
+ 
+
+ 
+
+1. 
+
+ Recommend to use grp_type or node only. Grp_type will give all the APNODES or ALL NODES 
+groups and node can enable users to select individual APNODES or PNODES. 
+
+2.  The “enddatetime” is ignored if the query is to pull “ALL” or “ALL_APNODES” nodes; ie query will 
+
+return only 1-hour’s worth of data for all nodes at a time based on the “startdatetime” supplied 
+
+3.  The “enddatetime” is referenced only when a node is supplied in the query 
+
+4.  Only  new  version (version=2) introduced as part of Fall 2014 release  will include new element  
+
+LMP_GHG_PRC. 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 48 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+PRC_AS 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_AS&market_run_id=DAM&startdatetime=201309
+19T07:00-0000&enddatetime=20130920T07:00-0000&version=1&anc_type=ALL&anc_region=ALL   
+
+Note: For HASP replace, ‘DAM’ with ‘HASP’. 
+
+PRC_INTVL_AS 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_INTVL_AS&market_run_id=RTM&startdatetime=
+20130919T07:00-0000&enddatetime=20130919T08:00-0000&version=1&anc_type=ALL&anc_region=ALL  
+
+ 
+
+ 
+
+PRC_CNSTR 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_CNSTR&market_run_id=DAM&ti_id=ALL&startda
+tetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1 
+
+ 
+  
+ 
+
+PRC_FUEL 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_FUEL&fuel_region_id=ALL&startdatetime=20130
+919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+PRC_CURR_LMP  http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_CURR_LMP&node=ALL&startdatetime=2013091
+
+9T07:00-0000&enddatetime=20130919T07:00-0000&version=1  
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_CURR_LMP&node=ALL&st
+artdatetime=20130919T07:00-0000&enddatetime=20130919T07:00-0000&version=2 
+
+PRC_CURR_HUB_
+LMP  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_CURR_HUB_LMP&startdatetime=20130919T07:
+00-0000&version=1  
+
+ 
+
+ 
+
+ 
+
+PRC_NOMOGRAM  http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_NOMOGRAM&market_run_id=DAM&nomogram_
+
+id=ALL&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+PRC_RTM_NOMO
+GRAM 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_RTM_NOMOGRAM&market_run_id=RTM&nomo
+gram_id=ALL&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+PRC_RTM_FLOWG
+ATE 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_RTM_FLOWGATE&market_run_id=RTM&node=
+ALL&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+ 
+  
+ 
+
+PRC_DS_REF 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_DS_REF&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1&market_run_id=DAM&node_id=ALL  
+
+OR 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_DS_REF&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1&market_run_id=DAM&node_id=LAPLMG1_7_B2  
+
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_DS_REF&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=3&market_run_id=DAM&node_id=DGAP_PGE-APND 
+
+OR 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_DS_REF&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=3&market_run_id=DAM&node_id=ALL  
+
+version=3 will output the TIE_NAME element 
+
+ 
+
+NOTE: Prices are the same for the entire quarter.  
+
+CB_NODAL_GRP_
+CNSTR_PRC 
+
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=CB_NODAL_GRP_CNSTR_PRC&startdatetime=20130
+919T07:00-0000&enddatetime=20130920T07:00-0000&version=1 
+  
+
+PRC_FLEX_RAMP  http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_FLEX_RAMP&market_run_id=DAM&startdatetim
+
+e=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+OR 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 49 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_FLEX_RAMP&market_run_id=RTPD&startdateti
+me=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1&grp_type=ALL  
+
+OR 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_FLEX_RAMP&market_run_id=RTD&startdatetim
+e=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1&grp_type=ALL  
+
+Note: This will be based on the historical view. Returns data based on the input time range. 
+
+EIM release will add the baa_grp_id parameter to the above URL 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_FLEX_RAMP&market_run_id=RTD&baa_grp_id=
+PACE&startdatetime=20141001T07:00-0000&enddatetime=20141002T07:00-0000&version=2&grp_type=ALL  
+
+Valid values for baa_grp_id parameter are ISO, PACE, PACW, ISO_PACW, ISO_PACE, 
+PACE_PACW, ISO_PACW_PACE 
+Valid values for market_run_id are RTD and RTPD 
+
+PRC_FLEX_RAMP_ http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_FLEX_RAMP&market_run_id=RTPD&startdateti
+
+me=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1&grp_type=CURR  
+OR  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_FLEX_RAMP&market_run_id=RTD&startdatetim
+e=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1&grp_type=CURR 
+
+ 
+
+Note: This will be based on the current view. This gives the most current/latest interval. It ignores the input 
+datetime range. The view outputs the latest/greatest interval. 
+
+ 
+
+EIM release will add the baa_grp_id parameter to the above URL 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_FLEX_RAMP&market_run_id=RTD&baa_grp_id=PACE&startdat
+
+etime=20141001T07:00-0000&enddatetime=20141002T07:00-0000&version=2&grp_type=CURR  
+
+Valid values for baa_grp_id parameter are ISO, PACE, PACW, ISO_PACW, ISO_PACE, 
+PACE_PACW, ISO_PACW_PACE  
+Valid values for market_run_id are RTD and RTPD 
+
+PRC_CD_INTVL_L
+MP 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_CD_INTVL_LMP&startdatetime=20130919T07:00
+-0000&enddatetime=20130920T07:00-0000&version=1&market_run_id=RTM&grp_type=ALL_APNODES  
+
+OR 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_CD_INTVL_LMP&startdatetime=20130919T07:00
+-0000&enddatetime=20130920T07:00-0000&version=1&market_run_id=RTM&node=LAPLMG1_7_B2  
+
+PRC_CD_SPTIE_L
+MP 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_CD_SPTIE_LMP&startdatetime=20130919T07:0
+0-0000&enddatetime=20130920T07:00-0000&version=3&market_run_id=RTM&grp_type=ALL_APNODES  
+
+OR 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_CD_SPTIE_LMP&startdatetime=20130919T07:0
+0-0000&enddatetime=20130920T07:00-0000&version=3&market_run_id=RTM&node=LAPLMG1_7_B2  
+OR 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_CD_SPTIE_LMP&startdatetime=20160919T07:0
+0-0000&enddatetime=20160920T07:00-0000&version=4&market_run_id=RTM&node=LAPLMG1_7_B2  
+
+ 
+
+ 
+
+PRC_CD_RTM_FL
+OWGATE 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_CD_RTM_FLOWGATE&market_run_id=RTM&ti_
+id=ALL&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1 
+
+ 
+
+PRC_CD_RTM_NO
+MOGRAM 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_CD_RTM_NOMOGRAM&market_run_id=RTM&n
+omogram_id=ALL&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1 
+
+TRANSMISSION 
+
+  
+
+TRNS_CURR_USA
+GE 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=TRNS_CURR_USAGE&ti_id=ALL&ti_direction=ALL&st
+artdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1 
+
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 50 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=TRNS_CURR_USAGE&ti_id=ALL&ti_direction=ALL&tr
+_type=TRNS_AS_IMPORT_IFM&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-
+0000&version=1   
+
+ 
+
+List of available “tr_type”:  TRNS_AS_IMPORT_IFM, TRNS_ENE_IMPORT_IFM, TRNS_RATING_CBM, 
+TRNS_RATING_CONSTRAINT, TRNS_RATING_MTC,  
+
+TRNS_RATING_OTC, TRNS_RATING_TRM, TRNS_RATING_TRM_FTO, TRNS_RATING_TRM_SPI, 
+TRNS_RATING_TRM_UF, TRNS_RATING_TTC, TRNS_TR_USEAGE, RATING_ATC 
+
+Note: API will accept maximum of 10 ti_id’s otherwise system will throw error 1017 (Please select a maximum 
+of 10 nodes or use the ALL option.) 
+
+TRNS_ATC 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=TRNS_ATC&market_run_id=DAM&ti_id=ALL&ti_directi
+on=ALL&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=TRNS_ATC&market_run_id=RTPD&ti_id=ALL&ti_direct
+ion=ALL&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1 
+
+TRNS_OUTAGE 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=TRNS_OUTAGE&ti_id=ALL&ti_direction=ALL&startdat
+etime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+TRNS_USAGE 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=TRNS_USAGE&market_run_id=DAM&ti_id=ALL&ti_dir
+ection=ALL&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=TRNS_USAGE&market_run_id=RTPD&ti_id=ALL&ti_di
+rection=ALL&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=TRNS_USAGE&market_run_id=DAM&ti_id=ALL&ti_dir
+ection=ALL&tr_type=TRNS_AS_IMPORT_IFM&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1  
+
+     
+
+List of available “tr_type”:  TRNS_AS_IMPORT_IFM, TRNS_ENE_IMPORT_IFM, TRNS_RATING_CBM, 
+TRNS_RATING_CONSTRAINT, TRNS_RATING_MTC,  
+
+TRNS_RATING_OTC, TRNS_RATING_TRM, TRNS_RATING_TRM_FTO, TRNS_RATING_TRM_SPI, 
+TRNS_RATING_TRM_UF, TRNS_RATING_TTC, TRNS_TR_USEAGE, RATING_ATC 
+
+ 
+ 
+
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 51 
+
+ 
+
+ 
+ 
+ 
+
+PRC_MPM_ LMP 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_LMP&market_run_id=DA
+M&grp_type=ALL_APNODES&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1 
+
+ 
+
+OR 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_LMP&market_run_id=DA
+M&node=3EMIDIO_6_N001&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1  
+
+ 
+
+NOTE:  
+
+ 
+
+ 
+
+1. 
+
+ Recommend to use grp_type or node only. Grp_type will give all the APNODES 
+or ALL NODES groups and node can enable users to select individual APNODES 
+or PNODES. 
+
+2.  The “enddatetime” is ignored if the query is to pull “ALL” or “ALL_APNODES” 
+
+nodes; ie query will return only 1-day’s worth of data for all nodes at a time based 
+on the “startdatetime” supplied 
+
+3.  The “enddatetime” is referenced only when a node is supplied in the query 
+
+PRC_MPM_RTM_LMP 
+
+HASP 
+
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_RTM_LMP&market_run_
+id=HASP&grp_type=ALL_APNODES&startdatetime=20130920T06:00-
+0000&enddatetime=20130920T07:00-0000&version=1  
+
+OR 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_RTM_LMP&market_run_
+id=HASP&node=3EMIDIO_6_N001&startdatetime=20130919T07:00-
+0000&enddatetime=20130919T08:00-0000&version=1  
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_RTM_
+LMP&market_run_id=HASP&grp_type=ALL_APNODES&startdatetime=2
+0130920T06:00-0000&enddatetime=20130920T07:00-0000&version=2  
+OR 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_RTM_
+LMP&market_run_id=HASP&node=3EMIDIO_6_N001&startdatetime=20
+130919T07:00-0000&enddatetime=20130919T08:00-0000&version=2 
+ 
+
+ 
+
+RTPD 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_RTM_LMP&market_run_
+id=RTPD&grp_type=ALL_APNODES&startdatetime=20130920T06:00-
+0000&enddatetime=20130920T07:00-0000&version=1  
+
+OR 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_RTM_LMP&market_run_
+id=RTPD&node=3EMIDIO_6_N001&startdatetime=20130919T07:00-
+0000&enddatetime=20130919T08:00-0000&version=1  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_RTM_
+LMP&market_run_id=RTPD&grp_type=ALL_APNODES&startdatetime=2
+0130920T06:00-0000&enddatetime=20130920T07:00-0000&version=2 
+OR 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_RTM_
+LMP&market_run_id=RTPD&node=3EMIDIO_6_N001&startdatetime=20
+130919T07:00-0000&enddatetime=20130919T08:00-0000&version=2 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 52 
+
+ 
+
+ 
+ 
+ 
+
+ 
+
+ 
+
+ 
+NOTE:  
+
+Interface Specification for OASIS 
+ 
+
+1.  Recommend to use grp_type or node only. Grp_type will give all the APNODES or 
+ALL NODES groups and node can enable users to select individual APNODES or 
+PNODES. 
+
+2.  The “enddatetime” is ignored if the query is to pull “ALL” or “ALL_APNODES” 
+
+nodes; ie query will return only 1 hours’ worth of data for all nodes at a time based 
+on the “startdatetime” supplied 
+
+3.  The “enddatetime” is referenced only when a node is supplied in the query 
+
+4.  Only  new  version (version=2) introduced as part of Fall 2014 release  will include 
+
+new element  LMP_GHG_PRC. 
+
+ 
+
+ 
+
+PRC_MPM_ NOMOGRAM 
+
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_NOMOGRAM&market_r
+un_id=DAM&nomogram_id=ALL&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1 
+
+PRC_MPM_RTM_NOMOGRAM 
+
+HASP 
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_RTM_NOMOGRAM&mar
+ket_run_id=HASP&nomogram_id=ALL&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1  
+
+ 
+
+RTPD 
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_RTM_NOMOGRAM&mar
+ket_run_id=RTPD&nomogram_id=ALL&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1  
+
+ 
+
+  
+
+ 
+
+PRC_MPM_NOMOGRAM_CMP 
+
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_NOMOGRAM_CMP&ma
+rket_run_id=DAM&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-
+0000&version=1  
+
+PRC_MPM_RTM_NOMOGRAM_CMP  http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_RTM_NOMOGRAM_CM
+
+P&market_run_id=HASP&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1  
+
+OR 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_RTM_NOMOGRAM_CM
+P&market_run_id=RTPD&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1 
+
+ 
+
+OR 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_RTM_NOMOGRAM_CM
+P&market_run_id=RTD&startdatetime=20170213T08:00-
+0000&enddatetime=20170214T08:00-0000&version=1 
+
+ 
+
+ 
+
+ 
+
+PRC_MPM_CNSTR 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_CNSTR&market_run_id=
+DAM&ti_id=ALL&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-
+0000&version=1  
+
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 53 
+
+ 
+
+ 
+ 
+ 
+
+ 
+
+  
+ 
+
+Interface Specification for OASIS 
+ 
+
+PRC_MPM_RTM_FLOWGATE 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_RTM_FLOWGATE&mark
+et_run_id=HASP&ti_id=ALL&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1 
+
+  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_RTM_FLOWGATE&mark
+et_run_id=RTPD&ti_id=ALL&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1  
+
+ 
+  
+ 
+
+PRC_MPM_CNSTR_CMP 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_CNSTR_CMP&market_r
+un_id=DAM&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-
+0000&version=1 
+
+PRC_MPM_REF_BUS 
+
+PRC_MPM_RTM_REF_BUS 
+
+  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_CNSTR_CMP&market_r
+un_id=HASP&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-
+0000&version=1  
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_CNSTR_CMP&market_r
+un_id=RTPD&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-
+0000&version=1  
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_CNSTR_CMP&market_r
+un_id=RTD&startdatetime=20170213T08:00-0000&enddatetime=20170214T08:00-0000 
+&version=1 
+  
+ 
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_REF_BUS&market_run_i
+d=DAM&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-
+0000&version=1  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_RTM_REF_BUS&market
+_run_id=HASP&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-
+0000&version=1  
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_RTM_REF_BUS&market
+_run_id=RTPD&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-
+0000&version=1  
+
+ 
+
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_MPM_RTM_REF_BUS&market
+_run_id=RTD&startdatetime=20170213T08:00-0000&enddatetime=20170214T08:00-
+0000&version=1  
+
+ 
+
+ 
+
+PRC_GHG_ALLOWANCE 
+
+PRC_EIM_GHG 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_GHG_ALLOWANCE&startdatet
+ime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1   
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_EIM_GHG&market_run
+_id=RTPD&startdatetime=20141001T07:00-
+0000&enddatetime=20141002T07:00-0000&version=2  
+
+OR 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 54 
+
+ 
+
+ 
+ 
+ 
+
+PRC_SPTIE_LMP 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_EIM_GHG&market_run_id
+=RTD&startdatetime=20141001T07:00-0000&enddatetime=20141002T07:00-
+0000&version=2  
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_SPTIE_LMP&startdatetime=20
+130919T07:00-0000&enddatetime=20130920T07:00-
+0000&version=3&market_run_id=DAM&grp_type=ALL_APNODES  
+ 
+OR 
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_SPTIE_LMP&startdatetime=20
+160919T07:00-0000&enddatetime=20160920T07:00-
+0000&version=4&market_run_id=DAM&grp_type=ALL_APNODES 
+ 
+ 
+OR 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_SPTIE_LMP&startdatetime=20
+130919T07:00-0000&enddatetime=20130920T07:00-
+0000&version=3&market_run_id=DAM&node=LAPLMG1_7_B2  
+ 
+OR 
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_SPTIE_LMP&startdatetime=20
+160919T07:00-0000&enddatetime=20160920T07:00-
+0000&version=4&market_run_id=DAM&node=LAPLMG1_7_B2  
+ 
+OR 
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_SPTIE_LMP&startdatetime=20
+130919T07:00-0000&enddatetime=20130919T08:00-
+0000&version=3&market_run_id=RTPD&grp_type=ALL_APNODES  
+ 
+OR 
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_SPTIE_LMP&startdatetime=20
+160919T07:00-0000&enddatetime=20160919T08:00-
+0000&version=4&market_run_id=RTPD&grp_type=ALL_APNODES  
+ 
+ 
+OR 
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_SPTIE_LMP&startdatetime=20
+130919T07:00-0000&enddatetime=20130919T08:00-
+0000&version=3&market_run_id=RTPD&node=LAPLMG1_7_B2  
+ 
+OR 
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_SPTIE_LMP&startdatetime=20
+160919T07:00-0000&enddatetime=20160919T08:00-
+0000&version=4&market_run_id=RTPD&node=LAPLMG1_7_B2  
+ 
+OR 
+ 
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_SPTIE_LMP&startdatetime=20
+130919T07:00-0000&enddatetime=20130919T08:00-
+0000&version=3&market_run_id=RTD&grp_type=ALL_APNODES  
+ 
+OR 
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_SPTIE_LMP&startdatetime=20
+160919T07:00-0000&enddatetime=20160919T08:00-
+0000&version=4&market_run_id=RTD&grp_type=ALL_APNODES  
+ 
+ 
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 55 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+OR 
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_SPTIE_LMP&startdatetime=20
+130919T07:00-0000&enddatetime=20130919T08:00-
+0000&version=3&market_run_id=RTD&node=LAPLMG1_7_B2  
+ 
+OR 
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_SPTIE_LMP&startdatetime=20
+160919T07:00-0000&enddatetime=20160919T08:00-
+0000&version=4&market_run_id=RTD&node=LAPLMG1_7_B2  
+ 
+OR 
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_SPTIE_LMP&startdatetime=20
+160919T07:00-0000&enddatetime=20160920T07:00-
+0000&version=5&market_run_id=DAM&grp_type=ALL_APNODES 
+ 
+OR 
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_SPTIE_LMP&startdatetime=20
+160919T07:00-0000&enddatetime=20160920T07:00-
+0000&version=5&market_run_id=DAM&node=LAPLMG1_7_B2  
+ 
+OR 
+ 
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_SPTIE_LMP&startdatetime=20
+160919T07:00-0000&enddatetime=20160919T08:00-
+0000&version=5&market_run_id=RTPD&grp_type=ALL_APNODES  
+ 
+ 
+OR 
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_SPTIE_LMP&startdatetime=20
+130919T07:00-0000&enddatetime=20130919T08:00-
+0000&version=5&market_run_id=RTPD&node=LAPLMG1_7_B2  
+ 
+OR 
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_SPTIE_LMP&startdatetime=20
+160919T07:00-0000&enddatetime=20160919T08:00-
+0000&version=5&market_run_id=RTD&grp_type=ALL_APNODES  
+ 
+ 
+OR 
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_SPTIE_LMP&startdatetime=20
+160919T07:00-0000&enddatetime=20160919T08:00-
+0000&version=5&market_run_id=RTD&node=LAPLMG1_7_B2  
+ 
+ 
+NOTE:  
+ 
+0.1. 
+or ALL NODES groups and node can enable users to select individual APNODES or 
+PNODES. 
+The “enddatetime” is ignored if the query is to pull “ALL” or “ALL_APNODES” 
+0.2. 
+nodes; ie query will return only 1-days’ worth of data for all nodes at a time based on the 
+“startdatetime” supplied 
+0.3. 
+ 
+0.4          The v4 version will include the following additional components  
+ 
+
+ Recommend to use grp_type or node only. Grp_type will give all the APNODES 
+
+The “enddatetime” is referenced only when a node is supplied in the query 
+
+ 
+
+LMP_ENE_PRC 
+
+LMP_LOSS_PRC 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 56 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+PRC_RTM_SCH_CNSTR 
+
+ 
+
+RTPD 
+
+ 
+
+ 
+LMP_GHG_PRC 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_RTM_SCH_CNSTR&market_ru
+n_id=RTPD&startdatetime=20160919T07:00-0000&enddatetime=20160920T07:00-
+0000&version=4  
+
+http://oasis.caiso.com/oasisapi/SingleZip?&queryname=PRC_RTM_SCH_CNSTR&market_
+run_id=RTPD&startdatetime=20190215T08:00-0000&enddatetime=20190216T08:00-
+0000&constraint_type=DC%20TRANSFER%20DEFINITION&version=4 
+
+ 
+
+RTD 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_RTM_SCH_CNSTR&market_ru
+n_id=RTD&startdatetime=20160919T07:00-0000&enddatetime=20160920T07:00-
+0000&version=4  
+
+http://oasis.caiso.com/oasisapi/SingleZip?&queryname=PRC_RTM_SCH_CNSTR&market_
+run_id=RTD&startdatetime=20190215T08:00-0000&enddatetime=20190216T08:00-
+0000&constraint_type=DC%20TRANSFER%20DEFINITION&version=4 
+
+PRC_DAM_SCH_CNSTR 
+
+DAM 
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_DAM_SCH_CNSTR&market_ru
+n_id=DAM&startdatetime=20190101T08:00-0000&enddatetime=20190102T08:00-
+0000&version=8  
+
+http://oasis.caiso.com/oasisapi/SingleZip?&queryname=PRC_DAM_SCH_CNSTR&market_
+run_id=DAM&startdatetime=20190215T08:00-0000&enddatetime=20190216T08:00-
+0000&constraint_type=DC%20TRANSFER%20DEFINITION&version=8 
+
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname= 
+PRC_MPM_DEFAULT_CMP&market_run_id=DAM &startdatetime=20160919T07:00-
+0000&enddatetime=20160920T07:00-0000&version=5 
+
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname= 
+PRC_MPM_DEFAULT_CMP&market_run_id=RTM &startdatetime=20160919T07:00-
+0000&enddatetime=20160920T07:00-0000&version=5 
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_RTM_LAP&startdatetime=2017
+1020T07:00-0000&enddatetime=20171021T07:00-
+0000&version=6&market_run_id=RTM&grp_type=ALL_APNODES  
+
+ 
+
+OR 
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_RTM_LAP&startdatetime=2017
+1020T07:00-0000&enddatetime=20171021T07:00-
+0000&version=6&market_run_id=RTM&node=ELAP_PACE-APND 
+
+ 
+
+  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=SLD_FCST_PEAK&startdatetime=20
+130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1 
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=SLD_FCST&market_run_id=DAM&st
+artdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=SLD_FCST&market_run_id=2DA&sta
+rtdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+PRC_MPM_DEFAULT_CMP 
+
+PRC_RTM_LAP 
+
+SYSTEM DEMAND 
+
+SLD_FCST_PEAK 
+
+SLD_FCST 
+
+ 
+
+ 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 57 
+
+ 
+
+ 
+ 
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=SLD_FCST&market_run_id=7DA&sta
+rtdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=SLD_FCST&market_run_id=RTM&ex
+ecution_type=RTD&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-
+0000&version=1  
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=SLD_FCST&market_run_id=RTM&ex
+ecution_type=RTPD&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-
+0000&version=1  
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=SLD_FCST&marke
+t_run_id=ACTUAL&startdatetime=20180203T08:00-
+0000&enddatetime=20180204T08:00-0000&version=1 
+ 
+  
+
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=SLD_REN_FCST&market_run_id=D
+AM&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=SLD_REN_FCST&market_run_id=RT
+PD&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=SLD_REN_FCST&market_run_id=RT
+D&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=SLD_ADV_FCST&market_run_id=RT
+PD&startdatetime=20160419T07:00-0000&enddatetime=20160420T07:00-0000&version=4  
+
+OR 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=SLD_ADV_FCST&market_run_id=RT
+D&startdatetime=20160419T07:00-0000&enddatetime=20160420T07:00-0000&version=4 
+
+ 
+
+SLD_REN_FCST 
+
+SLD_ADV_FCST 
+
+SLD_SF_EVAL_DMD_FCST 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=SLD_SF_EVAL_DMD_FCST&granul
+arity=HOURLY&startdatetime=20160419T07:00-0000&enddatetime=20160420T07:00-
+0000&version=4   
+
+ENERGY 
+
+ENE_SLRS 
+
+ENE_EA 
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=SLD_SF_EVAL_DMD_FCST&granul
+arity=15MIN&startdatetime=20160419T07:00-0000&enddatetime=20160420T07:00-
+0000&version=4  
+
+  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_SLRS&market_run_id=DAM&ta
+c_zone_name=ALL&schedule=ALL&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_EA&energy_type=ALL&opr_inte
+rval=ALL&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-
+0000&version=1  
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_EA&energy_t
+ype=ALL&opr_interval=ALL&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=2 
+ 
+
+ 
+
+ENE_MPM 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_MPM&market_run_id=DAM&st
+artdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+Interface Specification for OASIS 
+
+ 
+
+Page 58 
+
+ 
+
+ 
+ 
+ 
+
+ 
+
+OR 
+
+Interface Specification for OASIS 
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_MPM&market_run_id=RTM&ex
+ecution_type=HASP&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-
+0000&version=1  
+
+OR 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_MPM&market_run_id=RTM&ex
+ecution_type=RTPD&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-
+0000&version=1  
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_MPM&market_run_id=DAM&ba
+a_id=ALL&startdatetime=20141001T07:00-0000&enddatetime=20141002T07:00-
+0000&version=2  
+
+OR 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_MPM&market_run_id=RTM&ex
+ecution_type=HASP&baa_id=ALL&startdatetime=20141001T07:00-
+0000&enddatetime=20141002T07:00-0000&version=2  
+
+OR 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_MPM&market_run_id=RTM&ex
+ecution_type=RTPD&baa_id=ALL&startdatetime=20141001T07:00-
+0000&enddatetime=20141002T07:00-0000&version=2  
+
+OR 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_MPM&market_run_id=RTM
+&execution_type=RTD&baa_id=ALL&startdatetime=20161001T07:00-
+0000&enddatetime=20161002T07:00-0000&version=2 
+ 
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=CMMT_RMR&market_run_id=DAM&
+startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_DISP&startdatetime=20130919
+T07:00-0000&enddatetime=20130920T07:00-0000&version=1 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_LOSS&market_run_id=DAM&st
+artdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=CMMT_RA_MLC&market_run_id=DA
+M&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_CB_AWARDS&startdatetime=2
+0130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+CMMT_RMR 
+
+ENE_DISP 
+
+ENE_LOSS 
+
+CMMT_RA_MLC 
+
+ENE_CB_AWARDS 
+
+ENE_CB_CLR_AWARDS 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_CB_CLR_AWARDS&startdateti
+me=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+ENE_CB_MKT_SUM 
+
+CB_NODAL_LIMITS 
+
+ENE_CD_SLRS 
+
+AGGR_OUTAGE_SCH 
+
+ENE_EIM_TRANSFER_LIMITS 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_CB_MKT_SUM&startdatetime=
+20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=CB_NODAL_LIMITS&node_id=RNC
+HSECO_2_N108&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-
+0000&version=1  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_CD_SLRS&market_run_id=RT
+M&tac_zone_name=ALL&schedule=ALL&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=AGGR_OUTAGE_SCH&fuel_categor
+y=Renewable&trading_hub=NP15&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1  
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_EIM_TRANSFER_LIMITS&mar
+ket_run_id=RTD&baa_grp_id=ALL&startdatetime=20141001T07:00-
+0000&enddatetime=20141002T07:00-0000&version=2  
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_EIM_TRANSFER_LIMITS&mar
+ket_run_id=RTPD&baa_grp_id=ALL&startdatetime=20141001T07:00-
+0000&enddatetime=20141002T07:00-0000&version=2  
+
+Interface Specification for OASIS 
+
+ 
+
+Page 59 
+
+ 
+
+ 
+ 
+ 
+
+ENE_EIM_TRANSFER 
+
+ENE_EIM_DYN_NSI 
+
+ENE_BASE_NSI 
+
+ENE_HRLY_BASE_NSI 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_EIM_TRANSFER_LIMITS&mar
+ket_run_id=ALL&baa_grp_id=ALL&startdatetime=20141001T07:00-
+0000&enddatetime=20141002T07:00-0000&version=2  
+
+ 
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_EIM_TRANSFER&market_run_
+id=RTD&baa_grp_id=ALL&startdatetime=20141001T07:00-
+0000&enddatetime=20141002T07:00-0000&version=2  
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_EIM_TRANSFER&market_run_
+id=RTPD&baa_grp_id=ALL&startdatetime=20141001T07:00-
+0000&enddatetime=20141002T07:00-0000&version=2  
+
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_EIM_TRANSFER&market_run_
+id=ALL&baa_grp_id=ALL&startdatetime=20141001T07:00-
+0000&enddatetime=20141002T07:00-0000&version=2  
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_EIM_DYN_NSI&market_run_id
+=RTD&baa_id=ALL&startdatetime=20141001T07:00-
+0000&enddatetime=20141002T07:00-0000&version=2  
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_EIM_DYN_NSI&market_run_id
+=RTPD&baa_id=ALL&startdatetime=20141001T07:00-
+0000&enddatetime=20141002T07:00-0000&version=2  
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_EIM_DYN_NSI&market_run_id
+=ALL&baa_id=ALL&startdatetime=20141001T07:00-
+0000&enddatetime=20141002T07:00-0000&version=2 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_BASE_NSI&market_run
+_id=DAM&baa_id=ALL&snapshot_indicator=DA&startdatetime=20141001T07:00-
+0000&enddatetime=20141002T07:00-0000&version=2  
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_BASE_NSI&market_run_id=RT
+PD&baa_id=ALL&startdatetime=20141001T07:00-
+0000&enddatetime=20141002T07:00-0000&version=2  
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_BASE_NSI&market_run_id=RT
+D&baa_id=ALL&snapshot_indicator=T75MIN&startdatetime=20141001T07:00-
+0000&enddatetime=20141002T07:00-0000&version=2  
+
+ 
+
+  
+
+snapshot_indicator = T75MIN, T55MIN, T40MIN, DA  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_HRLY_BASE_NSI
+&market_run_id=DAM&baa_id=ALL&snapshot_indicator=ALL&startdatetime=201
+61001T07:00-0000&enddatetime=20161002T07:00-0000&version=4  
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_HRLY_BASE_NSI&market_run
+_id=RTM&baa_id=ALL&snapshot_indicator=ALL&startdatetime=20161001T07:00-
+0000&enddatetime=20161002T07:00-0000&version=2  
+
+ 
+Snapshot_indicator = T75MIN, T55MIN, T40MIN, DA  
+
+Interface Specification for OASIS 
+
+ 
+
+Page 60 
+
+ 
+
+ 
+ 
+ 
+
+ENE_HRLY_BASE_LOSS 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_HRLY_BASE_LO
+SS&market_run_id=DAM&baa_id=ALL&snapshot_indicator=ALL&startdatetime=2
+0161001T07:00-0000&enddatetime=20161002T07:00-0000&version=4  
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_HRLY_BASE_LOSS&market_r
+un_id=RTM&baa_id=ALL&snapshot_indicator=ALL&startdatetime=20161001T07:00-
+0000&enddatetime=20161002T07:00-0000&version=2  
+
+ 
+Snapshot_indicator = T75MIN, T55MIN, T40MIN, DA  
+
+ENE_UNCERTAINTY_MV 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_UNCERTAINTY_MV&market_r
+un_id=RTD&baa_grp_id=ALL&startdatetime=20160401T07:00-
+0000&enddatetime=20160402T07:00-0000&version=4 
+
+ENE_FLEX_RAMP_REQT 
+
+Before Fall 2016 release 
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_FLEX_RAMP_REQT&market_r
+un_id=RTPD&baa_grp_id=ALL&startdatetime=20160401T07:00-
+0000&enddatetime=20160402T07:00-0000&version=4 
+
+ 
+
+OR 
+
+ 
+
+After Fall 2016 release 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_FLEX_RAMP_REQT&market_r
+un_id=RTPD&baa_grp_id=ALL&startdatetime=20160401T07:00-
+0000&enddatetime=20160402T07:00-0000&version=4 
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_FLEX_RAMP_REQT&market_r
+un_id=RTD&baa_grp_id=ALL&startdatetime=20160401T07:00-
+0000&enddatetime=20160402T07:00-0000&version=4 
+
+ 
+
+ENE_AGGR_FLEX_RAMP 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_AGGR_FLEX_RAMP&market_r
+un_id=RTPD&baa_grp_id=ALL&startdatetime=20160401T07:00-
+0000&enddatetime=20160402T07:00-0000&version=4 
+
+ 
+
+OR 
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_AGGR_FLEX_RAMP&market_r
+un_id=RTD&baa_grp_id=ALL&startdatetime=20160401T07:00-
+0000&enddatetime=20160402T07:00-0000&version=4 
+
+ 
+
+ 
+
+ 
+
+ENE_FLEX_RAMP_DC 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_FLEX_RAMP_DC&market_run
+_id=RTPD&baa_grp_id=ALL&startdatetime=20160401T07:00-
+0000&enddatetime=20160402T07:00-0000&version=4 
+
+ENE_EIM_TRANSFER_TIE 
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_FLEX_RAMP_DC&market_run
+_id=RTD&baa_grp_id=ALL&startdatetime=20160401T07:00-
+0000&enddatetime=20160402T07:00-0000&version=4 
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_EIM_TRANSFER_TIE&market_
+run_id=RTD&baa_grp_id=ALL&startdatetime=20161001T07:00-
+0000&enddatetime=20161002T07:00-0000&version=4   
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_EIM_TRANSFER_TIE&market_
+run_id=RTPD&baa_grp_id=ALL&startdatetime=20161001T07:00-
+0000&enddatetime=20161002T07:00-0000&version=4  
+
+Interface Specification for OASIS 
+
+ 
+
+Page 61 
+
+ 
+
+ 
+ 
+ 
+
+ENE_EIM_TRANSFER_LIMITS_TIE 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_EIM_TRANSFER_TIE&market_
+run_id=ALL&baa_grp_id=ALL&startdatetime=20141001T07:00-
+0000&enddatetime=20161002T07:00-0000&version=4  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_EIM_TRANSFER_LIMITS_TIE
+&market_run_id=RTD&baa_grp_id=ALL&startdatetime=20161001T07:00-
+0000&enddatetime=20161002T07:00-0000&version=5  
+
+  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_EIM_TRANSFER_LIMITS_TIE
+&market_run_id=RTPD&baa_grp_id=ALL&startdatetime=20161001T07:00-
+0000&enddatetime=20161002T07:00-0000&version=5 
+
+ 
+ENE_WIND_SOLAR_SUMMARY   
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_WIND_SOLAR_
+SUMMARY &startdatetime=20161001T07:00-
+0000&enddatetime=20161002T07:00-0000&version=5 
+
+ 
+
+ENE_EIM_FLEX_RAMP_INPUT  http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_EIM_FLEX_RAMP_INPUT&ma
+rket_run_id=RTM&baa_grp_id=ALL&snapshot_indicator=ALL&startdatetime=20161001T07:
+00-0000&enddatetime=20171002T07:00-0000&version=6 
+
+ 
+
+Snapshot_indicator = T75MIN, T55MIN, T40MIN 
+
+ 
+
+ENE_BAA_MKT_EVENTS 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_BAA_MKT_E
+VENTS&market_run_id=RTD&baa_grp_id=ALL&startdatetime=20181001T07
+:00-0000&enddatetime=20181002T07:00-0000&version=7 
+
+ANCILLARY 
+
+AS_REQ 
+
+ 
+
+  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=AS_REQ&market_run_id=DAM&anc_
+type=ALL&anc_region=ALL&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1  
+
+OR 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=AS_REQ&market_run_id=HASP&anc
+_type=ALL&anc_region=ALL&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1  
+
+OR 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=AS_REQ&market_run_id=RTM&anc_
+type=ALL&anc_region=ALL&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1  
+
+ 
+
+AS_RESULTS 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=AS_RESULTS&market_run_id=DAM
+&anc_type=ALL&anc_region=ALL&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1  
+
+OR 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=AS_RESULTS&market_run_id=HAS
+P&anc_type=ALL&anc_region=ALL&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1  
+
+OR 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=AS_RESULTS&market_run_id=RTM
+&anc_type=ALL&anc_region=ALL&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1  
+
+  
+
+AS_OP_RSRV 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=AS_OP_RSRV&startdatetime=20130
+919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+Interface Specification for OASIS 
+
+ 
+
+Page 62 
+
+ 
+
+ 
+ 
+ 
+
+AS_MILEAGE_CALC 
+
+ 
+
+ 
+
+CRR 
+
+CRR_CLEARING 
+
+CRR_INVENTORY 
+
+CRR_AGG_REV_ADJ 
+
+PUBLICBIDS 
+
+PUB_BID 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=AS_MILEAGE_CALC&anc_type=ALL
+&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=CRR_CLEARING&market_name=AL
+L&market_term=ALL&time_of_use=ALL&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=CRR_INVENTORY&market_name=A
+LLOC_AN_2013_S03_TR&market_term=ALL&time_of_use=ALL&startdatetime=20130924T
+07:00-0000&enddatetime=20130925T07:00-0000&version=1  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=CRR_AGG_REV_
+ADJ&trans_cnstr_id=ALL&startdatetime=20181001T07:00-
+0000&enddatetime=20181002T07:00-0000&version=7 
+
+  
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=PUB_RTM_GRP&startdatetime=2013091
+9T07:00-0000&version=1   (for RTM) 
+
+ 
+
+OR 
+
+ 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=PUB_RTM_GRP&startdateti
+me=20160919T07:00-0000&version=2   (for RTM) 
+ 
+
+Note :  version 2  will provide GHG product. 
+
+ 
+
+OR 
+
+  
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=PUB_DAM_GRP&startdatetime=201309
+19T07:00-0000&version=1   (for DAM) 
+
+ 
+
+ 
+
+PUB_CB_BID 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=PUB_CB_DAM_GRP&startdatetime=201
+30919T07:00-0000&version=1  (for DAM)  
+
+PUB_CRR_BID 
+
+ 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=PUB_CB_DAM_GRP&
+startdatetime=20130919T07:00-0000&version=2   (for DAM) 
+ 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=PUB_CRR_BID_SEASONAL_GRP&start
+datetime=20130919T07:00-0000&version=1   
+
+ 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=PUB_CRR_BID_MONTHLY_GRP&startd
+atetime=20130919T07:00-0000&version=1   
+
+ 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=PUB_CRR_BID_SEAS
+ONAL_GRP&startdatetime=20180919T07:00-0000&version=2   
+
+ 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=PUB_CRR_BID_MON
+THLY_GRP&startdatetime=20180919T07:00-0000&version=2 
+
+ 
+
+Note: Version 2 will include HEDGE_TYPE and TRANSACTION_TYPE  
+elements 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 63 
+
+ 
+
+ 
+ 
+ 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+PUB_CSP_OFFER_SET 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=PUB_CSP_OFFER_SET_ANNUAL_GR
+P&startdatetime=20170101T08:00-0000&version=1 
+
+ 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=PUB_CSP_OFFER_SET_MONTHLY_G
+RP&startdatetime=20170102T08:00-0000&version=1 
+
+ 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=PUB_CSP_OFFER_SET_INTRAMONTH
+LY_GRP&startdatetime=20170110T08:00-0000&version=1 
+
+ 
+
+  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_PNODE&Pnode_id=12THST_6
+_N101&Pnode_type=ALL&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_APNODE&APnode_type=ALL&
+startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_LDF&apnode_id=AGRICO_6_P
+L3N5_APND&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-
+0000&version=1  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_LAP&APnode_type=ALL&startd
+atetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_RESOURCE&resource_id=8MIL
+E_2_V200LD&agge_type=ALL&resource_type=ALL&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_HUB&startdatetime=20130919T
+07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_PNODE_MAP&pnode_id=KEAR
+NY_7_KY2D&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-
+0000&version=1  
+
+ 
+
+ATLAS 
+
+ATL_PNODE 
+
+ATL_APNODE 
+
+ATL_LDF 
+
+ATL_LAP 
+
+ATL_RESOURCE 
+
+ATL_HUB 
+
+ATL_PNODE_MAP 
+
+ATL_AS_REGION_MAP 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_AS_REGION_MAP&as_region_
+id=A54_CNTR&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-
+0000&version=1  
+
+ATL_RUC_ZONE_MAP 
+
+ATL_TAC_AREA 
+
+ATL_TIEPOINT 
+
+ATL_TI 
+
+ATL_PUB 
+
+ATL_PUB_SCHED 
+
+ATL_OSM 
+
+ATL_PEAK_ON_OFF 
+
+ATL_CBNODE 
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_RUC_ZONE_MAP&startdatetim
+e=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_TAC_AREA_MAP&startdatetim
+e=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_TIEPOINT&resource_type=ALL
+&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_TI&Ti_type=ALL&wecc_path=A
+LL&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_PUB&market_run_id=DAM&oas
+is_section=ALL&status=ALL&atlpubversion=ALL&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1   
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_PUB_SCHED&market_run_id=
+DAM&oasis_section=ALL&publication_type=ALL&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=1  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_OSM&msg_severity=ALL&startd
+atetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_PEAK_ON_OFF&startdatetime=
+20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1  
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_CBNODE&st
+artdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-
+0000&version=2  
+
+Interface Specification for OASIS 
+
+ 
+
+Page 64 
+
+ 
+
+ 
+ 
+ 
+
+ATL_PRC_CORR_MSG 
+ 
+
+ATL_SP 
+
+ATL_BAA_TIE 
+
+ATL_SP_TIE 
+
+ATL_ITC_SP 
+
+Interface Specification for OASIS 
+ 
+
+ 
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_PRC_CORR_
+MSG&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=3 
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_PRC_CORR_
+MSG&market_run_id=DAM&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=3 
+
+ 
+
+Note: market_run_id are DAM, RTD, RTPD, RUC 
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_SP&startdatet
+ime=20130919T07:00-0000&enddatetime=20130920T07:00-
+0000&version=3 
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_SP&BAA_ID=
+CISO&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=3 
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_BAA_TIE&sta
+rtdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-
+0000&version=3 
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_BAA_TIE&FR
+OM_BAA_ID=AZPS&TO_BAA_ID=ARIZ&startdatetime=20130919T07:00
+-0000&enddatetime=20130920T07:00-0000&version=3 
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_SP_TIE&start
+datetime=20130919T07:00-0000&enddatetime=20130920T07:00-
+0000&version=3 
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_SP_TIE&TIE
+_NAME=AMARGOSA230&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=3 
+
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname= 
+ATL_ITC_SP&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=3 
+ 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname= 
+ATL_ITC_SP &TIEPOINT_NAME= 
+ADLANTO-SP_ITC 
+&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-
+0000&version=3 
+
+ATL_ISL_TIE 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname= 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 65 
+
+ 
+
+ 
+ 
+ 
+
+ATL_GEN_CAP_LST 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ATL_ISL_TIE &startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=3 
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname= 
+ATL_ISL_TIE &TIE_NAME=MALIN500&startdatetime=20130919T07:00-
+0000&enddatetime=20130920T07:00-0000&version=3 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_GEN_CAP_L
+ST&startdatetime=20170919T07:00-
+0000&enddatetime=20170920T07:00-0000&version=4 
+ 
+or 
+   
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_GEN_CAP_L
+ST&resource_id=ARLVAL_5_SOLAR&startdatetime=20170919T07:00-
+0000&enddatetime=20170920T07:00-0000&version=4 
+ 
+or 
+ 
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ATL_GEN_CAP_L
+ST&agge_type=Y&startdatetime=20170919T07:00-
+0000&enddatetime=20170920T07:00-0000&version=4 
+ 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 66 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+ 
+
+7. 
+
+Group Report Definitions 
+
+This section contains all GroupIDs and corresponding reports.  
+
+GroupID 
+
+Reports In Group 
+
+DAM_LMP_GRP 
+
+Locational Marginal Prices 
+(LMP) 
+ 
+
+DAM_SPTIE_LMP_GRP  DAM Scheduling Point Tie 
+Locational Marginal Prices 
+(LMP) 
+ 
+
+RTPD_SPTIE LMP_GRP  RTPD Scheduling Point Tie 
+Locational Marginal Prices 
+(LMP) 
+ 
+
+RTD_SPTIE_LMP_GRP 
+
+RUC_LMP_GRP 
+
+HASP_LMP_GRP 
+
+RTPD_LMP_GRP 
+
+RTM_LMP_GRP 
+
+RTD Scheduling Point Tie 
+Locational Marginal Prices 
+(LMP) 
+ 
+
+Locational Marginal Prices 
+(LMP) 
+ 
+
+HASP Locational Marginal 
+Prices (LMP) 
+ 
+
+RTPD Locational Marginal 
+Prices (LMP) 
+ 
+
+Interval Locational Marginal 
+Prices (LMP) 
+ 
+ 
+
+Market 
+Type 
+DAM 
+ 
+
+DAM 
+ 
+
+RTPD 
+ 
+
+RTD 
+ 
+
+RUC 
+ 
+
+HASP 
+ 
+
+RTPD 
+ 
+
+RTM 
+ 
+
+Report XML Names 
+
+PRC_LMP 
+( Note: 4 files will be 
+created LMP, MCC, MCE, 
+MCL for the trade date & 
+will be cached for all nodes) 
+PRC_SPTIE LMP 
+( Note: For version=3, 2 
+files will be created LMP, 
+MCC for the trade date & 
+will be cached for all nodes 
+and for version =4,5, 4,5 
+files will be created LMP, 
+MCC, MCE and MCL for 
+the trade date ) 
+ 
+ 
+PRC_SPTIE_LMP 
+( Note: Hourly  4 intervals 
+cached files for trade date 
+& will be cached for all 
+nodes) 
+PRC_SPTIE_LMP 
+( Note: Hourly  12 intervals 
+cached files for trade date 
+& will be cached for all 
+
+PRC_LMP 
+( Note: 1 file will be created 
+LMP for the trade date & 
+will be cached for all nodes) 
+
+PRC_HASP_LMP 
+( Note: Hourly  4 intervals 
+cached files for trade date 
+& will be cached for all 
+nodes) 
+PRC_RTPD_LMP 
+( Note: Hourly  4 intervals 
+cached files for trade date 
+& will be cached for all 
+nodes) 
+PRC_INTVL_LMP 
+( Note: Hourly  12 intervals 
+cached files for trade date 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 67 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+DAM_PRC_AS_GRP 
+
+AS Clearing Prices 
+ 
+
+HASP_PRC_AS_GRP 
+
+AS Clearing Prices 
+ 
+
+DAM 
+ 
+
+HASP 
+ 
+
+RTM_PRC_AS_GRP 
+
+Interval AS Clearing Prices 
+ 
+
+RTM 
+ 
+
+DAM_TRNS_GRP 
+
+Transmission Interface Usage 
+
+Market Available 
+Transmission Capacity 
+ 
+
+HASP_TRNS_GRP 
+
+Transmission Interface Usage 
+
+Market Available 
+Transmission Capacity 
+ 
+
+RTPD_TRNS_GRP 
+
+Transmission Interface Usage 
+
+DAM1_GRP  
+ 
+ 
+
+RTM1_GRP (RTD) 
+
+RTPD_FCST_GRP 
+
+Market Available 
+Transmission Capacity 
+
+ 
+TAC Area Demand Forecast 
+System Load and Resource 
+Schedules 
+Market Power Mitigation 
+Status 
+RMR 
+Marginal Losses 
+ 
+TAC Area Load Forecast 
+System Load and Resource 
+Schedules 
+ 
+ 
+TAC Area Load Forecast 
+ 
+ 
+
+& will be cached for all 
+nodes) 
+
+PRC_AS 
+( Note: Daily cached files 
+for trade date & will be 
+cached for all AS Regions ) 
+
+PRC_AS 
+( Note: Daily cached files 
+for trade date & will be 
+cached for all AS Regions) 
+
+PRC_INTVL_AS 
+( Note: Hourly 4 intervals 
+cached files for trade date 
+& will be cached for all AS 
+Regions) 
+TRNS_USAGE 
+TRNS_ATC 
+
+DAM 
+DAM 
+
+HASP 
+HASP 
+
+TRNS_USAGE 
+TRNS_ATC 
+
+RTPD 
+RTPD 
+
+TRNS_USAGE 
+TRNS_ATC 
+
+DAM 
+DAM 
+DAM 
+DAM 
+DAM 
+ 
+
+SLD_FCST 
+ENE_SLRS 
+ENE_MPM 
+CMMT_RMR 
+ENE_LOSS 
+ 
+
+RTM/RTD 
+RTM 
+ 
+ 
+
+SLD_FCST 
+ENE_SLRS 
+ 
+ 
+
+RTM/RTPD 
+ 
+ 
+
+SLD_FCST 
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 68 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+HASP1_GRP 
+
+POST1_GRP 
+
+System Load and Resource 
+Schedules 
+TAC Area Load Forecast 
+RMR 
+Marginal Losses 
+ 
+Expected Energy 
+Exceptional Dispatch 
+
+HASP 
+HASP 
+HASP 
+HASP 
+ 
+
+N/A 
+
+ENE_SLRS 
+SLD_FCST 
+CMMT_RMR 
+ENE_LOSS 
+ 
+
+ENE_EA 
+ENE_DISP 
+
+DAM_AS_GRP 
+
+AS Requirements 
+AS Results 
+
+DAM 
+DAM 
+
+AS_REQ 
+AS_RESULTS 
+
+HASP_AS_GRP 
+
+AS Requirements 
+AS Results 
+
+HASP 
+
+AS_REQ 
+AS_RESULTS 
+
+RTM_AS_GRP 
+
+AS Requirements 
+AS Results 
+
+RTM 
+(RTPD) 
+
+AS_REQ 
+AS_RESULTS 
+
+PUB_DAM_GRP 
+
+Public Bids 
+
+DAM 
+
+PUB_BID 
+
+PUB_RTM_GRP 
+
+Public Bids 
+
+RTM 
+
+PUB_BID 
+
+CURR_LMP_GRP 
+
+Current interval Price 
+
+RTM 
+
+PRC_CURR_LMP 
+
+DAM_SD_PRC_GRP 
+
+ 
+
+Constraint Shadow Prices 
+Nomogram/Branch Shadow 
+Prices 
+
+DAM 
+
+PRC_CNSTR 
+PRC_NOMOGRAM 
+
+HASP_SD_PRC_GRP 
+
+ 
+
+Constraint Shadow Prices 
+Nomogram/Branch Shadow 
+Prices 
+
+HASP 
+
+PRC_CNSTR 
+PRC_NOMOGRAM 
+
+RTM_SD_PRC_GRP 
+
+ 
+
+Constraint Shadow Prices 
+Nomogram/Branch Shadow 
+Prices 
+
+RTM 
+
+PRC_CNSTR 
+PRC_NOMOGRAM 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 69 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+PUB_CB_DAM_GRP 
+
+Public CB Bids 
+
+DAM 
+
+PUB_CB_BID 
+
+CB_REF_PRC_GRP 
+
+Reference Prices 
+ 
+
+CB_CLR_DAM_GRP 
+
+Net Cleared Awards 
+ 
+
+DAM 
+ 
+
+DAM 
+ 
+
+PRC_DS_REF (Note: File 
+will be created for Supply & 
+Demand Prices for the 
+effective date ranges 
+(quarterly) for all nodes.) 
+ENE_CB_CLR_AWARDS  
+
+CB_NODAL_LMT_GRP 
+
+Nodal Limit MW values 
+
+DAM 
+
+CB_NODAL_LIMITS 
+
+DAM_FLEX_RAMP_GRP 
+
+System ramping nomogram 
+results from DAM market run 
+
+DAM 
+
+PRC_FLEX_RAMP 
+
+RTPD_FLEX_RAMP_GRP 
+
+System ramping nomogram 
+results from RTPD market run 
+
+RTPD 
+
+PRC_FLEX_RAMP 
+
+RTD_FLEX_RAMP_GRP 
+
+System ramping nomogram 
+results from RTD market run 
+
+RTD 
+
+PRC_FLEX_RAMP 
+
+DAM_MPM_LMP_GRP 
+
+MPM Locational Marginal 
+Prices (LMP) 
+
+DAM 
+
+HASP_MPM_LMP_GRP  MPM HASP Locational 
+Marginal Prices (LMP) 
+ 
+
+RTPD_MPM_LMP_GRP  MPM RTPD Locational 
+Marginal Prices (LMP) 
+ 
+
+HASP 
+
+RTPD 
+
+PRC_MPM_LMP 
+PRC_MPM_LMP_DAM_MC
+CC 
+PRC_MPM_LMP_DAM_MC
+CNC 
+PRC_MPM_LMP_DAM_MC
+E 
+PRC_MPM_LMP_DAM_MC
+L 
+ 
+PRC_MPM_RTM_LMP_HA
+SP  
+ 
+
+PRC_MPM_RTM_LMP_RT
+PD 
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 70 
+
+ 
+
+ 
+ 
+ 
+
+ 
+ 
+
+ 
+
+ 
+ 
+
+DAM_MPM_SD_PRC_G
+RP 
+
+HASP_MPM_SD_PRC_
+GRP 
+
+RTPD_MPM_SD_PRC_
+GRP 
+
+MPM Constraint Shadow 
+Prices 
+MPM Constraint Competitive 
+Paths 
+MPM Nomogram/Branch 
+Shadow Prices 
+MPM Nomogram/Branch 
+Competitive Paths 
+MPM Flowgate Competitive 
+Paths 
+MPM Flowgate Shadow 
+Prices 
+MPM Nomogram/Branch 
+Competitive Paths 
+MPM Nomogram/Branch 
+Shadow Prices 
+  
+MPM Flowgate Competitive 
+Paths 
+MPM Flowgate Shadow 
+Prices 
+MPM Nomogram/Branch 
+Competitive Paths 
+MPM Nomogram/Branch 
+Shadow Prices 
+
+ 
+ 
+
+DAM 
+
+HASP 
+
+RTPD 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+
+PRC_MPM_CONSTR 
+PRC_MPM_CONSTR_CM
+P 
+ 
+PRC_MPM_NOMOGRAM 
+PRC_MPM_NOMOGRAM_
+CMP 
+ 
+PRC_MPM_RTM_FLOWG
+ATE_CMP_HASP 
+PRC_MPM_RTM_FLOWG
+ATE_HASP 
+PRC_MPM_NOMOGRAM_
+CMP_HASP 
+PRC_MPM_NOMOGRAM_
+HASP  
+
+PRC_MPM_RTM_FLOWGA
+TE_CMP_RTPD 
+PRC_MPM_RTM_FLOWGA
+TE_RTPD 
+PRC_MPM_RTM_NOMOGR
+AM_CMP_RTPD 
+PRC_MPM_RTM_NOMOGR
+AM_RTPD 
+  
+ 
+PUB_CRR_BID 
+
+PUB_CRR_BID_SEASO
+NAL_GRP 
+
+Congestion Revenue Rights 
+(CRR) Public Bids 
+From the Annual Auction 
+
+SEASONA
+L 
+
+PUB_CRR_BID_MONTH
+LY_GRP 
+
+Congestion Revenue Rights 
+(CRR) Public Bids 
+From the Monthly  Auction 
+
+MONTHLY  PUB_CRR_BID 
+
+AGGR_OUTAGE_SCH_
+GRP 
+
+Aggregated Generation 
+Outages data 
+
+N/A 
+
+AGGR_OUTAGE_SCH 
+
+PUB_CSP_OFFER_SET
+_ANNUAL_GRP 
+
+Competitive Solicitation 
+Process Offer Set for annual 
+offer period. 
+
+ANNUAL 
+
+PUB_CSP_OFFER_SET 
+
+  
+
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 71 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+PUB_CSP_OFFER_SET
+_MONTHLY_GRP 
+
+Competitive Solicitation 
+Process Offer Set for monthly 
+offer period. 
+
+MONTHLY  PUB_CSP_OFFER_SET 
+
+  
+
+ 
+
+PUB_CSP_OFFER_SET
+_INTRAMONTHLY_GRP 
+
+Competitive Solicitation 
+Process Offer Set for 
+intramonthly offer period. 
+
+INTRAMO
+NTHLY 
+
+PUB_CSP_OFFER_SET 
+
+RTM_LAP_GRP 
+
+  
+
+ 
+
+Hourly Real Time Market LAP 
+Marginal Cost of Congestion 
+(MCC) for Apnode. 
+
+RTM 
+
+ 
+
+CRR_AGG_REV_ADJ_G
+RP 
+
+CRR Aggregated Revenue 
+Adjustment data 
+
+NA 
+ 
+
+ 
+
+ENE_RES_UPL_GRP 
+
+Resource-Specific Uplift 
+
+NA 
+
+ENE_ZNL_UPL_GRP 
+
+Zonal Uplift Payment 
+
+NA 
+
+ENE_OIC_GRP 
+
+Operator-Initiated 
+Commitment 
+
+NA 
+
+PRC_RTM_LAP 
+( Note: 5 files will be 
+created LMP, MCC, MCE, 
+MCL, MGHG for the trade 
+date & will be cached for all 
+nodes) 
+ 
+CRR_AGG_REV_ADJ 
+( Note: Hourly CRR values 
+are aggregated over all 
+CRR IDs will be cached) 
+
+ENE_RES_UPL 
+( Note: The entire month 
+data will be cached.) 
+
+ENE_ZNL_UPL 
+( Note: The entire month 
+data will be cached.) 
+
+ENE_OIC 
+( Note: The entire month 
+data will be cached.) 
+
+8. 
+
+Group URL Query Strings 
+
+This section contains examples of all Group report URL Examples for XML Downloads. For 
+CSV format use resultformat=6 as specified above.  
+
+   
+
+Group ID 
+
+PRICES 
+
+DAM_LMP_GRP 
+
+DAM_SPTIE_LMP_GRP 
+
+Example URL for XML Download 
+
+  
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=DAM_LMP_GRP&startdatetime=20130919
+T07:00-0000&version=1  
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=DAM_SPTIE_LMP_GRP&startdatetime=20
+130919T07:00-0000&version=3  
+ 
+OR 
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 72 
+
+ 
+
+ 
+ 
+ 
+
+Group ID 
+
+RUC_LMP_GRP 
+
+HASP_LMP_GRP 
+
+RTPD_LMP_GRP 
+
+RTPD_SPTIE_LMP_GRP 
+
+RTM_LMP_GRP 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+Example URL for XML Download 
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=DAM_SPTIE_LMP_GRP
+&startdatetime=20160919T07:00-0000&version=4  
+ OR 
+ 
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=DAM_SPTIE_LMP_GRP
+&startdatetime=20160919T07:00-0000&version=5 
+ 
+ 
+ 
+ 
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=RUC_LMP_GRP&startdatetime=20130919
+T07:00-0000&version=1  
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=HASP_LMP_GRP&startdatetime=2013091
+9T07:00-0000&enddatetime=20130919T08:00-0000&version=1 
+ 
+OR  
+ 
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=HASP_LMP_GRP&startdatetime=2013091
+9T07:00-0000&enddatetime=20130919T08:00-0000&version=3 
+ 
+Note: Version 3 response zip file will include separate file for each price 
+component 
+  
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=RTPD_LMP_GRP&startdatetime=2013091
+9T07:00-0000&enddatetime=20130919T08:00-0000&version=1  
+ 
+OR 
+ 
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=RTPD_LMP_GRP&startdatetime=2013091
+9T07:00-0000&enddatetime=20130919T08:00-0000&version=3 
+ 
+Note: Version 3 response zip file will include separate file for each price 
+component 
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=RTPD_SPTIE_LMP_GRP&startdatetime=2
+0130919T07:00-0000&enddatetime=20130919T08:00-0000&version=3  
+ 
+OR 
+ 
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=RTPD_SPTIE_LMP_GRP&startdatetime=2
+0160919T07:00-0000&enddatetime=20160919T08:00-0000&version=4 
+ 
+OR 
+ 
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=RTPD_SPTIE_LMP_GRP&startdatetime=2
+0160919T07:00-0000&enddatetime=20160919T08:00-0000&version=5 
+ 
+Note: Version 5 response zip file will include separate file for each price 
+component 
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=RTM_LMP_GRP&startdatetime=20130919
+T07:00-0000&enddatetime=20130919T08:00-0000&version=1 
+ 
+OR 
+ 
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=RTM_LMP_GRP&startdatetime=20130919
+T07:00-0000&enddatetime=20130919T08:00-0000&version=3 
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 73 
+
+ 
+
+ 
+ 
+ 
+
+Group ID 
+
+RTD_SPTIE_LMP_GRP 
+
+DAM_PRC_AS_GRP 
+
+HASP_PRC_AS_GRP 
+
+RTM_PRC_AS_GRP 
+
+DAM_TRNS_GRP 
+
+HASP_TRNS_GRP 
+
+RTPD_TRNS_GRP 
+
+DAM1_GRP 
+
+RTM1_GRP 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+Example URL for XML Download 
+Note: Version 3 response zip file will include separate file for each price 
+component   
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=RTD_SPTIE_LMP_GRP&startdatetime=20
+130919T07:00-0000&enddatetime=20130919T08:00-0000&version=3   
+ 
+OR 
+ 
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=RTD_SPTIE_LMP_GRP&startdatetime=20
+160919T07:00-0000&enddatetime=20160919T08:00-0000&version=4   
+ 
+OR 
+ 
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=RTD_SPTIE_LMP_GRP&startdatetime=20
+160919T07:00-0000&enddatetime=20160919T08:00-0000&version=5 
+ 
+Note: Version 5 response zip file will include separate file for each price 
+component 
+ 
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=DAM_PRC_AS_GRP&startdatetime=20130
+919T07:00-0000&version=1  
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=HASP_PRC_AS_GRP&startdatetime=2013
+0919T07:00-0000&version=1  
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=RTM_PRC_AS_GRP&startdatetime=20130
+919T07:00-0000&version=1  
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=DAM_TRNS_GRP&startdatetime=2013091
+9T07:00-0000&version=1   
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=HASP_TRNS_GRP&startdatetime=201309
+19T07:00-0000&version=1  
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=RTPD_TRNS_GRP&startdatetime=201309
+19T07:00-0000&version=1  
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=DAM1_GRP&startdatetime=20130919T07:
+00-0000&version=1 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=RTM1_GRP&startdatetime=20130919T07:
+00-0000&version=1  
+
+RTPD_FCST_GRP 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=RTPD_FCST_GRP&startdatetime=201309
+19T07:00-0000&version=1  
+
+HASP1_GRP 
+
+POST1_GRP 
+
+DAM_AS_GRP 
+
+HASP_AS_GRP 
+
+RTM_AS_GRP 
+
+PUB_DAM_GRP 
+
+PUB_RTM_GRP 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=HASP1_GRP&startdatetime=20130919T07
+:00-0000&version=1 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=POST1_GRP&startdatetime=20130919T07
+:00-0000&version=1 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=DAM_AS_GRP&startdatetime=20130919T
+07:00-0000&version=1 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=HASP_AS_GRP&startdatetime=20130919
+T07:00-0000&version=1 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=RTM_AS_GRP&startdatetime=20130919T
+07:00-0000&version=1 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=PUB_DAM_GRP&startdatetime=20130919
+T07:00-0000&version=1 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=PUB_RTM_GRP&startdatetime=20130919
+T07:00-0000&version=1 
+
+CURR_LMP_GRP 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=CURR_LMP_GRP&startdatetime=2013091
+9T07:00-0000&version=1  
+
+DAM_SD_PRC_GRP 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=DAM_SD_PRC_GRP&startdatetime=20130
+919T07:00-0000&version=1 
+
+HASP_SD_PRC_GRP 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=HASP_SD_PRC_GRP&startdatetime=2013
+0919T07:00-0000&version=1 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 74 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Group ID 
+
+Example URL for XML Download 
+
+RTM_SD_PRC_GRP 
+
+PUB_CB_DAM_GRP 
+
+CB_REF_PRC_GRP 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=RTM_SD_PRC_GRP&startdatetime=20130
+919T07:00-0000&version=1 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=PUB_CB_DAM_GRP&startdatetime=20130
+919T07:00-0000&version=1 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=CB_REF_PRC_GRP&startdatetime=20130
+919T07:00-0000&version=1 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=CB_REF_PRC_GRP&st
+artdatetime=20130919T07:00-0000&version=3  
+ 
+
+CB_CLR_DAM_GRP 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=CB_CLR_DAM_GRP&startdatetime=20130
+919T07:00-0000&version=1 
+
+CB_NODAL_LMT_GRP 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=CB_NODAL_LMT_GRP&resultformat=5&st
+artdatetime=20130919T07:00-0000&version=1 
+
+DAM_FLEX_RAMP_GRP 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=DAM_FLEX_RAMP_GRP&startdatetime=2
+0130919T07:00-0000&version=1 
+
+RTPD_FLEX_RAMP_GRP 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=RTPD_FLEX_RAMP_GRP&startdatetime=
+20130919T07:00-0000&version=1 
+
+RTD_FLEX_RAMP_GRP 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=RTD_FLEX_RAMP_GRP&startdatetime=2
+0130919T07:00-0000&version=1 
+
+DAM_MPM_LMP_GRP 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=DAM_MPM_LMP_GRP&startdatetime=201
+30919T07:00-0000&version=1 
+
+HASP_MPM_LMP_GRP 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=HASP_MPM_LMP_GRP&startdatetime=20
+130919T07:00-0000&enddatetime=20130919T08:00-0000&version=1 
+
+RTPD_MPM_LMP_GRP 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=RTPD_MPM_LMP_GRP&startdatetime=20
+130919T07:00-0000&enddatetime=20130919T08:00-0000&version=1 
+
+  
+
+  
+
+DAM_MPM_SD_PRC_GRP  http://oasis.caiso.com/oasisapi/GroupZip?groupid=DAM_MPM_SD_PRC_GRP&startdatetime
+
+=20130919T07:00-0000&version=1 
+
+HASP_MPM_SD_PRC_GRP http://oasis.caiso.com/oasisapi/GroupZip?groupid=HASP_MPM_SD_PRC_GRP&startdatetim
+
+e=20130919T07:00-0000&version=1 
+
+RTPD_MPM_SD_PRC_GRP http://oasis.caiso.com/oasisapi/GroupZip?groupid=RTPD_MPM_SD_PRC_GRP&startdatetim
+
+e=20130919T07:00-0000&version=1 
+
+  
+
+  
+
+PUB_CRR_BID_SEASONAL
+_GRP 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=PUB_CRR_BID_SEASONAL_GRP&startd
+atetime=20130919T07:00-0000&version=1 
+
+ 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=PUB_CRR_BID_SEASONAL_GRP&startd
+atetime=20180919T07:00-0000&version=2 
+
+Note: Version 2 will include HEDGE_TYPE and TRANSACTION_TYPE  elements 
+
+PUB_CRR_BID_MTHLY_GR
+P 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=PUB_CRR_BID_MTHLY_GRP&startdateti
+me=20130919T07:00-0000&version=1 
+
+ 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=PUB_CRR_BID_MTHLY_GRP&startdateti
+me=20180919T07:00-0000&version=2 
+
+Note: Version 2 will include HEDGE_TYPE and TRANSACTION_TYPE  elements 
+
+AGGR_OUTAGE_SCH_GRP http://oasis.caiso.com/oasisapi/GroupZip?groupid=AGGR_OUTAGE_SCH_GRP&startdatetim
+
+e=20130919T07:00-0000&version=1 
+
+PUB_CSP_OFFER_SET_AN
+NUAL_GRP 
+
+PUB_CSP_OFFER_SET_M
+ONTHLY_GRP 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=PUB_CSP_OFFER_SET_ANNUAL_GRP&
+startdatetime=20170101T08:00-0000&version=1 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=PUB_CSP_OFFER_SET_MONTHLY_GRP
+&startdatetime=20170102T08:00-0000&version=1 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 75 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+Group ID 
+
+Example URL for XML Download 
+
+PUB_CSP_OFFER_SET_IN
+TRAMONTHLY_GRP 
+
+RTM_LAP_GRP 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=PUB_CSP_OFFER_SET_INTRAMONTHL
+Y_GRP&startdatetime=20170110T08:00-0000&version=1 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=RTM_LAP_GRP&startdatetime=20171019
+T07:00-0000&version=6 
+
+CRR_AGG_REV_ADJ_GRP  http://oasis.caiso.com/oasisapi/GroupZip?groupid=CRR_AGG_REV_ADJ_GRP&startdatetime
+
+=20181020T07:00-0000&version=7 
+
+ENE_RES_UPL_GRP 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=ENE_RES_UPL_GRP&startdatetime=2019
+0101T08:00-0000&version=8 
+
+ENE_ZNL_UPL_GRP 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=ENE_ZNL_UPL_GRP&startdatetime=2019
+0101T08:00-0000&version=8 
+
+ENE_OIC_GRP 
+
+http://oasis.caiso.com/oasisapi/GroupZip?groupid=ENE_OIC_GRP&startdatetime=20190101T
+08:00-0000&version=8 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 76 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+9. 
+
+Versioning and Namespace domain reference 
+
+With the GMT release, the namespace domain is changing from the environment specific URL 
+to use www.caiso.com/soa/*.xsd. So for the January 2015 release, the namespaces for the various 
+reports are: 
+
+ 
+
+Namespace 
+
+Major Version  Minor Version 
+
+http://www.caiso.com/soa/OASISBid_v1.xsd 
+
+ 
+
+http://www.caiso.com/soa/OASISCBBid_v1.xsd 
+
+1 
+
+1 
+
+http://www.caiso.com/soa/OASISCRRPublicBid_v1.xsd 
+
+1 
+
+ 
+
+20131201 
+
+20131201 
+
+20131201 
+
+http://www.caiso.com/soa/OASISCRRPublicBid_v1.xsd 
+
+2 
+
+20181001 
+
+ 
+
+http://www.caiso.com/soa/OASISMaster_v1.xsd 
+
+ 
+
+http://www.caiso.com/soa/OASISReport_v1.xsd 
+
+ 
+
+http://www.caiso.com/soa/OASISReport_v2.xsd 
+
+ 
+
+http://www.caiso.com/soa/OASISReport_v3.xsd 
+
+ 
+
+http://www.caiso.com/soa/OASISReport_v4.xsd 
+
+http://www.caiso.com/soa/OASISMaster_v2.xsd 
+
+http://www.caiso.com/soa/OASISReport_v5.xsd 
+
+http://www.caiso.com/soa/OASISReport_v6.xsd 
+
+http://www.caiso.com/soa/OASISReport_v7.xsd 
+
+1 
+
+1 
+
+2 
+
+3 
+
+4 
+
+2 
+
+5 
+
+6 
+
+7 
+
+20131201 
+
+20140401 
+
+20141001 
+
+20150101 
+
+20161001 
+
+20161001 
+
+20161201 
+
+20171001 
+
+20181001 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 77 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+ 
+ 
+ 
+
+http://www.caiso.com/soa/OASISReport_v8.xsd 
+
+http://www.caiso.com/soa/OASISMaster_v3.xsd 
+
+http://www.caiso.com/soa/OASISCSPOfferSet_v1.xsd 
+
+http://www.caiso.com/soa/OASISMaster_v4.xsd 
+
+8 
+
+3 
+
+1 
+
+4 
+
+20190101 
+
+20161201 
+
+20171001 
+
+20171001 
+
+ 
+
+10. 
+
+Schema Files Changes 
+
+This section contains the summary of the schema changes with release reference 
+
+ 
+
+Schema File Name 
+
+Change Description 
+
+OASISReport_v4.xsd 
+
+OASISReport_v1.xsd 
+
+OASISReport_v2.xsd 
+
+OASISReport_v3.xsd 
+
+OASISBid_v1.xsd 
+
+OASISBid_v2.xsd 
+
+OASISCBBid_v1.xsd 
+
+OASISCBBid_v2.xsd 
+
+OASISMaster_v1.xsd 
+
+OASISCRRPublicBid_v1.xsd 
+
+OASISCRRPublicBid_v2.xsd 
+
+OASISReport_v5.xsd 
+
+OASISMaster_v3.xsd 
+
+1.  Fall 2016 release changes. 
+
+No changes 
+
+No changes 
+
+No changes 
+No changes 
+Fall 2016 Change 
+No changes  
+No changes  
+No changes 
+No changes 
+Added TRANSACTION_TYPE and HEDGE_TYPE elements 
+Added new reports for Data Release Reports Projects 
+
+1.  EIM Transfer Limits By Tie 
+
+2.  Wind and Solar Summary 
+
+3.  MPM Default Competitive Path Assessment 
+
+List 
+
+ 
+
+Added New API’s for Atlas Reports 
+
+1.  Price Correction Messages 
+2.  Scheduling Point Definition 
+3.  BAA and Tie Definition 
+4.  Scheduling Point and Tie Definition 
+5.  Intertie Constraint and Scheduling Point Mapping 
+6.  Intertie Scheduling Limit and Tie Mapping 
+
+OASISMaster_v4.xsd 
+
+OASISCSPOfferSet_v1.xsd 
+
+OASISReport_v6.xsd 
+
+Added New API for Atlas Report 
+Master Control Area Generating Capability List 
+New XSD file added to support CSP Offer Set data as part of Fall 
+2017 Release. 
+Fall-2017 Release - Added two new API services. 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 78 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+ 
+
+Change Description 
+Fall 2018 Release – Added  new services for BAA Market Events and 
+CRR Aggregated Revenue Adjustment 
+ 
+2019 Independent Release – Added  new services for Resource-
+Specific Uplift, Zonal Uplift, Operator-Initiated Commitment, and Day-
+Ahead Schedule Constraint Prices 
+ 
+
+ 
+ 
+ 
+
+Schema File Name 
+
+OASISReport_v7.xsd 
+
+OASISReport_v8.xsd 
+
+ 
+
+ 
+ 
+
+Long day and short day request examples 
+
+11. 
+Here are the example URL’s for long day and short day with the GMT version of the OASIS API services: 
+ 
+
+Short day 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_CB_CLR_AWARDS&startdatetime
+=20130310T08:00-0000&enddatetime=20130311T07:00-0000&version=1  
+
+HE03 is skipped 
+
+ 
+
+Long day 
+
+http://oasis.caiso.com/oasisapi/SingleZip?queryname=ENE_CB_CLR_AWARDS&startdatetime
+=20131103T07:00-0000&enddatetime=20131104T08:00-0000&version=1 
+
+HE 25 is the repeating hour 
+
+ 
+
+ 
+
+Interface Specification for OASIS 
+
+ 
+
+Page 79 
+
+ 
+
+
