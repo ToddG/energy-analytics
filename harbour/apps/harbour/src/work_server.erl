@@ -62,11 +62,10 @@ start_link() ->
 %% `harbour_report_task`.
 %% @end
 %%--------------------------------------------------------------------
--spec(refresh() -> 
-    ok | {error, Reason :: term()}).
+-spec(refresh() -> ok | {error, Reason :: term()}).
 refresh() ->
     ?LOG_INFO(#{service => work, what => refresh}), 
-    gen_server:call(?MODULE, {refresh}).
+    gen_server:cast(?MODULE, {refresh}).
 
 
 %%--------------------------------------------------------------------
@@ -76,8 +75,7 @@ refresh() ->
 %% timestamp.
 %% @end
 %%--------------------------------------------------------------------
--spec(next_downloadable_item() -> 
-    {ok, Task :: harbour_report_task()} | {error, Reason :: term()}).
+-spec(next_downloadable_item() -> {ok, Task :: harbour_report_task()} | {error, Reason :: term()}).
 next_downloadable_item() ->
     ?LOG_INFO(#{service => work, what => next_downloadable_item}), 
     gen_server:call(?MODULE, {next_downloadable_item}).
@@ -88,8 +86,7 @@ next_downloadable_item() ->
 %% Register an item as having completed the download process.
 %% @end
 %%--------------------------------------------------------------------
--spec(item_download_complete(Id :: reference()) -> 
-    ok | {error, Reason :: term()}).
+-spec(item_download_complete(Id :: reference()) -> ok | {error, Reason :: term()}).
 item_download_complete(Id) ->
     ?LOG_INFO(#{service => work, what => item_download_complete, id=>Id}), 
     gen_server:call(?MODULE, {item_download_complete, Id}).
@@ -101,8 +98,7 @@ item_download_complete(Id) ->
 %% timestamp.
 %% @end
 %%--------------------------------------------------------------------
--spec(next_parsable_item() -> 
-    {ok, Task :: harbour_report_task()} | {error, Reason :: term()}).
+-spec(next_parsable_item() -> {ok, Task :: harbour_report_task()} | {error, Reason :: term()}).
 next_parsable_item() ->
     ?LOG_INFO(#{service => work, what => next_parsable_item}), 
     gen_server:call(?MODULE, {next_parsable_item}).
@@ -113,8 +109,7 @@ next_parsable_item() ->
 %% Register an item as having completed the parse process.
 %% @end
 %%--------------------------------------------------------------------
--spec(item_parse_complete(Id :: reference()) ->
-    ok | {error, Reason :: term()}).
+-spec(item_parse_complete(Id :: reference()) -> ok | {error, Reason :: term()}).
 item_parse_complete(Id) ->
     ?LOG_INFO(#{service => work, what => item_parse_complete, id=> Id}), 
     gen_server:call(?MODULE, {item_parse_complete, Id}).
@@ -145,7 +140,6 @@ init([]) ->
         {ok, Terms} -> parse_config(Terms)
     end,
     State = #state{config=ConfigRecord},
-    spawn(fun() -> cron_loop(State) end),
     {ok, State}.
 
 %%--------------------------------------------------------------------
@@ -163,8 +157,6 @@ init([]) ->
     {noreply, NewState :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term(), Reply :: term(), NewState :: #state{}} |
     {stop, Reason :: term(), NewState :: #state{}}).
-handle_call({refresh}, _From, State) ->
-    {reply, refresh_reports(), State};
 handle_call({next_downloadable_item}, _From, State) ->
     {reply, get_next_downloadable_item(), State};
 handle_call({item_download_complete, Id}, _From, State) ->
@@ -188,6 +180,9 @@ handle_call(_Request, _From, State) ->
     {noreply, NewState :: #state{}} |
     {noreply, NewState :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term(), NewState :: #state{}}).
+handle_cast({refresh}, State) ->
+    %%spawn(fun() -> refresh_reports() end),
+    {noreply, State};
 handle_cast(_Request, State) ->
     {noreply, State}.
 
@@ -292,15 +287,23 @@ refresh_reports() ->
     Existing = [{X#?TABLE_HARBOUR_REPORT_TASK.url, X#?TABLE_HARBOUR_REPORT_TASK.filename} || X <- Tasks],
     New = lists:subtract(Manifests, Existing),
     NewTasks = [#?TABLE_HARBOUR_REPORT_TASK{id=make_ref(), url=Url, filename=File} || {Url, File} <- New],
-    case length(NewTasks) > 0 of 
-        true -> 
-            ?LOG_INFO(#{service => work, what => refresh_reports, manifests_count=>length(Manifests), 
-                        tasks_count=>length(Tasks), new_tasks_count=>length(NewTasks), text=>"creating tasks"}), 
-            db_server:create(NewTasks);
-        false ->
-            ?LOG_INFO(#{service => work, what => refresh_reports, manifests_count=>length(Manifests), 
-                        tasks_count=>length(Tasks), new_tasks_count=>length(NewTasks), text=>"no tasks to create"}), 
-            ok
+    M = #{service => work, what => refresh_reports, manifests_count=>length(Manifests), tasks_count=>length(Tasks), new_tasks_count=>length(NewTasks)},
+    case 
+        case length(NewTasks) > 0 of 
+            true -> 
+                db_server:create(NewTasks);
+            false ->
+                no_tasks
+        end of
+        ok -> 
+            ?LOG_INFO(M#{text=>"created tasks"}),
+            ok;
+        no_tasks -> 
+            ?LOG_WARNING(M#{text=>"no tasks to create"}),
+            ok;
+        {error, Reason} -> 
+            ?LOG_ERROR(M#{error=>Reason}),
+            {error, Reason}
     end.
 
 
@@ -311,7 +314,7 @@ refresh_reports() ->
 %%--------------------------------------------------------------------
 -spec(get_next_downloadable_item() -> {ok, Item::harbour_report_task()} | {error, Reason :: term()}).
 get_next_downloadable_item() -> 
-    transition_next_item(undefined, download_started).
+    get_next_item_to_transition(undefined, download_started).
 
 %%--------------------------------------------------------------------
 %% @private
@@ -320,7 +323,7 @@ get_next_downloadable_item() ->
 %%--------------------------------------------------------------------
 -spec(get_next_parsable_item() -> {ok, Item::harbour_report_task()} | {error, Reason :: term()}).
 get_next_parsable_item() ->
-    transition_next_item(download_completed, parse_started).
+    get_next_item_to_transition(download_completed, parse_started).
 
 
 %%--------------------------------------------------------------------
@@ -343,32 +346,33 @@ update_item_state(Id, PrevState, NextState) ->
         _ -> throw(invalid_state_transition)
     end,
     Item1 = Item#?TABLE_HARBOUR_REPORT_TASK{state = NextState},
-    ok = db_server:update([Item1]),
-    {ok, Item1}.
+    case db_server:update([Item1]) of
+        ok -> 
+            {ok, Item1};
+        {error, Reason} -> 
+            {error, Reason}
+    end.
 
 %%--------------------------------------------------------------------
 %% @private
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec(transition_next_item(PrevState :: harbour_report_task_state(), 
+-spec(get_next_item_to_transition(PrevState :: harbour_report_task_state(), 
                     NextState :: harbour_report_task_state()) -> {ok, Item::harbour_report_task()} | {error, Reason :: term()}).
-transition_next_item(PrevState, NextState) -> 
-    ?LOG_INFO(#{service => work, what => transition_next_item, state0 => PrevState, state1 => NextState}), 
+get_next_item_to_transition(PrevState, NextState) -> 
+    ?LOG_INFO(#{service => work, what => get_next_item_to_transition, state0 => PrevState}), 
     case db_server:read(?TABLE_HARBOUR_REPORT_TASK, fun(X) -> X#?TABLE_HARBOUR_REPORT_TASK.state =:= PrevState end) of 
         {ok, [_|_] = Items} ->
+                ?LOG_INFO(#{service => work, what => get_next_item_to_transition, items_count => length(Items)}), 
                 Item = lists:nth(1, lists:sort(Items)),
                 Item1 = Item#?TABLE_HARBOUR_REPORT_TASK{state = NextState},
                 ok = db_server:update([Item1]),
                 {ok, Item1};
-        {error, []} ->
-                {error, no_items}
-    end.
-
-
-cron_loop(State) ->
-    receive cancel -> ok
-    after State#state.config#work_server_config.refresh ->
-            ?LOG_INFO(#{service => work, what => cron_loop, state=>State}), 
-            work_server:refresh()
+        {ok, [] = Items} ->
+                ?LOG_INFO(#{service => work, what => get_next_item_to_transition, items_count => length(Items)}), 
+                {error, noitems};
+        Error ->
+                ?LOG_ERROR(#{service => work, what => get_next_item_to_transition, items_count => 0, error=> Error}), 
+                {error, unknown}
     end.

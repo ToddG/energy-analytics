@@ -60,7 +60,7 @@ start_link() ->
 %%--------------------------------------------------------------------
 download() ->
     ?LOG_INFO(#{server=>download, what=>download}),
-    gen_server:call(?MODULE, {download}). 
+    gen_server:cast(?MODULE, {download}). 
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -69,7 +69,7 @@ download() ->
 %%--------------------------------------------------------------------
 download(Url, File) ->
     ?LOG_INFO(#{server=>download, what=>download, url=>Url, file=>File}),
-    gen_server:call(?MODULE, {download, Url, File}). 
+    gen_server:cast(?MODULE, {download, Url, File}). 
 
 
 %%%===================================================================
@@ -98,7 +98,7 @@ init([]) ->
         {ok, C} -> parse_config(C)
     end,
     State = #state{rate_limit=RateLimit, download_path=DownloadPath, refresh=Refresh},
-    spawn(fun() -> cron_loop(State) end),
+    %%spawn(fun() -> timer(State) end),
     {ok, State}.
 
 %%--------------------------------------------------------------------
@@ -116,12 +116,6 @@ init([]) ->
     {noreply, NewState :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term(), Reply :: term(), NewState :: #state{}} |
     {stop, Reason :: term(), NewState :: #state{}}).
-handle_call({download}, _From, State) ->
-    spawn(fun() -> sequential_download(State) end),
-    {reply, ok, State};
-handle_call({download, Url, File}, _From, State) ->
-    ok = curl(Url, File, State#state.rate_limit),
-    {reply, ok, State};
 handle_call(_Request, _From, State) ->
     {reply, ok, State}.
 
@@ -136,6 +130,12 @@ handle_call(_Request, _From, State) ->
     {noreply, NewState :: #state{}} |
     {noreply, NewState :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term(), NewState :: #state{}}).
+handle_cast({download}, State) ->
+    spawn(fun() -> sequential_download(State) end),
+    {noreply, State};
+handle_cast({download, Url, File}, State) ->
+    ok = curl(Url, File, State#state.rate_limit),
+    {noreply, State};
 handle_cast(_Request, State) ->
     {noreply, State}.
 
@@ -230,15 +230,15 @@ sequential_download(State) ->
             File        = filename:join(State#state.download_path, FileName),
             ok = curl(Url, File, State#state.rate_limit),
             work_server:item_download_complete(Id),
-            download_server:download();
+            download_server:download(),
+            ok;
         _ -> ok
-    end,
-    ok.
+    end.
 
 
-cron_loop(State) ->
+timer(State) ->
     receive cancel -> ok
-    after State#state.refresh ->
-            ?LOG_INFO(#{server=>download, what=>cron_loop, state=>State}),
-            download_server:sequential_download(State)
+    after 2000 ->
+            ?LOG_INFO(#{server=>download, what=>timer, state=>State}),
+            download_server:download()
     end.
