@@ -9,8 +9,8 @@
 -module(work_server).
 
 -behaviour(gen_server).
--include("../../common/include/tables.hrl").
 -include_lib("kernel/include/logger.hrl").
+-include("../../common/include/tables.hrl").
 
 %% API
 -export([start_link/0
@@ -86,10 +86,10 @@ next_downloadable_item() ->
 %% Register an item as having completed the download process.
 %% @end
 %%--------------------------------------------------------------------
--spec(item_download_complete(Id :: reference()) -> ok | {error, Reason :: term()}).
-item_download_complete(Id) ->
-    ?LOG_INFO(#{service => work, what => item_download_complete, id=>Id}), 
-    gen_server:call(?MODULE, {item_download_complete, Id}).
+-spec(item_download_complete(Url :: string()) -> ok | {error, Reason :: term()}).
+item_download_complete(Url) ->
+    ?LOG_INFO(#{service => work, what => item_download_complete, url=>Url}), 
+    gen_server:call(?MODULE, {item_download_complete, Url}).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -181,7 +181,7 @@ handle_call(_Request, _From, State) ->
     {noreply, NewState :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term(), NewState :: #state{}}).
 handle_cast({refresh}, State) ->
-    %%spawn(fun() -> refresh_reports() end),
+    spawn(fun() -> refresh_reports() end),
     {noreply, State};
 handle_cast(_Request, State) ->
     {noreply, State}.
@@ -283,15 +283,15 @@ parse_config(ConfigList) ->
 -spec(refresh_reports() -> ok | {error, Reason :: term()}).
 refresh_reports() ->
     {ok, Manifests} = manifest_server:manifests(),
-    {ok, Tasks} = db_server:read(?TABLE_HARBOUR_REPORT_TASK),
+    {ok, Tasks} = harbour_db:tasks(),
     Existing = [{X#?TABLE_HARBOUR_REPORT_TASK.url, X#?TABLE_HARBOUR_REPORT_TASK.filename} || X <- Tasks],
     New = lists:subtract(Manifests, Existing),
-    NewTasks = [#?TABLE_HARBOUR_REPORT_TASK{id=make_ref(), url=Url, filename=File} || {Url, File} <- New],
+    NewTasks = [#?TABLE_HARBOUR_REPORT_TASK{url=Url, filename=File} || {Url, File} <- New],
     M = #{service => work, what => refresh_reports, manifests_count=>length(Manifests), tasks_count=>length(Tasks), new_tasks_count=>length(NewTasks)},
     case 
         case length(NewTasks) > 0 of 
             true -> 
-                db_server:create(NewTasks);
+                harbour_db:create(NewTasks);
             false ->
                 no_tasks
         end of
@@ -332,21 +332,20 @@ get_next_parsable_item() ->
 %% TODO: think about how to better expose item state.
 %% @end
 %%--------------------------------------------------------------------
--spec(update_item_state(Id :: reference(), 
+-spec(update_item_state(Url :: string(), 
                         PrevState :: harbour_report_task_state(),
                         NextState :: harbour_report_task_state()) 
       -> {ok, Item :: tuple()} | {error, Reason :: term()}).
-update_item_state(Id, PrevState, NextState) ->
-    ?LOG_INFO(#{service => work, what => update_item_state, id => Id, state0 => PrevState, state1 => NextState}), 
-    {ok, [Item]} = db_server:read(?TABLE_HARBOUR_REPORT_TASK, 
-                   fun(X) -> X#?TABLE_HARBOUR_REPORT_TASK.id =:= Id end),
+update_item_state(Url, PrevState, NextState) ->
+    ?LOG_INFO(#{service => work, what => update_item_state, url => Url, state0 => PrevState, state1 => NextState}), 
+    {ok, [Item]} = harbour_db:task(Url),
     %invariant
     case Item#?TABLE_HARBOUR_REPORT_TASK.state of 
         PrevState -> ok;
         _ -> throw(invalid_state_transition)
     end,
     Item1 = Item#?TABLE_HARBOUR_REPORT_TASK{state = NextState},
-    case db_server:update([Item1]) of
+    case harbour_db:update([Item1]) of
         ok -> 
             {ok, Item1};
         {error, Reason} -> 
@@ -362,7 +361,7 @@ update_item_state(Id, PrevState, NextState) ->
                     NextState :: harbour_report_task_state()) -> {ok, Item::harbour_report_task()} | {error, Reason :: term()}).
 get_next_item_to_transition(PrevState, NextState) -> 
     ?LOG_INFO(#{service => work, what => get_next_item_to_transition, state0 => PrevState}), 
-    case db_server:read(?TABLE_HARBOUR_REPORT_TASK, fun(X) -> X#?TABLE_HARBOUR_REPORT_TASK.state =:= PrevState end) of 
+    case harbour_db:tasks_in_state(PrevState) of 
         {ok, [_|_] = Items} ->
                 ?LOG_INFO(#{service => work, what => get_next_item_to_transition, items_count => length(Items)}), 
                 Item = lists:nth(1, lists:sort(Items)),

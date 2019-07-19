@@ -52,18 +52,6 @@ main([Path|_]) ->
                                           ]),
                 io:format("created '~p' table: ~n", [?TABLE_HARBOUR_REPORT_TASK])
     end,
-    case sets:is_element(?TABLE_HARBOUR_RECORD_STATE, TableSet) of
-        true -> 
-                io:format("table '~p' already exists: ~n", [?TABLE_HARBOUR_RECORD_STATE]);
-        false ->
-                mnesia:create_table(?TABLE_HARBOUR_RECORD_STATE, [
-                                            {type, set},
-                                            {attributes, record_info(fields, ?TABLE_HARBOUR_RECORD_STATE)},
-                                            {disc_copies, [node()]}
-                                          ]),
-                io:format("created '~p' table: ~n", [?TABLE_HARBOUR_RECORD_STATE])
-    end,
-    
     %% done
     mnesia:stop(),
     erlang:halt(0).

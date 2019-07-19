@@ -9,8 +9,8 @@
 -module(download_server).
 
 -behaviour(gen_server).
--include("../../common/include/tables.hrl").
 -include_lib("kernel/include/logger.hrl").
+-include("../../common/include/tables.hrl").
 
 %% API
 -export([start_link/0
@@ -224,21 +224,20 @@ curl(Link, OutputFile, RateLimit)->
 sequential_download(State) ->
     case work_server:next_downloadable_item() of 
         {ok, T} -> 
-            Id          = T#?TABLE_HARBOUR_REPORT_TASK.id,
             Url         = T#?TABLE_HARBOUR_REPORT_TASK.url,
             FileName    = T#?TABLE_HARBOUR_REPORT_TASK.filename,
             File        = filename:join(State#state.download_path, FileName),
             ok = curl(Url, File, State#state.rate_limit),
-            work_server:item_download_complete(Id),
+            work_server:item_download_complete(Url),
             download_server:download(),
             ok;
         _ -> ok
     end.
 
 
-timer(State) ->
-    receive cancel -> ok
-    after 2000 ->
-            ?LOG_INFO(#{server=>download, what=>timer, state=>State}),
-            download_server:download()
-    end.
+%timer(State) ->
+%    receive cancel -> ok
+%    after 2000 ->
+%            ?LOG_INFO(#{server=>download, what=>timer, state=>State}),
+%            download_server:download()
+%    end.
