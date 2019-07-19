@@ -15,6 +15,7 @@
         ,update/1
         ,task/1
         ,tasks_in_state/1
+        ,update_item_state/2
         ]).
          
 -define(TABLE, ?TABLE_HARBOUR_REPORT_TASK).
@@ -38,3 +39,7 @@ task(Url) ->
 
 tasks_in_state(State) ->
     common_harbour_db:read(fun(X) -> X#?TABLE.state =:= State end).
+
+update_item_state(Item, NextState) ->
+    Item1 = Item#?TABLE_HARBOUR_REPORT_TASK{state = NextState},
+    common_harbour_db:update([Item1]).

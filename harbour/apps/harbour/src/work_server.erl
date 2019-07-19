@@ -109,10 +109,10 @@ next_parsable_item() ->
 %% Register an item as having completed the parse process.
 %% @end
 %%--------------------------------------------------------------------
--spec(item_parse_complete(Id :: reference()) -> ok | {error, Reason :: term()}).
-item_parse_complete(Id) ->
-    ?LOG_INFO(#{service => work, what => item_parse_complete, id=> Id}), 
-    gen_server:call(?MODULE, {item_parse_complete, Id}).
+-spec(item_parse_complete(Url :: string()) -> ok | {error, Reason :: term()}).
+item_parse_complete(Url) ->
+    ?LOG_INFO(#{service => work, what => item_parse_complete, url=> Url}), 
+    gen_server:call(?MODULE, {item_parse_complete, Url}).
 
 %%%===================================================================
 %%% gen_server callbacks
@@ -159,12 +159,12 @@ init([]) ->
     {stop, Reason :: term(), NewState :: #state{}}).
 handle_call({next_downloadable_item}, _From, State) ->
     {reply, get_next_downloadable_item(), State};
-handle_call({item_download_complete, Id}, _From, State) ->
-    {reply, update_item_state(Id, download_started, download_completed), State};
+handle_call({item_download_complete, Url}, _From, State) ->
+    {reply, update_item_state(Url, download_started, download_completed), State};
 handle_call({next_parsable_item}, _From, State) ->
     {reply, get_next_parsable_item(), State};
-handle_call({item_parse_complete, Id}, _From, State) ->
-    {reply, update_item_state(Id, parse_started, parse_completed), State};
+handle_call({item_parse_complete, Url}, _From, State) ->
+    {reply, update_item_state(Url, parse_started, parse_completed), State};
 handle_call(_Request, _From, State) ->
     {reply, ok, State}.
 
@@ -366,7 +366,7 @@ get_next_item_to_transition(PrevState, NextState) ->
                 ?LOG_INFO(#{service => work, what => get_next_item_to_transition, items_count => length(Items)}), 
                 Item = lists:nth(1, lists:sort(Items)),
                 Item1 = Item#?TABLE_HARBOUR_REPORT_TASK{state = NextState},
-                ok = db_server:update([Item1]),
+                ok = harbour_db:update([Item1]),
                 {ok, Item1};
         {ok, [] = Items} ->
                 ?LOG_INFO(#{service => work, what => get_next_item_to_transition, items_count => length(Items)}), 

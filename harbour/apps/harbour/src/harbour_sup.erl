@@ -54,12 +54,6 @@ init([]) ->
                         10000,
                         worker,
                         [work_server]}
-                     ,{tag_db,
-                        {db_server, start_link, []},
-                        permanent,
-                        10000,
-                        worker,
-                        [db_server]}        
                      ,{tag_download,
                         {download_server, start_link, []},
                         permanent,

@@ -65,7 +65,7 @@ inotify -> config_server -> pubsub_server
 
 work_server:refresh() 
     -> manifest_server:reports()
-    -> db_server:create(tasks)
+    -> harbour_db:create(tasks)
 ```
 
 #### api

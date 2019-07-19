@@ -212,7 +212,7 @@ curl(Link, OutputFile, RateLimit)->
     case filelib:is_regular(OutputFile) of
         true -> 
             ?LOG_WARNING(#{server=>download, what=>curl, link=>Link, file=>OutputFile, rate=>RateLimit, text=>"output file exists, skipping download"}),
-            {error, output_file_exists};
+            ok;
         _ ->
             Cmd = io_lib:format("curl --limit-rate ~pK -X GET -o ~s \"~s\"", [RateLimit, OutputFile, Link]), 
             Out = os:cmd(Cmd),
