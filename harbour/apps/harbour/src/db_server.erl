@@ -56,7 +56,7 @@ start_link() ->
 %%--------------------------------------------------------------------
 -spec(create(Items :: [tuple()]) -> ok | {error, Reason :: term()}).
 create(Items) ->
-    ?LOG_DEBUG(#{server=>db, what=>create, items=>Items}),
+    ?LOG_INFO(#{server=>db, what=>create, items_count=>length(Items)}),
     gen_server:call(?MODULE, {create, Items}). 
 
 %%--------------------------------------------------------------------
@@ -66,7 +66,7 @@ create(Items) ->
 %%--------------------------------------------------------------------
 -spec(read(Table :: atom()) -> {ok, [tuple()]} | {error, Reason :: term()}).
 read(Table) ->
-    ?LOG_DEBUG(#{server=>db, what=>read, table=>Table}),
+    ?LOG_INFO(#{server=>db, what=>read, table=>Table}),
     gen_server:call(?MODULE, {read, Table}). 
 
 %%--------------------------------------------------------------------
@@ -76,7 +76,7 @@ read(Table) ->
 %%--------------------------------------------------------------------
 -spec(read(Table :: atom(), FilterFun :: fun((tuple()) -> boolean())) -> {ok, [tuple()]} | {error, Reason :: term()}).
 read(Table, FilterFun) ->
-    ?LOG_DEBUG(#{server=>db, what=>read, table=>Table}),
+    ?LOG_INFO(#{server=>db, what=>read_with_filterfun, table=>Table}),
     gen_server:call(?MODULE, {read, Table, FilterFun}). 
 
 %%--------------------------------------------------------------------
@@ -87,7 +87,7 @@ read(Table, FilterFun) ->
 %%--------------------------------------------------------------------
 -spec(update(Items :: [tuple()]) -> ok | {error, Reason :: term()}).
 update(Items) ->
-    ?LOG_DEBUG(#{server=>db, what=>update, items=>Items}),
+    ?LOG_INFO(#{server=>db, what=>update, items_count=>length(Items)}),
     gen_server:call(?MODULE, {update, Items}). 
 
 %%--------------------------------------------------------------------
@@ -102,7 +102,7 @@ update(Items) ->
 %%--------------------------------------------------------------------
 -spec(delete(Items :: [tuple()]) -> ok | {error, Reason :: term()}).
 delete(Items) ->
-    ?LOG_DEBUG(#{server=>db, what=>delete, items=>Items}),
+    ?LOG_INFO(#{server=>db, what=>delete, items_count=>length(Items)}),
     gen_server:call(?MODULE, {delete, Items}). 
 
 %%%===================================================================
@@ -124,6 +124,7 @@ delete(Items) ->
     {ok, State :: #state{}} | {ok, State :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term()} | ignore).
 init([]) ->
+    ok = pubsub_server:subscribe(work_server_config, ?MODULE),
     {ok, #state{}}.
 
 %%--------------------------------------------------------------------
@@ -182,7 +183,8 @@ handle_cast(_Request, State) ->
     {noreply, NewState :: #state{}} |
     {noreply, NewState :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term(), NewState :: #state{}}).
-handle_info(_Info, State) ->
+handle_info(Info, State) ->
+    ?LOG_INFO(#{service => db, what => handle_info, info=> Info, state0 => State}), 
     {noreply, State}.
 
 %%--------------------------------------------------------------------

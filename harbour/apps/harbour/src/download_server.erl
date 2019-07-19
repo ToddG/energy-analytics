@@ -91,13 +91,14 @@ download(Url, File) ->
     {ok, State :: #state{}} | {ok, State :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term()} | ignore).
 init([]) ->
+    ok = pubsub_server:subscribe(download_server_config, ?MODULE),
     {ok, ConfigDir} = application:get_env(harbour, config_dir),
     ConfigFile = filename:join(ConfigDir, "download.config"),
     {ok, RateLimit, DownloadPath, Refresh} = case file:consult(ConfigFile) of
         {ok, C} -> parse_config(C)
     end,
     State = #state{rate_limit=RateLimit, download_path=DownloadPath, refresh=Refresh},
-    spawn_link(fun() -> cron_loop(State) end),
+    spawn(fun() -> cron_loop(State) end),
     {ok, State}.
 
 %%--------------------------------------------------------------------
@@ -116,7 +117,7 @@ init([]) ->
     {stop, Reason :: term(), Reply :: term(), NewState :: #state{}} |
     {stop, Reason :: term(), NewState :: #state{}}).
 handle_call({download}, _From, State) ->
-    spawn_link(fun() -> sequential_download(State) end),
+    spawn(fun() -> sequential_download(State) end),
     {reply, ok, State};
 handle_call({download, Url, File}, _From, State) ->
     ok = curl(Url, File, State#state.rate_limit),
@@ -153,12 +154,13 @@ handle_cast(_Request, State) ->
     {noreply, NewState :: #state{}} |
     {noreply, NewState :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term(), NewState :: #state{}}).
-handle_info({pubsub, {pubsub, {download_server_config, _} = Config}}, State) ->
+handle_info({pubsub, {download_server_config, _} = Config} = Info, State) ->
     {ok, RateLimit, DownloadPath, Refresh} = parse_config([Config]),
     State1 = State#state{rate_limit=RateLimit, download_path=DownloadPath, refresh=Refresh},
-    ?LOG_INFO(#{server=>download, what=>handle_info, pubsub=> download_server_config, state0=>State, state1=>State1}),
+    ?LOG_INFO(#{server=>download, what=>handle_info, info=>Info, state0=>State, state1=>State1}),
     {noreply, State1};
-handle_info(_Info, State) ->
+handle_info(Info, State) ->
+    ?LOG_INFO(#{service => download, what => handle_info, info=> Info, state0 => State}), 
     {noreply, State}.
 
 %%--------------------------------------------------------------------
@@ -207,10 +209,16 @@ parse_config(C)->
            RateLimit :: pos_integer()) -> ok | {error, Reason :: term()}).
 curl(Link, OutputFile, RateLimit)->
     ?LOG_INFO(#{server=>download, what=>curl, link=>Link, file=>OutputFile, rate=>RateLimit}),
-    %Cmd = io_lib:format("curl --limit-rate ~pK -X GET -o ~s \"~s\"", [RateLimit, OutputFile, Link]), 
-    %%Out = os:cmd(Cmd),
-    %%?LOG_INFO(#{server=>download, what=>curl, link=>Link, file=>OutputFile, output=>Out}),
-    ok.
+    case filelib:is_regular(OutputFile) of
+        true -> 
+            ?LOG_WARNING(#{server=>download, what=>curl, link=>Link, file=>OutputFile, rate=>RateLimit, text=>"output file exists, skipping download"}),
+            {error, output_file_exists};
+        _ ->
+            Cmd = io_lib:format("curl --limit-rate ~pK -X GET -o ~s \"~s\"", [RateLimit, OutputFile, Link]), 
+            Out = os:cmd(Cmd),
+            ?LOG_INFO(#{server=>download, what=>curl, link=>Link, file=>OutputFile, output=>Out, cmd=>Cmd}),
+            ok
+    end.
 
 -spec(sequential_download(State :: #state{}) -> ok | {error, Reason :: term()}).
 sequential_download(State) ->

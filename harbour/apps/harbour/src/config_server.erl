@@ -116,7 +116,8 @@ handle_cast(_Request, State) ->
     {noreply, NewState :: #state{}} |
     {noreply, NewState :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term(), NewState :: #state{}}).
-handle_info(_Info, State) ->
+handle_info(Info, State) ->
+    ?LOG_INFO(#{service => config, what => handle_info, info=> Info, state0 => State, state1 => State}), 
     {noreply, State}.
 
 %%--------------------------------------------------------------------

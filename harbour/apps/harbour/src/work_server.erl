@@ -21,6 +21,7 @@
          ,item_parse_complete/1
 %         ,next_archivable_item/0
 %         ,item_archive_complete/1
+         %,status/0
         ]).
 
 %% gen_server callbacks
@@ -137,13 +138,14 @@ item_parse_complete(Id) ->
     {ok, State :: #state{}} | {ok, State :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term()} | ignore).
 init([]) ->
+    ok = pubsub_server:subscribe(work_server_config, ?MODULE),
     {ok, ConfigDir} = application:get_env(harbour, config_dir),
     ConfigFile = filename:join(ConfigDir, "work.config"),
     ConfigRecord = case file:consult(ConfigFile) of
         {ok, Terms} -> parse_config(Terms)
     end,
     State = #state{config=ConfigRecord},
-    spawn_link(fun() -> cron_loop(State) end),
+    spawn(fun() -> cron_loop(State) end),
     {ok, State}.
 
 %%--------------------------------------------------------------------
@@ -208,7 +210,8 @@ handle_info({pubsub, {work_server_config, _} = C}, State) ->
     State1 = State#state{config=ConfigRecord},
     ?LOG_INFO(#{service => work, what => handle_info, pubsub => work_server_config, state0 => State, state1 => State1}), 
     {noreply, State1};
-handle_info(_Info, State) ->
+handle_info(Info, State) ->
+    ?LOG_INFO(#{service => work, what => handle_info, info=> Info, state0 => State}), 
     {noreply, State}.
 
 %%--------------------------------------------------------------------
@@ -285,15 +288,21 @@ parse_config(ConfigList) ->
 -spec(refresh_reports() -> ok | {error, Reason :: term()}).
 refresh_reports() ->
     {ok, Manifests} = manifest_server:manifests(),
-    ?LOG_INFO(#{service => work, what => refresh_reports, manifests_count=>length(Manifests)}), 
     {ok, Tasks} = db_server:read(?TABLE_HARBOUR_REPORT_TASK),
-    ?LOG_INFO(#{service => work, what => refresh_reports, tasks_count=>length(Tasks)}), 
     Existing = [{X#?TABLE_HARBOUR_REPORT_TASK.url, X#?TABLE_HARBOUR_REPORT_TASK.filename} || X <- Tasks],
     New = lists:subtract(Manifests, Existing),
     NewTasks = [#?TABLE_HARBOUR_REPORT_TASK{id=make_ref(), url=Url, filename=File} || {Url, File} <- New],
-    ?LOG_INFO(#{service => work, what => refresh_reports, new_tasks_count=>length(NewTasks)}), 
-    ok = db_server:create(NewTasks),
-    ok.
+    case length(NewTasks) > 0 of 
+        true -> 
+            ?LOG_INFO(#{service => work, what => refresh_reports, manifests_count=>length(Manifests), 
+                        tasks_count=>length(Tasks), new_tasks_count=>length(NewTasks), text=>"creating tasks"}), 
+            db_server:create(NewTasks);
+        false ->
+            ?LOG_INFO(#{service => work, what => refresh_reports, manifests_count=>length(Manifests), 
+                        tasks_count=>length(Tasks), new_tasks_count=>length(NewTasks), text=>"no tasks to create"}), 
+            ok
+    end.
+
 
 %%--------------------------------------------------------------------
 %% @private

@@ -97,8 +97,8 @@ manifests(StartDate, EndDate) ->
     {ok, State :: #state{}} | {ok, State :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term()} | ignore).
 init([]) ->
-    ok = pubsub_server:subscribe(manifest_server_config, manifest_server),
-    ok = pubsub_server:subscribe(oasis_reports_config, manifest_server),
+    ok = pubsub_server:subscribe(manifest_server_config, ?MODULE),
+    ok = pubsub_server:subscribe(oasis_reports_config, ?MODULE),
     {ok, ConfigDir} = application:get_env(harbour, config_dir),
     ManifestConfigFile = filename:join(ConfigDir, "manifest.config"),
     {ok, OasisServerConfig} = case file:consult(ManifestConfigFile) of
@@ -169,17 +169,18 @@ handle_cast(_Request, State) ->
     {noreply, NewState :: #state{}} |
     {noreply, NewState :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term(), NewState :: #state{}}).
-handle_info({pubsub, {oasis_reports_config, _} = Config}, State) ->
+handle_info({pubsub, {oasis_reports_config, _} = Config} = Info, State) ->
     {ok, ReportsConfig} = parse_oasis_report_config([Config]),
     State1 = State#state{oasis_reports = ReportsConfig},
-    ?LOG_INFO(#{service => manifest, what => handle_info, pubsub => oasis_reports, state0=> State, state1 => State1}), 
+    ?LOG_INFO(#{service => manifest, what => handle_info, info=> Info, state0=> State, state1 => State1}), 
     {noreply, State1};
-handle_info({pubsub, {manifest_server_config, _} = Config}, State) ->
+handle_info({pubsub, {manifest_server_config, _} = Config} = Info, State) ->
     {ok, OasisConfig} = parse_oasis_server_config([Config]),
     State1 = State#state{oasis_config = OasisConfig},
-    ?LOG_INFO(#{service => manifest, what => handle_info, pubsub => manifest_server_config, state0=> State, state1 => State1}), 
+    ?LOG_INFO(#{service => manifest, what => handle_info, info=> Info, state0=> State, state1 => State1}), 
     {noreply, State1};
-handle_info(_Info, State) ->
+handle_info(Info, State) ->
+    ?LOG_INFO(#{service => manifest, what => handle_info, info=> Info, state0 => State, state1 => State}), 
     {noreply, State}.
 
 %%--------------------------------------------------------------------
