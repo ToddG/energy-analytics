@@ -10,6 +10,7 @@
 
 -behaviour(gen_server).
 -include("../../common/include/tables.hrl").
+-include_lib("kernel/include/logger.hrl").
 
 %% API
 -export([start_link/0
@@ -33,8 +34,7 @@
 -define(SERVER, ?MODULE). 
 
 -record(state, {config                  :: work_server_config()}).
--record(work_server_config, {name       :: string(),
-                             path       :: string(),
+-record(work_server_config, {
                              refresh    :: pos_integer()
                             }).
 -type work_server_config()              :: #work_server_config{}.
@@ -64,6 +64,7 @@ start_link() ->
 -spec(refresh() -> 
     ok | {error, Reason :: term()}).
 refresh() ->
+    ?LOG_INFO(#{service => work, what => refresh}), 
     gen_server:call(?MODULE, {refresh}).
 
 
@@ -77,6 +78,7 @@ refresh() ->
 -spec(next_downloadable_item() -> 
     {ok, Task :: harbour_report_task()} | {error, Reason :: term()}).
 next_downloadable_item() ->
+    ?LOG_INFO(#{service => work, what => next_downloadable_item}), 
     gen_server:call(?MODULE, {next_downloadable_item}).
 
 
@@ -88,6 +90,7 @@ next_downloadable_item() ->
 -spec(item_download_complete(Id :: reference()) -> 
     ok | {error, Reason :: term()}).
 item_download_complete(Id) ->
+    ?LOG_INFO(#{service => work, what => item_download_complete, id=>Id}), 
     gen_server:call(?MODULE, {item_download_complete, Id}).
 
 %%--------------------------------------------------------------------
@@ -100,6 +103,7 @@ item_download_complete(Id) ->
 -spec(next_parsable_item() -> 
     {ok, Task :: harbour_report_task()} | {error, Reason :: term()}).
 next_parsable_item() ->
+    ?LOG_INFO(#{service => work, what => next_parsable_item}), 
     gen_server:call(?MODULE, {next_parsable_item}).
 
 
@@ -111,6 +115,7 @@ next_parsable_item() ->
 -spec(item_parse_complete(Id :: reference()) ->
     ok | {error, Reason :: term()}).
 item_parse_complete(Id) ->
+    ?LOG_INFO(#{service => work, what => item_parse_complete, id=> Id}), 
     gen_server:call(?MODULE, {item_parse_complete, Id}).
 
 %%%===================================================================
@@ -137,7 +142,9 @@ init([]) ->
     ConfigRecord = case file:consult(ConfigFile) of
         {ok, Terms} -> parse_config(Terms)
     end,
-    {ok, #state{config=ConfigRecord}}.
+    State = #state{config=ConfigRecord},
+    spawn_link(fun() -> cron_loop(State) end),
+    {ok, State}.
 
 %%--------------------------------------------------------------------
 %% @private
@@ -198,7 +205,9 @@ handle_cast(_Request, State) ->
     {stop, Reason :: term(), NewState :: #state{}}).
 handle_info({pubsub, {work_server_config, _} = C}, State) ->
     ConfigRecord = parse_config([C]),
-    {noreply, State#state{config=ConfigRecord}};
+    State1 = State#state{config=ConfigRecord},
+    ?LOG_INFO(#{service => work, what => handle_info, pubsub => work_server_config, state0 => State, state1 => State1}), 
+    {noreply, State1};
 handle_info(_Info, State) ->
     {noreply, State}.
 
@@ -262,10 +271,8 @@ code_change(_OldVsn, State, _Extra) ->
 -spec(parse_config([term()]) -> #work_server_config{}).
 parse_config(ConfigList) ->
     Config      = proplists:get_value(work_server_config, ConfigList),
-    DbName      = proplists:get_value(database_name, Config),
-    DbPath      = proplists:get_value(database_path, Config),
-    Refresh     = proplists:get_value(manifest_refresh_frequency_ms, Config),
-    #work_server_config{name=DbName, path=DbPath, refresh=Refresh}.    
+    Refresh     = proplists:get_value(refresh, Config),
+    #work_server_config{refresh=Refresh}.    
 
 
 %%--------------------------------------------------------------------
@@ -278,11 +285,15 @@ parse_config(ConfigList) ->
 -spec(refresh_reports() -> ok | {error, Reason :: term()}).
 refresh_reports() ->
     {ok, Manifests} = manifest_server:manifests(),
+    ?LOG_INFO(#{service => work, what => refresh_reports, manifests_count=>length(Manifests)}), 
     {ok, Tasks} = db_server:read(?TABLE_HARBOUR_REPORT_TASK),
+    ?LOG_INFO(#{service => work, what => refresh_reports, tasks_count=>length(Tasks)}), 
     Existing = [{X#?TABLE_HARBOUR_REPORT_TASK.url, X#?TABLE_HARBOUR_REPORT_TASK.filename} || X <- Tasks],
     New = lists:subtract(Manifests, Existing),
     NewTasks = [#?TABLE_HARBOUR_REPORT_TASK{id=make_ref(), url=Url, filename=File} || {Url, File} <- New],
-    db_server:create(NewTasks).
+    ?LOG_INFO(#{service => work, what => refresh_reports, new_tasks_count=>length(NewTasks)}), 
+    ok = db_server:create(NewTasks),
+    ok.
 
 %%--------------------------------------------------------------------
 %% @private
@@ -291,7 +302,7 @@ refresh_reports() ->
 %%--------------------------------------------------------------------
 -spec(get_next_downloadable_item() -> {ok, Item::harbour_report_task()} | {error, Reason :: term()}).
 get_next_downloadable_item() -> 
-    get_next_item(undefined, download_started).
+    transition_next_item(undefined, download_started).
 
 %%--------------------------------------------------------------------
 %% @private
@@ -300,7 +311,7 @@ get_next_downloadable_item() ->
 %%--------------------------------------------------------------------
 -spec(get_next_parsable_item() -> {ok, Item::harbour_report_task()} | {error, Reason :: term()}).
 get_next_parsable_item() ->
-    get_next_item(download_completed, parse_started).
+    transition_next_item(download_completed, parse_started).
 
 
 %%--------------------------------------------------------------------
@@ -314,6 +325,7 @@ get_next_parsable_item() ->
                         NextState :: harbour_report_task_state()) 
       -> {ok, Item :: tuple()} | {error, Reason :: term()}).
 update_item_state(Id, PrevState, NextState) ->
+    ?LOG_INFO(#{service => work, what => update_item_state, id => Id, state0 => PrevState, state1 => NextState}), 
     {ok, [Item]} = db_server:read(?TABLE_HARBOUR_REPORT_TASK, 
                    fun(X) -> X#?TABLE_HARBOUR_REPORT_TASK.id =:= Id end),
     %invariant
@@ -322,7 +334,7 @@ update_item_state(Id, PrevState, NextState) ->
         _ -> throw(invalid_state_transition)
     end,
     Item1 = Item#?TABLE_HARBOUR_REPORT_TASK{state = NextState},
-    ok = db_server:update(Item1),
+    ok = db_server:update([Item1]),
     {ok, Item1}.
 
 %%--------------------------------------------------------------------
@@ -330,12 +342,24 @@ update_item_state(Id, PrevState, NextState) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec(get_next_item(PrevState :: harbour_report_task_state(), 
+-spec(transition_next_item(PrevState :: harbour_report_task_state(), 
                     NextState :: harbour_report_task_state()) -> {ok, Item::harbour_report_task()} | {error, Reason :: term()}).
-get_next_item(PrevState, NextState) -> 
-    {ok, Items} = db_server:read(?TABLE_HARBOUR_REPORT_TASK, 
-                   fun(X) -> X#?TABLE_HARBOUR_REPORT_TASK.state =:= PrevState end),
-    Item = lists:nth(1, lists:sort(Items)),
-    Item1 = Item#?TABLE_HARBOUR_REPORT_TASK{state = NextState},
-    ok = db_server:update(Item1),
-    {ok, Item1}.
+transition_next_item(PrevState, NextState) -> 
+    ?LOG_INFO(#{service => work, what => transition_next_item, state0 => PrevState, state1 => NextState}), 
+    case db_server:read(?TABLE_HARBOUR_REPORT_TASK, fun(X) -> X#?TABLE_HARBOUR_REPORT_TASK.state =:= PrevState end) of 
+        {ok, [_|_] = Items} ->
+                Item = lists:nth(1, lists:sort(Items)),
+                Item1 = Item#?TABLE_HARBOUR_REPORT_TASK{state = NextState},
+                ok = db_server:update([Item1]),
+                {ok, Item1};
+        {error, []} ->
+                {error, no_items}
+    end.
+
+
+cron_loop(State) ->
+    receive cancel -> ok
+    after State#state.config#work_server_config.refresh ->
+            ?LOG_INFO(#{service => work, what => cron_loop, state=>State}), 
+            work_server:refresh()
+    end.

@@ -10,6 +10,7 @@
 
 -behaviour(gen_server).
 -include("../../common/include/dates.hrl").
+-include_lib("kernel/include/logger.hrl").
 
 %% API
 -export([start_link/0
@@ -63,6 +64,7 @@ start_link() ->
 %%--------------------------------------------------------------------
 -spec(manifests() -> {ok, [term()]} | {error, Reason :: term()}).
 manifests() -> 
+    ?LOG_INFO(#{service => manifest, what => manifests}), 
     gen_server:call(?MODULE, {manifests}). 
 
 %%--------------------------------------------------------------------
@@ -72,6 +74,7 @@ manifests() ->
 %%--------------------------------------------------------------------
 -spec(manifests(tdate(), tdate()) -> {ok, [term()]} | {error, Reason :: term()}).
 manifests(StartDate, EndDate) -> 
+    ?LOG_INFO(#{service => manifest, what => manifests, startdate => StartDate, enddate => EndDate}), 
     gen_server:call(?MODULE, {manifests_start_end, StartDate, EndDate}). 
 
 
@@ -128,12 +131,12 @@ handle_call({manifests}, _From, State) ->
     StartDate = C#oasis_config.start_date,
     {EndDate, _} = calendar:local_time(),
     {ok, Reports} = oasis_reports(C, R, StartDate, EndDate),
-    {reply, {ok, [{oasis, Reports}]}, State};
+    {reply, {ok, Reports}, State};
 handle_call({manifests_start_end, StartDate, EndDate}, _From, State) ->
     C = State#state.oasis_config,
     R = State#state.oasis_reports,
     {ok, Reports} =  oasis_reports(C, R, StartDate, EndDate),
-    {reply, {ok, [{oasis, Reports}]}, State};
+    {reply, {ok, Reports}, State};
 handle_call(_Request, _From, State) ->
     {reply, ok, State}.
 
@@ -168,10 +171,14 @@ handle_cast(_Request, State) ->
     {stop, Reason :: term(), NewState :: #state{}}).
 handle_info({pubsub, {oasis_reports_config, _} = Config}, State) ->
     {ok, ReportsConfig} = parse_oasis_report_config([Config]),
-    {noreply, State#state{oasis_reports = ReportsConfig}};
+    State1 = State#state{oasis_reports = ReportsConfig},
+    ?LOG_INFO(#{service => manifest, what => handle_info, pubsub => oasis_reports, state0=> State, state1 => State1}), 
+    {noreply, State1};
 handle_info({pubsub, {manifest_server_config, _} = Config}, State) ->
     {ok, OasisConfig} = parse_oasis_server_config([Config]),
-    {noreply, State#state{oasis_config = OasisConfig}};
+    State1 = State#state{oasis_config = OasisConfig},
+    ?LOG_INFO(#{service => manifest, what => handle_info, pubsub => manifest_server_config, state0=> State, state1 => State1}), 
+    {noreply, State1};
 handle_info(_Info, State) ->
     {noreply, State}.
 
@@ -312,5 +319,6 @@ oasis_reports(C, R, StartDate, EndDate) ->
     Ranges      = date_gen:day_ranges(Dates),
     SingleZipsList = [single_zip(X, date_gen:format(Start), date_gen:format(End), Website, Context) || 
               #{type := single_zip} = X <- Reports, {Start, End} <- Ranges],
+    ?LOG_INFO(#{service => manifest, what => oasis_reports, type => sz, count => length(SingleZipsList)}), 
     {ok, SingleZipsList}.
 

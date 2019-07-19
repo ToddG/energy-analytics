@@ -9,10 +9,14 @@
 -module(download_server).
 
 -behaviour(gen_server).
+-include("../../common/include/tables.hrl").
+-include_lib("kernel/include/logger.hrl").
 
 %% API
--export([start_link/0,
-         download/2
+-export([start_link/0
+         ,download/0
+         %,download/1 %% use a regex match
+         ,download/2
         ]).
 
 %% gen_server callbacks
@@ -25,7 +29,11 @@
 
 -define(SERVER, ?MODULE). 
 
--record(state, {rate_limit = 500 :: pos_integer()}).
+-record(state, {
+                    rate_limit      = 500                   :: pos_integer(),
+                    download_path   = "/appdata/zip/"       :: string(),
+                    refresh         = 3600000
+         }).
 
 %%%===================================================================
 %%% API
@@ -45,10 +53,22 @@ start_link() ->
 
 %%--------------------------------------------------------------------
 %% @doc
+%% Download all new files. Query the work_server for all remaining
+%% stuff to download. This starts a sequential download that continues
+%% for as long as there are items to download.
+%% @end
+%%--------------------------------------------------------------------
+download() ->
+    ?LOG_INFO(#{server=>download, what=>download}),
+    gen_server:call(?MODULE, {download}). 
+
+%%--------------------------------------------------------------------
+%% @doc
 %% Download url to file.
 %% @end
 %%--------------------------------------------------------------------
 download(Url, File) ->
+    ?LOG_INFO(#{server=>download, what=>download, url=>Url, file=>File}),
     gen_server:call(?MODULE, {download, Url, File}). 
 
 
@@ -73,10 +93,12 @@ download(Url, File) ->
 init([]) ->
     {ok, ConfigDir} = application:get_env(harbour, config_dir),
     ConfigFile = filename:join(ConfigDir, "download.config"),
-    {rate_limit, RateLimit} = case file:consult(ConfigFile) of
-        {ok, [H|_]} -> parse_config(H)
+    {ok, RateLimit, DownloadPath, Refresh} = case file:consult(ConfigFile) of
+        {ok, C} -> parse_config(C)
     end,
-    {ok, #state{rate_limit=RateLimit}}.
+    State = #state{rate_limit=RateLimit, download_path=DownloadPath, refresh=Refresh},
+    spawn_link(fun() -> cron_loop(State) end),
+    {ok, State}.
 
 %%--------------------------------------------------------------------
 %% @private
@@ -93,6 +115,9 @@ init([]) ->
     {noreply, NewState :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term(), Reply :: term(), NewState :: #state{}} |
     {stop, Reason :: term(), NewState :: #state{}}).
+handle_call({download}, _From, State) ->
+    spawn_link(fun() -> sequential_download(State) end),
+    {reply, ok, State};
 handle_call({download, Url, File}, _From, State) ->
     ok = curl(Url, File, State#state.rate_limit),
     {reply, ok, State};
@@ -113,6 +138,7 @@ handle_call(_Request, _From, State) ->
 handle_cast(_Request, State) ->
     {noreply, State}.
 
+
 %%--------------------------------------------------------------------
 %% @private
 %% @doc
@@ -127,9 +153,11 @@ handle_cast(_Request, State) ->
     {noreply, NewState :: #state{}} |
     {noreply, NewState :: #state{}, timeout() | hibernate} |
     {stop, Reason :: term(), NewState :: #state{}}).
-handle_info({pubsub, {download_server_config, _} = C}, State) ->
-    {rate_limit, RateLimit} = parse_config(C),
-    {noreply, State#state{rate_limit=RateLimit}};
+handle_info({pubsub, {pubsub, {download_server_config, _} = Config}}, State) ->
+    {ok, RateLimit, DownloadPath, Refresh} = parse_config([Config]),
+    State1 = State#state{rate_limit=RateLimit, download_path=DownloadPath, refresh=Refresh},
+    ?LOG_INFO(#{server=>download, what=>handle_info, pubsub=> download_server_config, state0=>State, state1=>State1}),
+    {noreply, State1};
 handle_info(_Info, State) ->
     {noreply, State}.
 
@@ -167,14 +195,42 @@ code_change(_OldVsn, State, _Extra) ->
 %%% Internal functions
 %%%===================================================================
 parse_config(C)->
-    {download_server_config, P} = C,
-    RateLimit = proplists:get_value(rate_limit, P),
-    {rate_limit, RateLimit}.
+    P               = proplists:get_value(download_server_config, C),
+    RateLimit       = proplists:get_value(rate_limit, P),
+    DownloadPath    = proplists:get_value(download_path, P),
+    RefreshRate     = proplists:get_value(refresh, P),
+    {ok, RateLimit, DownloadPath, RefreshRate}.
 
+
+-spec(curl(Link :: string(), 
+           OutputFile :: string(), 
+           RateLimit :: pos_integer()) -> ok | {error, Reason :: term()}).
 curl(Link, OutputFile, RateLimit)->
-    io:format("downloading url:~s to file:~s, rate limit: ~p~n", [Link, OutputFile, RateLimit]), 
-    Cmd = io_lib:format("curl --limit-rate ~pK -X GET -o ~s \"~s\"", [RateLimit, OutputFile, Link]), 
-    io:format("command:~s~n", [Cmd]), 
-    Out = os:cmd(Cmd),
-    io:format("out: ~p~n", [Out]).
+    ?LOG_INFO(#{server=>download, what=>curl, link=>Link, file=>OutputFile, rate=>RateLimit}),
+    %Cmd = io_lib:format("curl --limit-rate ~pK -X GET -o ~s \"~s\"", [RateLimit, OutputFile, Link]), 
+    %%Out = os:cmd(Cmd),
+    %%?LOG_INFO(#{server=>download, what=>curl, link=>Link, file=>OutputFile, output=>Out}),
+    ok.
 
+-spec(sequential_download(State :: #state{}) -> ok | {error, Reason :: term()}).
+sequential_download(State) ->
+    case work_server:next_downloadable_item() of 
+        {ok, T} -> 
+            Id          = T#?TABLE_HARBOUR_REPORT_TASK.id,
+            Url         = T#?TABLE_HARBOUR_REPORT_TASK.url,
+            FileName    = T#?TABLE_HARBOUR_REPORT_TASK.filename,
+            File        = filename:join(State#state.download_path, FileName),
+            ok = curl(Url, File, State#state.rate_limit),
+            work_server:item_download_complete(Id),
+            download_server:download();
+        _ -> ok
+    end,
+    ok.
+
+
+cron_loop(State) ->
+    receive cancel -> ok
+    after State#state.refresh ->
+            ?LOG_INFO(#{server=>download, what=>cron_loop, state=>State}),
+            download_server:sequential_download(State)
+    end.

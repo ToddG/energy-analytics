@@ -9,7 +9,8 @@
 -module(config_server).
 
 -behaviour(gen_server).
-
+-include_lib("inotify/include/inotify.hrl").
+-include_lib("kernel/include/logger.hrl").
 %% API
 -export([start_link/0]).
 
@@ -28,7 +29,6 @@
 -define(SERVER, ?MODULE). 
 
 -record(state, {}).
--include_lib("inotify/include/inotify.hrl").
 
 %%%===================================================================
 %%% API
@@ -67,6 +67,7 @@ init([]) ->
     {ok, ConfigDir} = application:get_env(harbour, config_dir),
     Ref = inotify:watch(ConfigDir),
     inotify:add_handler(Ref, ?MODULE, dir_change),
+    ?LOG_INFO(#{service => config, what => init}), 
     {ok, #state{}}.
 
 %%--------------------------------------------------------------------
@@ -204,4 +205,5 @@ broadcast_file_change(_, _) ->
     ok.
 
 broadcast_term({Topic, Message}) ->
+    ?LOG_INFO(#{service => config, what => broadcast, topic => Topic, message => Message}), 
     pubsub_server:publish(Topic, Message).

@@ -9,6 +9,7 @@
 -module(pubsub_server).
 
 -behaviour(gen_server).
+-include_lib("kernel/include/logger.hrl").
 
 %% API
 -export([start_link/0]).
@@ -41,10 +42,12 @@
 %%%
 -spec(publish(term(), term()) -> ok | {error, Reason :: term()}).
 publish(Topic, Message) ->
+    ?LOG_INFO(#{service => pubsub, what => publish, topic => Topic, message => Message}), 
     gen_server:call(?MODULE, {publish, #pub{topic=Topic, message=Message}}). 
 
 -spec(subscribe(term(), term()) -> ok | {error, Reason :: term()}).
 subscribe(Topic, Subscriber) ->
+    ?LOG_INFO(#{service => pubsub, what => subscribe, topic => Topic, subscriber => Subscriber}), 
     gen_server:call(?MODULE, {subscribe, #sub{topic=Topic, subscriber=Subscriber}}). 
 
 

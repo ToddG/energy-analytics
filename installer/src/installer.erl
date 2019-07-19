@@ -9,20 +9,31 @@
 %%====================================================================
 
 %% escript Entry point
-main(Args) ->
-    Path = "/appdata/db/mnesia",
-    io:format("Installer is configuring target system... ~p~n", [Args]),
+main([Path|_]) ->
+    MnesiaPath  = filename:join([Path, "db", "mnesia"]),
+    ZipPath     = filename:join([Path, "zip"]),
+    XmlPath     = filename:join([Path, "xml"]),
+    LogPath     = filename:join([Path, "log"]),
+    ok = filelib:ensure_dir(io_lib:format("~s/", [MnesiaPath])),
+    ok = filelib:ensure_dir(io_lib:format("~s/", [ZipPath])),
+    ok = filelib:ensure_dir(io_lib:format("~s/", [XmlPath])),
+    ok = filelib:ensure_dir(io_lib:format("~s/", [LogPath])),
+    io:format("Installing system to... ~p~n", [Path]),
+    io:format(" > db dir    : ~p~n", [MnesiaPath]),
+    io:format(" > zip dir   : ~p~n", [ZipPath]),
+    io:format(" > xml dir   : ~p~n", [XmlPath]),
+    io:format(" > log dir   : ~p~n", [LogPath]),
     %% directory
-    application:set_env([{mnesia, [{dir, Path}]}]),
+    application:set_env([{mnesia, [{dir, MnesiaPath}]}]),
     E = application:get_all_env(mnesia),
     io:format("installer: ~p~n", [E]),
     %% schema
     DbNodes = [node()],
     case mnesia:create_schema(DbNodes) of
         ok -> 
-            io:format("created db schema at: ~s~n", [Path]);
+            io:format("created db schema at: ~s~n", [MnesiaPath]);
         {error,{Node,{already_exists, Node}}} ->
-            io:format("db schema already exists at: ~s for node: ~s~n", [Path, Node])
+            io:format("db schema already exists at: ~s for node: ~s~n", [MnesiaPath, Node])
     end,
     io:format("created schema on: ~p~n", [DbNodes]),
     %% tables

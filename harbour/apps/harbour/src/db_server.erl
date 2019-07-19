@@ -11,7 +11,7 @@
 -behaviour(gen_server).
 -include_lib("stdlib/include/qlc.hrl").
 -include("../../common/include/tables.hrl").
--compile(export_all).
+-include_lib("kernel/include/logger.hrl").
 %% API
 -export([start_link/0
         ,create/1
@@ -54,9 +54,9 @@ start_link() ->
 %% yet exist.
 %% @end
 %%--------------------------------------------------------------------
--spec(create(Items :: [tuple()]) ->
-    ok | ignore | {error, Reason :: term()}).
+-spec(create(Items :: [tuple()]) -> ok | {error, Reason :: term()}).
 create(Items) ->
+    ?LOG_DEBUG(#{server=>db, what=>create, items=>Items}),
     gen_server:call(?MODULE, {create, Items}). 
 
 %%--------------------------------------------------------------------
@@ -64,9 +64,9 @@ create(Items) ->
 %% Return all 'enabled' records. 'R' of CRUD.
 %% @end
 %%--------------------------------------------------------------------
--spec(read(Table :: atom()) ->
-    {ok, [tuple()]} | {error, Reason :: term()}).
+-spec(read(Table :: atom()) -> {ok, [tuple()]} | {error, Reason :: term()}).
 read(Table) ->
+    ?LOG_DEBUG(#{server=>db, what=>read, table=>Table}),
     gen_server:call(?MODULE, {read, Table}). 
 
 %%--------------------------------------------------------------------
@@ -74,9 +74,9 @@ read(Table) ->
 %% Return all 'enabled' records where FilterFun(X) =:= true. 'R' of CRUD.
 %% @end
 %%--------------------------------------------------------------------
--spec(read(Table :: atom(), FilterFun :: fun((tuple()) -> boolean()))
-      -> {ok, [tuple()]} | {error, Reason :: term()}).
+-spec(read(Table :: atom(), FilterFun :: fun((tuple()) -> boolean())) -> {ok, [tuple()]} | {error, Reason :: term()}).
 read(Table, FilterFun) ->
+    ?LOG_DEBUG(#{server=>db, what=>read, table=>Table}),
     gen_server:call(?MODULE, {read, Table, FilterFun}). 
 
 %%--------------------------------------------------------------------
@@ -85,7 +85,9 @@ read(Table, FilterFun) ->
 %% 'disabled' records will raise an error.
 %% @end
 %%--------------------------------------------------------------------
+-spec(update(Items :: [tuple()]) -> ok | {error, Reason :: term()}).
 update(Items) ->
+    ?LOG_DEBUG(#{server=>db, what=>update, items=>Items}),
     gen_server:call(?MODULE, {update, Items}). 
 
 %%--------------------------------------------------------------------
@@ -98,7 +100,9 @@ update(Items) ->
 %% * 'disabled' items are returned in read operations
 %% @end
 %%--------------------------------------------------------------------
+-spec(delete(Items :: [tuple()]) -> ok | {error, Reason :: term()}).
 delete(Items) ->
+    ?LOG_DEBUG(#{server=>db, what=>delete, items=>Items}),
     gen_server:call(?MODULE, {delete, Items}). 
 
 %%%===================================================================
@@ -214,6 +218,7 @@ code_change(_OldVsn, State, _Extra) ->
 %%%===================================================================
 %%% Internal functions
 %%%===================================================================
+-spec(p_create(Items :: [tuple()]) -> ok | {error, Reason :: term()}).
 p_create(Items) ->
     F = fun() ->
         ok = consistency_check(Items),
@@ -231,16 +236,23 @@ p_create(Items) ->
                 lists:foreach(fun mnesia:write/1, RecordStates)
             end
         end,
-    {atomic, ok} = mnesia:transaction(F),
-    ok.
+    case mnesia:transaction(F) of
+        {atomic, ok} -> ok;
+        {aborted, Reason} -> {error, Reason}
+    end.
 
+-spec(p_read(Table :: term(), F :: fun((X :: tuple()) -> boolean())) -> {ok, Values :: [term()]} | {error, Reason :: term()}).
 p_read(Table, F) ->
-    {ok, do(qlc:q([X || X <- mnesia:table(Table),
+    case do(qlc:q([X || X <- mnesia:table(Table),
                         Y <- mnesia:table(?TABLE_HARBOUR_RECORD_STATE),
                         id(X) =:= id(Y),
                         F(X) =:= true,
-                        Y#?TABLE_HARBOUR_RECORD_STATE.enabled =:= true]))}.
+                        Y#?TABLE_HARBOUR_RECORD_STATE.enabled =:= true])) of
+        {atomic, Values} -> {ok, Values};
+        {aborted, Reason} -> {error, Reason}
+    end.
 
+-spec(p_update(Items :: [tuple()]) -> ok | {error, Reason :: term()}).
 p_update(Items) ->
     F = fun() ->
         ok = consistency_check(Items),
@@ -265,9 +277,12 @@ p_update(Items) ->
                 lists:foreach(fun mnesia:write/1, UpdatedRecordStates)
             end
         end,
-    {atomic, ok} = mnesia:transaction(F),
-    ok.
+    case mnesia:transaction(F) of
+        {atomic, ok} -> ok;
+        {aborted, Reason} -> {error, Reason}
+    end.
 
+-spec(p_delete(Items :: [tuple()]) -> ok | {error, Reason :: term()}).
 p_delete(Items) ->
     F = fun() ->
         ok = consistency_check(Items),
@@ -281,14 +296,17 @@ p_delete(Items) ->
         UpdatedRecordStates = [R#?TABLE_HARBOUR_RECORD_STATE{enabled=false, date_modified=Shazzam} || R <- ItemsRStates],
         lists:foreach(fun mnesia:write/1, UpdatedRecordStates)
     end,
-    {atomic, ok} = mnesia:transaction(F),
-    ok.
+    case mnesia:transaction(F) of
+        {atomic, ok} -> ok;
+        {aborted, Reason} -> {error, Reason}
+    end.
 
+-spec(do(Q :: any()) -> {atomic, Val :: [term()]} | {aborted, Reason :: term()}).
 do(Q) ->
     F = fun() -> qlc:e(Q) end,
-    {atomic, Val} = mnesia:transaction(F),
-    Val.
+    mnesia:transaction(F).
 
+-spec(consistency_check(Items :: [tuple()]) ->  ok | {aborted, Reason :: term()}).
 consistency_check(Items) ->
     Tables = sets:to_list(sets:from_list([table(X) || X <- Items])),
     case Tables of
@@ -300,8 +318,10 @@ consistency_check(Items) ->
             ok
     end.
 
+-spec(table(R::tuple()) -> any()).
 table(R) ->
     element(1, R).
 
+-spec(id(R::tuple()) -> reference()).
 id(R) ->
     element(2, R).
