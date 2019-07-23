@@ -34,4 +34,5 @@ shell:
 
 .PHONY: run
 run: build 
-	_build/default/bin/${APP}  ~/scratch/parsing-xml/foo.xml
+	# _build/default/bin/${APP}  ~/scratch/parsing-xml/foo.xml
+	_build/default/bin/${APP}  ~/scratch/parsing-xml/foo-short.xml
