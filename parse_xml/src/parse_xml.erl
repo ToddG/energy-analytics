@@ -120,19 +120,12 @@ ender("MessagePayload", P, M, R) ->
     M2  = pop(P, M1),
     {M2, R1};
 ender("REPORT_ITEM", P, M, R) ->
-    io:format("M: ~p~n", [M]),
     MP = R#oasis_report.message_payload,
-    io:format("MP: ~p~n", [MP]),
     RI = MP#message_payload.report_items,
-    io:format("RI: ~p~n", [RI]),
     {M1, ReportHeader}      = pop(["REPORT_HEADER",     "REPORT_ITEM", "RTO", "MessagePayload", "OASISReport"], M),
-    io:format("ReportHeader: ~p~n", [ReportHeader]),
     {M2, ReportData}        = pop(["REPORT_DATA",       "REPORT_ITEM", "RTO", "MessagePayload", "OASISReport"], M1),
-    io:format("ReportData: ~p~n", [ReportData]),
     NewReportItem = #report_item{report_header=ReportHeader, report_data=ReportData},
-    io:format("NewReportItem: ~p~n", [NewReportItem]),
     NRI = [NewReportItem | RI],
-    io:format("NRI: ~p~n", [NRI]),
     R1 = R#oasis_report{message_payload = MP#message_payload{report_items=NRI}},
     {M3, _} = pop(P, M2),
     {M3, R1};
@@ -188,10 +181,8 @@ callback(endDocument, _Location, State) ->
     io:format("items count: ~p~n", [length(Items)]),
     State;
 callback(startDocument, _Location, _State) ->
-    io:format("startDocument~n", []),
     #state{};
 callback({characters, Data}, _Location, #state{path=Path, accum=M} = State) ->
-    io:format("~p : ~p~n", [Path,Data]),
     M1 = push(Path, Data, M),
     S1 = State#state{accum=M1},
     S1;
@@ -202,7 +193,6 @@ callback({startElement, _, LocalName, _, _}, _Location, #state{path=Path, accum=
     S1;
 callback({endElement, _Uri, LocalName, _QualifiedName}, _Location, #state{path=Path, accum=M, oasis_report=R} = State) ->
     {M1, R1} = ender(LocalName, Path, M, R),
-    %io:format("~nender m1: ~p~n, ender r1: ~p~n", [M1, R1]),
     [_|P1] = Path,
     State#state{path=P1, accum=M1, oasis_report=R1};
 callback(_Event, _Location, State) ->
