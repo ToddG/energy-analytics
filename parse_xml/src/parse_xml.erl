@@ -29,26 +29,33 @@ main([File|_]=Args) ->
 %% @end
 %%--------------------------------------------------------------------
 %callback(Event, Location, State) -> NewState
--record(state, {            path = ""                       :: string(), 
-                            temp                            :: string(),
-                            report                          :: oasis_report()
+-record(state, {            path        = ""            :: string(), 
+                            accum       = #{}           :: map(),
+                            report                      :: oasis_report()
                }).
--record(oasis_report, {name, foo}).
+-record(oasis_report, {     name, 
+                            foo
+                      }).
 
-%-type state()                                               :: #state{}.
--type oasis_report()                                        :: #oasis_report{}.
+-type oasis_report()                                    :: #oasis_report{}.
 
 callback(startDocument, _Location, _State) ->
+    io:format("startDocument~n", []),
     #state{};
-callback({characters, Data}, _Location, State) ->
-    State#state{temp=Data};
-callback({startElement, _, LocalName, _, _}, _Location, #state{path=Path} = State) ->
-    State#state{path = [LocalName | Path]};
-callback({endElement, _Uri, _LocalName, _QualifiedName}, _Location, #state{path=Path, temp=Value} = State) ->
-    io:format("path: ~p, value: ~p~n", [Path, Value]),
-    [_|PrevPath] = Path,
-    State#state{path = PrevPath};
-callback(_Event, _Location, State) ->
+callback({characters, Data}, _Location, #state{path=Path, accum=M} = State) ->
+    %io:format("characters: ~p~n", [Data]),
+    State#state{accum=M#{Path => Data}};
+callback({startElement, _, LocalName, _, _}, _Location, #state{path=Path, accum=M} = State) ->
+    NewPath = [LocalName | Path],
+    %io:format("startElement: ~p~n", [NewPath]),
+    State#state{path = NewPath, accum=M#{NewPath => undefined}};
+callback({endElement, _Uri, _LocalName, _QualifiedName}, _Location, #state{path=Path, accum=M} = State) ->
+    io:format("~p : ~p~n", [Path, maps:find(Path, M)]),
+    M1 = M#{Path => undefined},
+    [_|P1] = Path,
+    State#state{path = P1, accum=M1};
+callback(Event, _Location, State) ->
+    %io:format("event: ~p~n", [Event]),
     State.
 
 foo(F) ->
