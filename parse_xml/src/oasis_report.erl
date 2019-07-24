@@ -8,46 +8,11 @@
 %%%-------------------------------------------------------------------
 -module(oasis_report).
 -include_lib("kernel/include/logger.hrl").
+-include("records.hrl").
 
 %% API exports
 -export([parse_xml/2]).
 
--record(oasis_report, {     message_header                  :: message_header(),
-                            message_payload                 :: message_payload()
-                      }).
--record(message_header, {   timedate                        :: string(),
-                            source                          :: string(),
-                            version                         :: string()
-                        }).
--record(message_payload, {  name                            :: string(),
-                            report_items                    :: [report_item()]
-                         }).
--record(report_item, {      report_header                   :: report_header(),
-                            report_data                     :: report_data()
-                     }).
--record(report_header, {    system                          :: string(),
-                            tz                              :: string(),
-                            report                          :: string(),
-                            mkt_type                        :: string(),
-                            uom                             :: string(),
-                            interval                        :: string(),
-                            sec_per_interval                :: string()
-                       }).
--record(report_data, {      data_item                       :: string(),
-                            resource_name                   :: string(),
-                            opr_date                        :: string(),
-                            interval_num                    :: pos_integer(),
-                            interval_start_gmt              :: string(),
-                            interval_end_gmt                :: string(),
-                            value                           :: number()
-                     }).
-
--type oasis_report()                                        :: #oasis_report{}.
--type message_header()                                      :: #message_header{}.
--type message_payload()                                     :: #message_payload{}.
--type report_item()                                         :: #report_item{}.
--type report_header()                                       :: #report_header{}.
--type report_data()                                         :: #report_data{}.
 
 -record(state, {            path   = ""                     :: string(), 
                             accum  = #{}                    :: map(),
@@ -110,9 +75,10 @@ ender("MessageHeader", P, M, R) ->
     {M3, Version}           = pop(["Version",      "MessageHeader", "OASISReport"], M2),
     MH = R#oasis_report.message_header,
     MH1 = MH#message_header{
-                            timedate   = TimeDate, 
-                            source     = Source, 
-                            version    = Version},
+                            timedate   		= TimeDate,
+			    timedate_posix 	= calendar:rfc3339_to_system_time(TimeDate, [{unit, second}]),
+                            source     		= Source, 
+                            version    		= Version},
     R1 = R#oasis_report{message_header=MH1},
     {M4, _} = pop(P, M3),
     {M4, R1};
@@ -156,16 +122,19 @@ ender("REPORT_DATA", P, M, R) ->
     {M2, RESOURCE_NAME}     = pop(["RESOURCE_NAME",         "REPORT_DATA", "REPORT_ITEM", "RTO", "MessagePayload", "OASISReport"], M1),
     {M3, OPR_DATE}          = pop(["OPR_DATE",              "REPORT_DATA", "REPORT_ITEM", "RTO", "MessagePayload", "OASISReport"], M2),
     {M4, INTERVAL_NUM}      = pop(["INTERVAL_NUM",          "REPORT_DATA", "REPORT_ITEM", "RTO", "MessagePayload", "OASISReport"], M3),
-    {M5, INTERVAL_START_GMT}= pop(["INTERVAL_START_GMT", "REPORT_DATA", "REPORT_ITEM", "RTO", "MessagePayload", "OASISReport"], M4),
-    {M6, INTERVAL_END_GMT}  = pop(["INTERVAL_END_GMT",   "REPORT_DATA", "REPORT_ITEM", "RTO", "MessagePayload", "OASISReport"], M5),
+    {M5, INTERVAL_START_GMT}= pop(["INTERVAL_START_GMT",    "REPORT_DATA", "REPORT_ITEM", "RTO", "MessagePayload", "OASISReport"], M4),
+    {M6, INTERVAL_END_GMT}  = pop(["INTERVAL_END_GMT",      "REPORT_DATA", "REPORT_ITEM", "RTO", "MessagePayload", "OASISReport"], M5),
     {M7, VALUE}             = pop(["VALUE",                 "REPORT_DATA", "REPORT_ITEM", "RTO", "MessagePayload", "OASISReport"], M6),
     M8 = M7#{P => #report_data{
                                             data_item          = DATA_ITEM         ,
                                             resource_name      = RESOURCE_NAME     ,
                                             opr_date           = OPR_DATE          ,
+                                            opr_date_8601      = io_lib:format("~s 00:00:00.000", [OPR_DATE]),
                                             interval_num       = INTERVAL_NUM      ,
                                             interval_start_gmt = INTERVAL_START_GMT,
                                             interval_end_gmt   = INTERVAL_END_GMT  ,
+                                            interval_start_posix = calendar:rfc3339_to_system_time(INTERVAL_START_GMT, [{unit, second}]),
+                                            interval_end_posix   = calendar:rfc3339_to_system_time(INTERVAL_END_GMT, [{unit, second}]),
                                             value              = VALUE}},
     %%this is popped by REPORT_ITEM
     {M8, R};

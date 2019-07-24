@@ -2,6 +2,7 @@
                             message_payload                 :: message_payload()
                       }).
 -record(message_header, {   timedate                        :: string(),
+			    timedate_posix		    :: pos_integer(),
                             source                          :: string(),
                             version                         :: string()
                         }).
@@ -22,9 +23,12 @@
 -record(report_data, {      data_item                       :: string(),
                             resource_name                   :: string(),
                             opr_date                        :: string(),
+                            opr_date_8601                   :: string(),
                             interval_num                    :: pos_integer(),
                             interval_start_gmt              :: string(),
+                            interval_start_posix            :: pos_integer(),
                             interval_end_gmt                :: string(),
+                            interval_end_posix              :: pos_integer(),
                             value                           :: number()
                      }).
 
