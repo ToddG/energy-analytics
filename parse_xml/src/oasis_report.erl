@@ -6,10 +6,48 @@
 %%% @end
 %%% Created : 2019-07-22 16:22:01.808103
 %%%-------------------------------------------------------------------
--module(parse_xml).
--include("records.hrl").
+-module(oasis_report).
+-include_lib("kernel/include/logger.hrl").
+
 %% API exports
--export([main/1]).
+-export([parse_xml/2]).
+
+-record(oasis_report, {     message_header                  :: message_header(),
+                            message_payload                 :: message_payload()
+                      }).
+-record(message_header, {   timedate                        :: string(),
+                            source                          :: string(),
+                            version                         :: string()
+                        }).
+-record(message_payload, {  name                            :: string(),
+                            report_items                    :: [report_item()]
+                         }).
+-record(report_item, {      report_header                   :: report_header(),
+                            report_data                     :: report_data()
+                     }).
+-record(report_header, {    system                          :: string(),
+                            tz                              :: string(),
+                            report                          :: string(),
+                            mkt_type                        :: string(),
+                            uom                             :: string(),
+                            interval                        :: string(),
+                            sec_per_interval                :: string()
+                       }).
+-record(report_data, {      data_item                       :: string(),
+                            resource_name                   :: string(),
+                            opr_date                        :: string(),
+                            interval_num                    :: pos_integer(),
+                            interval_start_gmt              :: string(),
+                            interval_end_gmt                :: string(),
+                            value                           :: number()
+                     }).
+
+-type oasis_report()                                        :: #oasis_report{}.
+-type message_header()                                      :: #message_header{}.
+-type message_payload()                                     :: #message_payload{}.
+-type report_item()                                         :: #report_item{}.
+-type report_header()                                       :: #report_header{}.
+-type report_data()                                         :: #report_data{}.
 
 -record(state, {            path   = ""                     :: string(), 
                             accum  = #{}                    :: map(),
@@ -19,21 +57,24 @@
 %%====================================================================
 %% API functions
 %%====================================================================
+%%--------------------------------------------------------------------
+%% @doc
+%%
+%% @end
+%%--------------------------------------------------------------------
+-spec(parse_xml(File :: string(), 
+		Handler :: fun((oasis_report()) -> ok | {error, Reason :: term()}) ) 
+      -> ok | error).
+parse_xml(F, H) ->
+    {ok, #state{oasis_report=R}, _} = xmerl_sax_parser:file(F, [{event_fun, fun callback/3}]),
+    ?LOG_INFO(#{service=>oasis_report, what=>handler, file=>F}), 
+    H(R).
 
-%% escript Entry point
-main([File|_]=Args) ->
-    io:format("Args: ~p~n", [Args]),
-    foo(File),
-    erlang:halt(0).
+
 
 %%====================================================================
 %% Internal functions
 %%====================================================================
-%%--------------------------------------------------------------------
-%% @doc
-%% @end
-%%--------------------------------------------------------------------
-%callback(Event, Location, State) -> NewState
 
 oasis_report() ->
     #oasis_report{
@@ -134,14 +175,9 @@ ender(_, _P, M, R) ->
 
 callback(endDocument, _Location, State) ->
     R = State#state.oasis_report,
-    io:format("endDocument: ~n", []),
-    io:format("report: ~p~n", [R]),
-    H = R#oasis_report.message_header,
-    io:format("header: ~p~n", [H]),
     P = R#oasis_report.message_payload,
-    io:format("payload name: ~p~n", [P#message_payload.name]),
     Items = P#message_payload.report_items,
-    io:format("items count: ~p~n", [length(Items)]),
+    ?LOG_INFO(#{service => oasis_report, what => endDocument, report=>P#message_payload.name, count=>length(Items)}), 
     State;
 callback(startDocument, _Location, _State) ->
     #state{};
@@ -155,11 +191,9 @@ callback({startElement, _, LocalName, _, _}, _Location, #state{path=Path, accum=
     S1 = State#state{path = NewPath, accum=M1},
     S1;
 callback({endElement, _Uri, LocalName, _QualifiedName}, _Location, #state{path=Path, accum=M, oasis_report=R} = State) ->
+    ?LOG_DEBUG(#{service=>oasis_report, what=>endElement, path=>Path}), 
     {M1, R1} = ender(LocalName, Path, M, R),
     [_|P1] = Path,
     State#state{path=P1, accum=M1, oasis_report=R1};
 callback(_Event, _Location, State) ->
     State.
-
-foo(F) ->
-    xmerl_sax_parser:file(F, [{event_fun, fun callback/3}]).
