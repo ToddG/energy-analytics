@@ -1,4 +1,6 @@
-[{<<"sqlite3">>,
-  {git,"git://github.com/saleyn/erlang-sqlite3.git",
-       {ref,"d84170ebf74d742b46765227eae828fc575a69fa"}},
-  0}].
+{"1.1.0",
+[{<<"esqlite">>,{pkg,<<"esqlite">>,<<"0.4.0">>},0}]}.
+[
+{pkg_hash,[
+ {<<"esqlite">>, <<"8D0B88A774DCEAEC4FFF0A6F63248EFE811684591F186B6B21D4390BE19BF1DB">>}]}
+].

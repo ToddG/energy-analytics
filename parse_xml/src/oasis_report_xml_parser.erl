@@ -6,7 +6,7 @@
 %%% @end
 %%% Created : 2019-07-22 16:22:01.808103
 %%%-------------------------------------------------------------------
--module(oasis_report).
+-module(oasis_report_xml_parser).
 -include_lib("kernel/include/logger.hrl").
 -include("records.hrl").
 
