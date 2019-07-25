@@ -57,3 +57,4 @@ To tail the logs, do this:
 
 * https://stackoverflow.com/questions/17529623/erlang-location-of-hrl-files-in-multiple-applications#17533897
 
+https://github.com/erlang/rebar3/issues/2129#issuecomment-515084409
